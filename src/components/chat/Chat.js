@@ -283,13 +283,16 @@ const Chat = ({ room }) => {
     {message.reactions && Object.entries(message.reactions).map(([reaction, users], index) => 
       users.length > 0 && (
         <div 
-          key={reaction} 
-          className="reaction-badge"
-          style={{ animationDelay: `${index * 0.05}s` }}
-        >
-          <span className="reaction-emoji">{reaction}</span>
-          <span className="reaction-count">{users.length}</span>
+        key={reaction} 
+        className="reaction-badge"
+        style={{ animationDelay: `${index * 0.05}s` }}
+      >
+        <span className="reaction-emoji">{reaction}</span>
+        <span className="reaction-count">{users.length}</span>
+        <div className="reaction-tooltip">
+          {users.join(', ')}
         </div>
+      </div>
       )
     )}
   </div>
