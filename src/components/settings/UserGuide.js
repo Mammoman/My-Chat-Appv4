@@ -5,7 +5,7 @@ import { ArrowRight03Icon, Cancel02Icon } from 'hugeicons-react';
 const UserGuide = ({ onClose }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isAnimating, setIsAnimating] = useState(false);
-  const totalPages = 6;
+  const totalPages = 10;
 
   const handlePageChange = () => {
     if (isAnimating) return;
@@ -74,6 +74,48 @@ const UserGuide = ({ onClose }) => {
         "I hope you enjoy using this app",
         "If you have any feedback, dont let me know",
         "buzz off"
+      ]
+    },{
+      title: "Coming soon features: Group Chat Features",
+      content: [
+        "1.User mentions with @ notifications ",
+        "2.Room avatars, Room notifications settings",
+        "3.Room roles (admin, moderator, member)",
+        "4.Room settings (message retention, member limits)",
+        "5.Group video/audio calls (using WebRTC)",
+        "6.Task/todo lists within rooms",
+        "7.Sounds like discord😂😂"
+
+      ]
+    },{
+      title: "Coming soon features: Message Features",
+      content: [
+        "1.Message reactions",
+        "2.Message timestamps",
+        "3.Message editing",
+        "4.Message deleting",
+        "5.Message scheduling",
+        "7.Sounds like discord😂😂"
+      ]
+    },{
+      title: "Coming soon features: User Features",
+      content: [
+        "1.User avatars",
+        "2.User settings",
+        "3.User analytics",
+        "4.User roles (admin, moderator, member)",
+        "5.User settings (notification preferences, privacy settings)",
+        "6.Sounds like discord😂😂"
+      ]
+    },{
+      title: "Coming soon features: Room Features",
+      content: [
+        "1.Room avatars",
+        "2.Room settings",
+        "3.Room analytics",
+        "4.Room roles (admin, moderator, member)",
+        "5.Room settings (message retention, member limits)",
+        "6.Sounds like discord😂😂"
       ]
     }
   ];

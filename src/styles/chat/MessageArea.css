@@ -103,6 +103,7 @@
   
   .message.received {
     margin-right: auto;
+    max-width: fit-content;
   }
   
   .message.sent {
@@ -119,6 +120,14 @@
     position: relative;
     word-break: break-word;
     white-space: pre-wrap;
+  }
+
+  .message-bubble-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    position: relative;
+    align-items: flex-start;
   }
    
   .message.sent .message-bubble   {
@@ -447,11 +456,6 @@
     align-self: flex-start;
   }
 
-  .message-bubble-wrapper {
-    display: flex;
-    flex-direction: column;
-    width: fit-content;
-    position: relative;
-  }
+
 
  
