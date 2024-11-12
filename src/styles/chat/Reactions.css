@@ -11,7 +11,7 @@
   
   .reactions-popup {
     position: absolute;
-    top: -45px;
+    bottom: -45px;  /* Changed from top: -45px */
     left: 0;
     background: white;
     border-radius: 20px;
@@ -20,12 +20,23 @@
     display: none;
     gap: 8px;
     z-index: 100;
-    animation: slideDown 0.2s ease-out;
+    animation: slideUp 0.2s ease-out;  /* Changed from slideDown */
   }
   
   .message.sent .reactions-popup {
     left: auto;
     right: 0;
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
   
   .message-bubble-wrapper:hover .reactions-popup {
@@ -49,7 +60,8 @@
   .reaction-badges {
     display: flex;
     gap: 4px;
-    margin-top: 4px;
+    margin-bottom: 4px;  /* Changed from margin-top */
+    order: -1;  /* Move badges above message */
   }
   
   .message.sent .reaction-badges {
