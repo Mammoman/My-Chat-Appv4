@@ -1,0 +1,93 @@
+.chat-request-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .chat-request-content {
+    background-color: white;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    width: 400px;
+  }
+  
+  .user-profile {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .avatar-placeholder {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-right: 16px;
+  }
+  
+  .user-info {
+    flex: 1;
+  }
+  
+  .user-info h3 {
+    margin: 0 0 4px 0;
+    color: #333;
+  }
+  
+  .user-info p {
+    margin: 0;
+    color: #666;
+  }
+  
+  .request-message {
+    text-align: center;
+    margin: 20px 0;
+    color: #555;
+  }
+  
+  .request-buttons {
+    display: flex;
+    justify-content: space-around;
+    gap: 16px;
+  }
+  
+  .request-buttons button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+  
+  .accept-btn {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .accept-btn:hover {
+    background-color: #218838;
+  }
+  
+  .decline-btn {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .decline-btn:hover {
+    background-color: #c82333;
+  }

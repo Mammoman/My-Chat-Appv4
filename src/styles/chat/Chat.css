@@ -1,0 +1,18 @@
+.app-container {
+  display: flex;
+  height: 100vh; /* Full height of the viewport */
+
+
+
+
+.main-content {
+  display: flex;
+  flex: 1; /* Take the remaining space */
+  flex-direction: row;
+}
+
+.chat-list-container {
+  width: 70%; /* Adjust width as needed */
+  background-color: #ffffff;
+  border-right: 1px solid #ccc;
+}

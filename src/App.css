@@ -1,0 +1,243 @@
+:root {
+  height: 100vh;
+  overflow: hidden;
+  background-color: #0A0A0A;
+}
+
+body{
+  display: flex;
+  height: 100vh;
+  margin: 0;
+  background-color: #0A0A0A;
+}
+
+
+.mainpage-container {
+  display: flex;
+    flex-direction: row;
+    width: 100%;
+    overflow: hidden;
+    height: 100vh;
+}
+
+
+.chat-area-container{ 
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  min-width: 0;
+  border-radius: 20px;
+  border:  1px solid  #000000;
+  margin:  14px;
+  overflow-y: auto;
+  height: 100vh;
+}
+
+.chat-area-container4 {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.chat-area p{
+  font-size: 44px;
+}
+
+.dark-theme{
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+
+body.dark-theme {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+.dark-theme .settings-content {
+  background-color: #1e1e1e;
+  color: #ffffff;
+}
+
+.dark-theme .settings-sidebar {
+  background-color: #2c2c2c;
+  border-right: 1px solid #444;
+}
+
+.dark-theme .settings-sidebar li.active {
+  background-color: #3a3a3a;
+}
+
+ ::-webkit-scrollbar {
+  width: 8px;
+}
+
+ ::-webkit-scrollbar-track {
+  background: #bebebe;
+}
+
+ ::-webkit-scrollbar-thumb {
+  background: #ece8e8;
+  border-radius: 4px;
+}
+
+ ::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Scrollbar Dark Theme */
+.dark-theme ::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dark-theme ::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+.dark-theme ::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 4px;
+}
+
+.dark-theme ::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+
+
+
+
+/* Main Container Dark Theme */
+.dark-theme .mainpage-container {
+  background-color: #1a1a1a;
+}
+
+/* Chat List Container Dark Theme */
+.dark-theme .chat-list-container {
+  background-color: #2c2c2c;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.dark-theme .chat-list-header {
+  background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.darkmode--icon{
+  position: relative;
+  z-index: 100px;
+}
+
+.dark-theme .toggle-icon-1{
+  color: yellow;
+  border-radius: 14px;
+  width: 40px;
+  height: 44px;
+}
+
+.dark-theme .gradient-text {
+  background: linear-gradient(135deg, #ffffff 0%, #4f46e5 100%);
+  -webkit-background-clip: text;
+}
+
+.darkmode .room-label{
+  color: aliceblue;
+}
+
+
+
+
+
+
+/* Search Bar Dark Theme */
+.dark-theme .chat-search-container {
+  background: #333;
+  border-color: #444;
+}
+
+.dark-theme .chat-search-container input {
+  color: #ffffff;
+}
+
+.dark-theme .search.focused .chat-search-container {
+  border-color: #4f46e5;
+  background: #3a3a3a;
+}
+
+
+/* Room Items Dark Theme */
+.dark-theme .room-input-wrapper{
+   padding: 0;
+}
+
+.dark-theme .room{
+  background: #221f1f;
+  padding: 4px;
+}
+
+.dark-theme .room-item {
+  border: 1px solid #444;
+}
+
+.dark-theme .room-item:hover {
+  background: rgba(79, 70, 229, 0.15);
+}
+
+.dark-theme .room-item.active {
+  background: rgba(79, 70, 229, 0.2);
+}
+
+.dark-theme .room-info h4 {
+  color: #ffffff;
+}
+
+.dark-theme .room-info p {
+  color: #999;
+}
+
+.dark-theme .room-label{
+  transition: all;
+  background: linear-gradient(135deg, #d89393 0%, #deff3b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient 8s ease infinite;
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+
+/* Message Area Dark Theme */
+.dark-theme .message-area {
+  background-color: #2c2c2c;
+  border-color: #444;
+  border-radius: 15px;
+}
+
+.dark-theme .message-header {
+  border-bottom: 1px solid #444;
+}
+
+.dark-theme .message-bubble {
+  background: #3a3a3a;
+  color: #ffffff;
+}
+
+.dark-theme .message.sent .message-bubble {
+  background: #4f46e5;
+}
+
+.dark-theme .message-box{
+  background: #1a1a1a;
+}
+
+
+
+/* Input Areas Dark Theme */
+ 
+
+

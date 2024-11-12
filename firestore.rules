@@ -1,0 +1,72 @@
+
+
+
+
+
+
+
+
+// Firebase Firestore Rules for room deletion
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isRoomCreator(roomData) {
+      return roomData.createdBy == request.auth.uid;
+    }
+    
+    function isRoomParticipant(roomData) {
+      return roomData.participants.hasAny([request.auth.uid]);
+    }
+
+    match /rooms/{roomId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn();
+      
+      // Allow delete only if user is the room creator
+      allow delete: if isSignedIn() && 
+        isRoomCreator(resource.data);
+      
+      // Allow updates based on different conditions
+      allow update: if isSignedIn() && (
+        // Room creator can make any changes
+        isRoomCreator(resource.data) ||
+        
+        // Public rooms can be joined by anyone
+        resource.data.type == 'public' ||
+        
+        // Private room updates for participants
+        (resource.data.type == 'private' && (
+          // Existing participants can update
+          isRoomParticipant(resource.data) ||
+          // New participants can join if room isn't full
+          resource.data.participants.size() < 2
+        )) ||
+        
+        // Allow participants to remove themselves
+        (request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['participants']) &&
+        resource.data.participants.hasAll(request.resource.data.participants))
+      );
+      
+      match /Messages/{messageId} {
+        allow read: if isSignedIn() && 
+          isRoomParticipant(get(/databases/$(database)/documents/rooms/$(roomId)).data);
+        
+        allow write: if isSignedIn() && 
+          isRoomParticipant(get(/databases/$(database)/documents/rooms/$(roomId)).data);
+        
+        allow delete: if isSignedIn() && (
+          // Message creator can delete their messages
+          resource.data.user == request.auth.token.email ||
+          // Room creator can delete any message
+          isRoomCreator(get(/databases/$(database)/documents/rooms/$(roomId)).data)
+        );
+      }
+    }
+  }
+} 
