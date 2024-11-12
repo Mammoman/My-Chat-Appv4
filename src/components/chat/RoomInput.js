@@ -56,7 +56,7 @@ function RoomInput({ setRoom }) {
   const createRoom = async () => {
     const roomName = roomInputRef.current.value.trim();
     if (!roomName) return;
-
+       
     try {
       const roomsRef = collection(db, "rooms");
       

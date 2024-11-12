@@ -9,13 +9,15 @@ import {
   doc,
   getDoc,
   updateDoc,
-  arrayUnion
+  arrayUnion,
+  arrayRemove
 } from 'firebase/firestore';
 import { auth, db } from '../../config/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { Call02Icon, PlusSignIcon, Cancel02Icon, MoreVerticalIcon, TelegramIcon } from 'hugeicons-react';
 import ChatRequestPopup from './ChatRequestPopup';
 import '../../styles/chat/MessageArea.css';
+import '../../styles/chat/Reactions.css';
 
 const Chat = ({ room }) => {
   const [roomData, setRoomData] = useState(null);
@@ -27,10 +29,32 @@ const Chat = ({ room }) => {
   const [isRoomCreator, setIsRoomCreator] = useState(false);
   const [selectedReply, setSelectedReply] = useState(null);
   const [selectedMessageId, setSelectedMessageId] = useState(null);
+  const reactions = ['🔥', '🙌', '👍', '😊','🫠','😭'];
 
   const scrollToBottom = () => {
     if (messageContentRef.current) {
       messageContentRef.current.scrollTop = messageContentRef.current.scrollHeight;
+    }
+  };
+
+  const handleReaction = async (messageId, reaction) => {
+    try {
+      const messageRef = doc(db, 'rooms', room, 'Messages', messageId);
+      const messageDoc = await getDoc(messageRef);
+      const currentReactions = messageDoc.data().reactions || {};
+      
+      // Toggle reaction for current user
+      if (currentReactions[reaction]?.includes(auth.currentUser.uid)) {
+        await updateDoc(messageRef, {
+          [`reactions.${reaction}`]: arrayRemove(auth.currentUser.uid)
+        });
+      } else {
+        await updateDoc(messageRef, {
+          [`reactions.${reaction}`]: arrayUnion(auth.currentUser.uid)
+        });
+      }
+    } catch (error) {
+      console.error("Error handling reaction:", error);
     }
   };
 
@@ -223,6 +247,8 @@ const Chat = ({ room }) => {
                 <div className="message-user-avatar">
                   {message.user.charAt(0).toUpperCase()}
                 </div>
+
+
                 <div className="message-content-wrapper">
                   <span className="message-user-email">{message.user}</span>
                   <div className="message-bubble-wrapper">
@@ -235,6 +261,40 @@ const Chat = ({ room }) => {
                     )}
                     <p>{message.text}</p>
                   </div>
+                
+                  <div className="reactions-container">
+  <div className="reactions-popup">
+    {reactions.map((reaction, index) => (
+      <button
+        key={reaction}
+        className="reaction-btn"
+        style={{ animationDelay: `${index * 0.05}s` }}
+        onClick={(e) => {
+          e.stopPropagation();
+          handleReaction(message.id, reaction);
+        }}
+      >
+        {reaction}
+      </button>
+    ))}
+  </div>
+  
+  <div className="reaction-badges">
+    {message.reactions && Object.entries(message.reactions).map(([reaction, users], index) => 
+      users.length > 0 && (
+        <div 
+          key={reaction} 
+          className="reaction-badge"
+          style={{ animationDelay: `${index * 0.05}s` }}
+        >
+          <span className="reaction-emoji">{reaction}</span>
+          <span className="reaction-count">{users.length}</span>
+        </div>
+      )
+    )}
+  </div>
+</div>
+
                   </div>
                 
                   <span className="message-status">
@@ -244,9 +304,9 @@ const Chat = ({ room }) => {
                       <span className="status-icon status-pending">⏳</span>
                     )}
                   </span>
-                  
-                  {selectedMessageId === message.id && (
-                    <div className="message-overlay">
+                                
+                                {selectedMessageId === message.id && (
+                  <div className="message-overlay">
                       <button 
                         className="overlay-reply-button"
                         onClick={(e) => {
@@ -257,7 +317,7 @@ const Chat = ({ room }) => {
                       >
                         Reply
                       </button>
-                    </div>
+                  </div>
                   )}
                 </div>
               </div>
