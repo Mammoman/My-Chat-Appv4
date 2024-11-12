@@ -14,7 +14,7 @@ import {
 } from 'firebase/firestore';
 import { auth, db } from '../../config/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
-import { Call02Icon, PlusSignIcon, Cancel02Icon, MoreVerticalIcon, TelegramIcon } from 'hugeicons-react';
+import { Call02Icon, PlusSignIcon, Cancel02Icon, MoreVerticalIcon, TelegramIcon, StopIcon, Mic02Icon } from 'hugeicons-react';
 import ChatRequestPopup from './ChatRequestPopup';
 import '../../styles/chat/MessageArea.css';
 import '../../styles/chat/Reactions.css';
@@ -30,6 +30,15 @@ const Chat = ({ room }) => {
   const [selectedReply, setSelectedReply] = useState(null);
   const [selectedMessageId, setSelectedMessageId] = useState(null);
   const reactions = ['🔥', '🙌', '👍', '😊','🫠','😭'];
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordingDuration, setRecordingDuration] = useState(0);
+  const [previewAudio, setPreviewAudio] = useState(null);
+  const [showPreview, setShowPreview] = useState(false);
+  const mediaRecorderRef = useRef(null);
+  const audioChunksRef = useRef([]);
+  const timerRef = useRef(null);
+
+  const MAX_DURATION = 60; // Maximum duration in seconds
 
   const scrollToBottom = () => {
     if (messageContentRef.current) {
@@ -206,6 +215,94 @@ const Chat = ({ room }) => {
     setSelectedMessageId(messageId === selectedMessageId ? null : messageId);
   };
 
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorderRef.current = new MediaRecorder(stream);
+      audioChunksRef.current = [];
+      setRecordingDuration(0);
+      setShowPreview(false);
+      setPreviewAudio(null);
+
+      mediaRecorderRef.current.ondataavailable = (event) => {
+        audioChunksRef.current.push(event.data);
+      };
+
+      mediaRecorderRef.current.onstop = async () => {
+        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/mp3' });
+        const audioUrl = URL.createObjectURL(audioBlob);
+        setPreviewAudio({ blob: audioBlob, url: audioUrl });
+        setShowPreview(true);
+      };
+
+      // Start duration timer
+      timerRef.current = setInterval(() => {
+        setRecordingDuration(prev => {
+          if (prev >= MAX_DURATION) {
+            stopRecording();
+            return prev;
+          }
+          return prev + 1;
+        });
+      }, 1000);
+
+      mediaRecorderRef.current.start();
+      setIsRecording(true);
+    } catch (error) {
+      console.error("Error starting recording:", error);
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      clearInterval(timerRef.current);
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+      mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
+    }
+  };
+
+  const cancelRecording = () => {
+    setShowPreview(false);
+    setPreviewAudio(null);
+    setRecordingDuration(0);
+  };
+
+  const sendVoiceMessage = async () => {
+    if (!previewAudio) return;
+
+    const reader = new FileReader();
+    reader.readAsDataURL(previewAudio.blob);
+    reader.onloadend = async () => {
+      const base64Audio = reader.result;
+      
+      try {
+        const messagesRef = collection(db, 'rooms', room, 'Messages');
+        await addDoc(messagesRef, {
+          type: 'voice',
+          audioData: base64Audio,
+          duration: recordingDuration,
+          createdAt: serverTimestamp(),
+          user: auth.currentUser.email,
+          room,
+        });
+        
+        // Reset states after sending
+        setShowPreview(false);
+        setPreviewAudio(null);
+        setRecordingDuration(0);
+      } catch (error) {
+        console.error("Error sending voice message:", error);
+      }
+    };
+  };
+
+  const formatDuration = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
   return (
     <div className="message-area">
       {!room ? (
@@ -253,13 +350,20 @@ const Chat = ({ room }) => {
                   <span className="message-user-email">{message.user}</span>
                   <div className="message-bubble-wrapper">
                   <div className="message-bubble">
-                    {message.replyTo && (
-                      <div className="reply-content">
-                        <span className="reply-user">{message.replyTo.user}</span>
-                        <p className="reply-text">{message.replyTo.text}</p>
+                    {message.type === 'voice' ? (
+                      <div className="voice-message">
+                        <audio 
+                          controls 
+                          src={message.audioData} 
+                          className="voice-message-player" 
+                        />
+                        <span className="voice-duration">
+                          {formatDuration(message.duration)}
+                        </span>
                       </div>
+                    ) : (
+                      <p>{message.text}</p>
                     )}
-                    <p>{message.text}</p>
                   </div>
                 
                   <div className="reactions-container">
@@ -345,20 +449,54 @@ const Chat = ({ room }) => {
               </div>
             )}
             <div className="message-box">
-              <button className="action-btn plus-btn" type="button">
-                <PlusSignIcon />
-              </button>
-              <input
-                type="text"
-                className='message-input'
-                placeholder='Type here...'
-                onChange={(e) => setNewMessage(e.target.value)}
-                value={newMessage}
-              />
-              <button type='submit' className='action-btn plus-btn'>
-                <TelegramIcon/>
-              </button>
-              </div>
+              {showPreview ? (
+                <div className="voice-preview">
+                  <audio 
+                    controls 
+                    src={previewAudio?.url} 
+                    className="voice-message-player"
+                  />
+                  <div className="voice-preview-actions">
+                    <button 
+                      onClick={cancelRecording} 
+                      className="voice-preview-btn cancel"
+                    >
+                      Cancel
+                    </button>
+                    <button 
+                      onClick={sendVoiceMessage} 
+                      className="voice-preview-btn send"
+                    >
+                      Send
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <input
+                    type="text"
+                    className='message-input'
+                    placeholder='Type here...'
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    value={newMessage}
+                  />
+                  <button 
+                    type="button" 
+                    className={`action-btn voice-btn ${isRecording ? 'recording' : ''}`}
+                    onClick={isRecording ? stopRecording : startRecording}
+                  >
+                    {isRecording ? (
+                      <div className="recording-indicator">
+                        <StopIcon />
+                        <span className="duration">{formatDuration(recordingDuration)}</span>
+                      </div>
+                    ) : (
+                      <Mic02Icon />
+                    )}
+                  </button>
+                </>
+              )}
+            </div>
           </form>
           
         
