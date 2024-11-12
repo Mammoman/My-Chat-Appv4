@@ -17,8 +17,8 @@ import { Call02Icon, PlusSignIcon, Cancel02Icon, MoreVerticalIcon, TelegramIcon 
 import ChatRequestPopup from './ChatRequestPopup';
 import '../../styles/chat/MessageArea.css';
 
-const Chat = (props) => {
-  const { room } = props;
+const Chat = ({ room }) => {
+  const [roomData, setRoomData] = useState(null);
   const messageContentRef = useRef(null)
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -35,6 +35,25 @@ const Chat = (props) => {
   };
 
   useEffect(() => {
+    if (!room) return;
+
+    const fetchRoomData = async () => {
+      try {
+        const roomRef = doc(db, 'rooms', room);
+        const roomDoc = await getDoc(roomRef);
+        
+        if (roomDoc.exists()) {
+          setRoomData(roomDoc.data());
+        }
+      } catch (error) {
+        console.error("Error fetching room data:", error);
+      }
+    };
+
+    fetchRoomData();
+  }, [room]);
+
+  useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
@@ -46,6 +65,7 @@ const Chat = (props) => {
       const roomDoc = await getDoc(roomRef);
       
       if (roomDoc.exists()) {
+
         setIsRoomCreator(roomDoc.data().createdBy === auth.currentUser?.uid);
       }
     };
@@ -172,7 +192,7 @@ const Chat = (props) => {
         <>
           <div className='message-header'>
             <div className="header-info">
-              <h1>Welcome user : {room.name}</h1>
+            <h1>Welcome to: {roomData?.displayName || roomData?.name}</h1>
               {userEmail ? (
                 <>
                   <h2>User Email: {userEmail}</h2>
@@ -183,7 +203,9 @@ const Chat = (props) => {
               )}
             </div>
             <div className="header-actions">
-            <span className="member-count">{room.members?.length || 0} members</span>
+            <span className="member-count">
+                {roomData?.participants?.length || 0} members
+              </span>
               <button className="action-btn"><Call02Icon className='phone-ma-btn'/></button>
               <button className="action-btn"><MoreVerticalIcon className='ellipsisV-ma-btn'/></button>
 

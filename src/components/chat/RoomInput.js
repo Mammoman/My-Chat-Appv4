@@ -85,7 +85,9 @@ function RoomInput({ setRoom }) {
         createdAt: new Date(),
         type: roomType,
         participants: [auth.currentUser.uid],
-        isActive: true
+        isActive: true,
+        pendingRequests: [],
+        lastMessage: null
       };
 
       const docRef = await addDoc(roomsRef, newRoom);

@@ -45,7 +45,7 @@ const MainApp = () => {
       
         <ChatList rooms={rooms} selectedRoom={room} onSelectRoom={setRoom} setRoom={setRoom} />
         <div className="chat-area">
-          {room (
+          {room && (
             <Chat room={room} />
           )}
         </div>

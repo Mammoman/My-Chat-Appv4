@@ -42,9 +42,13 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom }) => {
     // Filter rooms based on permissions and search query
     const userRooms = rooms.filter(room => {
       const matchesSearch = room.name?.toLowerCase().includes(searchQuery.toLowerCase());
-      const hasPermission = room.type === 'public' || 
-        (room.participants && room.participants.includes(auth.currentUser?.uid));
-      
+      const hasPermission =
+       room.type === 'public' || 
+        (room.participants && room.participants.includes(auth.currentUser?.uid)) ||
+        room.createdBy === auth.currentUser.uid;
+
+      console.log(room.createdBy, auth.currentUser.uid);
+
       return matchesSearch && hasPermission;
     });
 
