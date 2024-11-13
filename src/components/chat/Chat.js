@@ -18,6 +18,7 @@ import { Call02Icon, PlusSignIcon, Cancel02Icon, MoreVerticalIcon, TelegramIcon,
 import ChatRequestPopup from './ChatRequestPopup';
 import '../../styles/chat/MessageArea.css';
 import '../../styles/chat/Reactions.css';
+import VoiceMessagePlayer from './VoiceMessagePlayer';
 
 const Chat = ({ room }) => {
   const [roomData, setRoomData] = useState(null);
@@ -351,16 +352,11 @@ const Chat = ({ room }) => {
                   <div className="message-bubble-wrapper">
                   <div className="message-bubble">
                     {message.type === 'voice' ? (
-                      <div className="voice-message">
-                        <audio 
-                          controls 
-                          src={message.audioData} 
-                          className="voice-message-player" 
-                        />
-                        <span className="voice-duration">
-                          {formatDuration(message.duration)}
-                        </span>
-                      </div>
+                      <VoiceMessagePlayer 
+                        audioUrl={message.audioData} 
+                        duration={message.duration}
+                        isSent={message.userId === auth.currentUser?.uid}
+                      />
                     ) : (
                       <p>{message.text}</p>
                     )}
