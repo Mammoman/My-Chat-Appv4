@@ -551,7 +551,7 @@ const Chat = ({ room }) => {
                   <span className="reply-user">{selectedReply.user}</span>
                   <p className="reply-text">
                     {selectedReply.type === 'voice' ? (
-                      <span>🎤 Voice message</span>
+                      <span className='reply-voice'>🎤 Voice message</span>
                     ) : (
                       selectedReply.text
                     )}
@@ -562,7 +562,7 @@ const Chat = ({ room }) => {
                   className="cancel-reply" 
                   onClick={() => setSelectedReply(null)}
                 >
-                  <Cancel02Icon/>
+                  <Cancel02Icon className='cancel-reply-icon'/>
                 </button>
               </div>
             )}
@@ -575,15 +575,16 @@ const Chat = ({ room }) => {
                    />
               ) : (
                 <>
-                  <input
+                <div className='message-input-container '>
+                <input
                    ref={inputRef}
                     type="text"
                     className='message-input'
                     placeholder='Type here...'
                     onChange={(e) => setNewMessage(e.target.value)}
                     value={newMessage}
-                  />
-                  <button 
+                    />
+                    <button 
                     type="button" 
                     className={`action-btn voice-btn ${isRecording ? 'recording' : ''}`}
                     onClick={isRecording ? stopRecording : startRecording}
@@ -597,6 +598,9 @@ const Chat = ({ room }) => {
                       <Mic02Icon />
                     )}
                   </button>
+                 
+                </div>
+                 
                 </>
               )}
             </div>
