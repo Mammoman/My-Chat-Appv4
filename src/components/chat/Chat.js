@@ -140,26 +140,33 @@ const Chat = ({ room }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!room || newMessage === "") return;
-    
+
+    // Clear message and reply state immediately
+    const messageToSend = newMessage;
+    const replyToSend = selectedReply;
+    setNewMessage("");
+    setSelectedReply(null);
 
     try {
       const messagesRef = collection(db, 'rooms', room, 'Messages');
       await addDoc(messagesRef, {
-        text: newMessage,
+        text: messageToSend,
+        type: 'text',
         createdAt: serverTimestamp(),
         user: auth.currentUser ? auth.currentUser.email : 'Guest',
         room,
-        replyTo: selectedReply ? {
-          id: selectedReply.id,
-          text: selectedReply.text,
-          user: selectedReply.user,
-          type: selectedReply.type
+        replyTo: replyToSend ? {
+          id: replyToSend.id,
+          text: replyToSend.text,
+          user: replyToSend.user,
+          type: replyToSend.type
         } : null
       });
-      setNewMessage("");
-      setSelectedReply(null);
     } catch (error) {
       console.error("Error sending message:", error);
+      // Restore the message if sending fails
+      setNewMessage(messageToSend);
+      setSelectedReply(replyToSend);
     }
   };
 
@@ -291,6 +298,11 @@ const Chat = ({ room }) => {
   const sendVoiceMessage = async () => {
     if (!previewAudio) return;
 
+    // Store reply state before clearing
+    const replyToSend = selectedReply;
+    setSelectedReply(null);
+    setShowPreview(false);
+
     const reader = new FileReader();
     reader.readAsDataURL(previewAudio.blob);
     reader.onloadend = async () => {
@@ -305,14 +317,22 @@ const Chat = ({ room }) => {
           createdAt: serverTimestamp(),
           user: auth.currentUser.email,
           room,
+          replyTo: replyToSend ? {
+            id: replyToSend.id,
+            text: replyToSend.text,
+            user: replyToSend.user,
+            type: replyToSend.type
+          } : null
         });
         
-        // Reset states after sending
-        setShowPreview(false);
+        // Reset states after successful send
         setPreviewAudio(null);
         setRecordingDuration(0);
       } catch (error) {
         console.error("Error sending voice message:", error);
+        // Restore states if sending fails
+        setSelectedReply(replyToSend);
+        setShowPreview(true);
       }
     };
   };
