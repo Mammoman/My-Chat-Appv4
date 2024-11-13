@@ -39,6 +39,7 @@ const Chat = ({ room }) => {
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
   const timerRef = useRef(null);
+  const inputRef = useRef(null);
 
   const MAX_DURATION = 60; // Maximum duration in seconds
 
@@ -234,6 +235,12 @@ const Chat = ({ room }) => {
         type: message.type || 'text'  // Default to 'text' for normal messages
       });
     }; 
+       
+       // Focus the input immediately
+  setTimeout(() => {
+    inputRef.current?.focus();
+  }, 0);
+
   };
 
 
@@ -541,6 +548,7 @@ const Chat = ({ room }) => {
               ) : (
                 <>
                   <input
+                   ref={inputRef}
                     type="text"
                     className='message-input'
                     placeholder='Type here...'
