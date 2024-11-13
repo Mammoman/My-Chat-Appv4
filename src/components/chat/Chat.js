@@ -9,6 +9,7 @@ import {
   doc,
   getDoc,
   updateDoc,
+  deleteDoc,
   arrayUnion,
   arrayRemove
 } from 'firebase/firestore';
@@ -254,6 +255,18 @@ const Chat = ({ room }) => {
   };
 
 
+  const handleDeleteMessage = async (message) => {
+    try {
+      const messageRef = doc(db, 'rooms', room, 'Messages', message.id);
+      await deleteDoc(messageRef);
+      setSelectedMessageId(null);
+    } catch (error) {
+      console.error("Error deleting message:", error);
+    }
+  };
+   
+
+
 
 
   const handleMessageClick = (messageId) => {
@@ -492,7 +505,9 @@ const Chat = ({ room }) => {
                                     handleReply(msg);
                                     setSelectedMessageId(null);
                                   }}
+                                  onDelete={handleDeleteMessage}
                                   isSelected={selectedMessageId === message.id}
+                                  canDelete={message.user === auth.currentUser?.email}
                                 />
                 </div>
               </div>
