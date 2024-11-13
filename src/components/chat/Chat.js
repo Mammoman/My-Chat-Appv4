@@ -237,6 +237,17 @@ const Chat = ({ room }) => {
   };
 
 
+  const scrollToMessage = (messageId) => {
+    const messageElement = document.getElementById(`message-${messageId}`);
+    if (messageElement) {
+      messageElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      messageElement.classList.add('highlight');
+      setTimeout(() => messageElement.classList.remove('highlight'), 2000);
+    }
+  };
+
+
+
 
   const handleMessageClick = (messageId) => {
     setSelectedMessageId(messageId === selectedMessageId ? null : messageId);
@@ -378,6 +389,7 @@ const Chat = ({ room }) => {
             {messages.map((message) => (
               <div 
                 key={message.id} 
+                id={`message-${message.id}`}
                 className={`message ${message.user === userEmail ? 'sent' : 'received'}`}
                 onClick={() => handleMessageClick(message.id)}
               >
@@ -391,10 +403,22 @@ const Chat = ({ room }) => {
                   <div className="message-bubble-wrapper">
                   <div className="message-bubble">
                     {message.replyTo && (
-                      <div className="reply-reference">
+                      <div 
+                        className="reply-reference"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          scrollToMessage(message.replyTo.id);
+                        }}
+                      >
                         <div className="reply-preview-content">
                           <span className="reply-user">{message.replyTo.user}</span>
-                          <p className="reply-text">{message.replyTo.text}</p>
+                          <p className="reply-text">
+                            {message.replyTo.type === 'voice' ? (
+                              <span>🎤 Voice message</span>
+                            ) : (
+                              message.replyTo.text
+                            )}
+                          </p>
                         </div>
                       </div>
                     )}
