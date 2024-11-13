@@ -38,23 +38,36 @@ const VoiceMessagePlayer = ({ audioUrl, duration, isSent }) => {
       
       analyserRef.current.getByteFrequencyData(dataArray);
       
-      ctx.fillStyle = isSent ? '#4338ca' : '#e5e7eb';
-      ctx.fillRect(0, 0, WIDTH, HEIGHT);
+      ctx.clearRect(0, 0, WIDTH, HEIGHT);
       
-      const barWidth = (WIDTH / bufferLength) * 1.5;
+      const barWidth = (WIDTH / bufferLength) * 1.2;
       let barHeight;
       let x = 0;
       
       for(let i = 0; i < bufferLength; i++) {
-        barHeight = (dataArray[i] / 255) * HEIGHT * 0.8;
+        barHeight = (dataArray[i] / 255) * HEIGHT * 0.7;
         
-        ctx.fillStyle = isSent ? '#ffffff' : '#4f46e5';
-        ctx.fillRect(
-          x, 
-          (HEIGHT - barHeight) / 2, 
-          barWidth - 1, 
-          barHeight
+        const gradient = ctx.createLinearGradient(0, HEIGHT - barHeight, 0, HEIGHT);
+        
+        if (isSent) {
+          gradient.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
+          gradient.addColorStop(1, 'rgba(255, 255, 255, 0.4)');
+        } else {
+          gradient.addColorStop(0, '#4f46e5');
+          gradient.addColorStop(1, '#818cf8');
+        }
+        
+        ctx.fillStyle = gradient;
+        
+        ctx.beginPath();
+        ctx.roundRect(
+          x,
+          (HEIGHT - barHeight) / 2,
+          barWidth - 1,
+          barHeight,
+          3
         );
+        ctx.fill();
         
         x += barWidth + 1;
       }
@@ -93,20 +106,22 @@ const VoiceMessagePlayer = ({ audioUrl, duration, isSent }) => {
   };
   
   return (
-    <div className={`voice-message-player-container ${isSent ? 'sent' : 'received'}`}>
-      <button className="play-button" onClick={togglePlay}>
-        {isPlaying ? <PauseIcon size={20} /> : <PlayIcon size={20} />}
-      </button>
-      
-      <div className="waveform-container">
-        <canvas ref={canvasRef} className="waveform-canvas" />
+    <div className={`message-bubble voice-message ${isSent ? 'sent' : 'received'}`}>
+      <div className="voice-message-player-container">
+        <button className="play-button" onClick={togglePlay}>
+          {isPlaying ? <PauseIcon size={20} /> : <PlayIcon size={20} />}
+        </button>
+        
+        <div className="waveform-container">
+          <canvas ref={canvasRef} className="waveform-canvas" />
+        </div>
+        
+        <span className="duration-display">
+          {formatTime(currentTime)}
+        </span>
+        
+        <audio ref={audioRef} src={audioUrl} preload="metadata" />
       </div>
-      
-      <span className="duration-display">
-        {formatTime(currentTime)}
-      </span>
-      
-      <audio ref={audioRef} src={audioUrl} preload="metadata" />
     </div>
   );
 };
