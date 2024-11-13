@@ -151,7 +151,8 @@ const Chat = ({ room }) => {
         replyTo: selectedReply ? {
           id: selectedReply.id,
           text: selectedReply.text,
-          user: selectedReply.user
+          user: selectedReply.user,
+          type: selectedReply.type
         } : null
       });
       setNewMessage("");
@@ -209,9 +210,25 @@ const Chat = ({ room }) => {
   };
 
   const handleReply = (message) => {
-    setSelectedReply(message);
-    messageContentRef.current?.focus();
+    if ( message.type === 'voice') {
+      setSelectedReply({
+        id: message.id,
+        text: message.type === 'voice' ? '🎤 Voice message' : message.text,
+        user: message.user,
+        type: message.type
+      });
+      messageContentRef.current?.focus();
+    }  else {
+      setSelectedReply({
+        id: message.id,
+        text: message.text,
+        user: message.user,
+        type: message.type || 'text'  // Default to 'text' for normal messages
+      });
+    }; 
   };
+
+  
 
   const handleMessageClick = (messageId) => {
     setSelectedMessageId(messageId === selectedMessageId ? null : messageId);
@@ -436,7 +453,13 @@ const Chat = ({ room }) => {
               <div className="reply-preview">
                 <div className="reply-preview-content">
                   <span className="reply-user">{selectedReply.user}</span>
-                  <p className="reply-text">{selectedReply.text}</p>
+                  <p className="reply-text">
+                    {selectedReply.type === 'voice' ? (
+                      <span>🎤 Voice message</span>
+                    ) : (
+                      selectedReply.text
+                    )}
+                  </p>
                 </div>
                 <button 
                   type="button" 
