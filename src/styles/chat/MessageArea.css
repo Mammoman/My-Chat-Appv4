@@ -286,6 +286,42 @@
   }
 
 
+  .reply-reference {
+  padding: 6px 10px;
+  margin-bottom: 8px;
+  background: rgba(0, 0, 0, 0.05);
+  border-left: 2px solid #4f46e5;
+  border-radius: 4px;
+}
+
+.message.sent .reply-reference {
+  background: rgba(255, 255, 255, 0.1);
+  border-left-color: #fff;
+}
+
+.reply-reference .reply-user {
+  font-size: 11px;
+  color: #4f46e5;
+  margin-bottom: 2px;
+}
+
+.message.sent .reply-reference .reply-user {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.reply-reference .reply-text {
+  font-size: 12px;
+  color: #666;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.message.sent .reply-reference .reply-text {
+  color: rgba(255, 255, 255, 0.7);
+}
+
 
    
   .message-overlay {

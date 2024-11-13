@@ -351,6 +351,14 @@ const Chat = ({ room }) => {
                   <span className="message-user-email">{message.user}</span>
                   <div className="message-bubble-wrapper">
                   <div className="message-bubble">
+                    {message.replyTo && (
+                      <div className="reply-reference">
+                        <div className="reply-preview-content">
+                          <span className="reply-user">{message.replyTo.user}</span>
+                          <p className="reply-text">{message.replyTo.text}</p>
+                        </div>
+                      </div>
+                    )}
                     {message.type === 'voice' ? (
                       <VoiceMessagePlayer 
                         audioUrl={message.audioData} 
