@@ -19,6 +19,7 @@ import ChatRequestPopup from './ChatRequestPopup';
 import '../../styles/chat/MessageArea.css';
 import '../../styles/chat/Reactions.css';
 import VoiceMessagePlayer from './VoiceMessagePlayer';
+import MessageActions from './MessageActions';
 
 const Chat = ({ room }) => {
   const [roomData, setRoomData] = useState(null);
@@ -140,23 +141,32 @@ const Chat = ({ room }) => {
     e.preventDefault();
     if (!room || newMessage === "") return;
 
+    // Clear message and reply state immediately
+    const messageToSend = newMessage;
+    const replyToSend = selectedReply;
+    setNewMessage("");
+    setSelectedReply(null);
+
     try {
       const messagesRef = collection(db, 'rooms', room, 'Messages');
       await addDoc(messagesRef, {
-        text: newMessage,
+        text: messageToSend,
+        type: 'text',
         createdAt: serverTimestamp(),
         user: auth.currentUser ? auth.currentUser.email : 'Guest',
         room,
-        replyTo: selectedReply ? {
-          id: selectedReply.id,
-          text: selectedReply.text,
-          user: selectedReply.user
+        replyTo: replyToSend ? {
+          id: replyToSend.id,
+          text: replyToSend.text,
+          user: replyToSend.user,
+          type: replyToSend.type
         } : null
       });
-      setNewMessage("");
-      setSelectedReply(null);
     } catch (error) {
       console.error("Error sending message:", error);
+      // Restore the message if sending fails
+      setNewMessage(messageToSend);
+      setSelectedReply(replyToSend);
     }
   };
 
@@ -208,9 +218,36 @@ const Chat = ({ room }) => {
   };
 
   const handleReply = (message) => {
-    setSelectedReply(message);
-    messageContentRef.current?.focus();
+    if ( message.type === 'voice') {
+      setSelectedReply({
+        id: message.id,
+        text: message.type === 'voice' ? '🎤 Voice message' : message.text,
+        user: message.user,
+        type: message.type
+      });
+      messageContentRef.current?.focus();
+    }  else {
+      setSelectedReply({
+        id: message.id,
+        text: message.text,
+        user: message.user,
+        type: message.type || 'text'  // Default to 'text' for normal messages
+      });
+    }; 
   };
+
+
+  const scrollToMessage = (messageId) => {
+    const messageElement = document.getElementById(`message-${messageId}`);
+    if (messageElement) {
+      messageElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      messageElement.classList.add('highlight');
+      setTimeout(() => messageElement.classList.remove('highlight'), 2000);
+    }
+  };
+
+
+
 
   const handleMessageClick = (messageId) => {
     setSelectedMessageId(messageId === selectedMessageId ? null : messageId);
@@ -272,6 +309,11 @@ const Chat = ({ room }) => {
   const sendVoiceMessage = async () => {
     if (!previewAudio) return;
 
+    // Store reply state before clearing
+    const replyToSend = selectedReply;
+    setSelectedReply(null);
+    setShowPreview(false);
+
     const reader = new FileReader();
     reader.readAsDataURL(previewAudio.blob);
     reader.onloadend = async () => {
@@ -286,14 +328,22 @@ const Chat = ({ room }) => {
           createdAt: serverTimestamp(),
           user: auth.currentUser.email,
           room,
+          replyTo: replyToSend ? {
+            id: replyToSend.id,
+            text: replyToSend.text,
+            user: replyToSend.user,
+            type: replyToSend.type
+          } : null
         });
         
-        // Reset states after sending
-        setShowPreview(false);
+        // Reset states after successful send
         setPreviewAudio(null);
         setRecordingDuration(0);
       } catch (error) {
         console.error("Error sending voice message:", error);
+        // Restore states if sending fails
+        setSelectedReply(replyToSend);
+        setShowPreview(true);
       }
     };
   };
@@ -339,6 +389,7 @@ const Chat = ({ room }) => {
             {messages.map((message) => (
               <div 
                 key={message.id} 
+                id={`message-${message.id}`}
                 className={`message ${message.user === userEmail ? 'sent' : 'received'}`}
                 onClick={() => handleMessageClick(message.id)}
               >
@@ -352,10 +403,22 @@ const Chat = ({ room }) => {
                   <div className="message-bubble-wrapper">
                   <div className="message-bubble">
                     {message.replyTo && (
-                      <div className="reply-reference">
+                      <div 
+                        className="reply-reference"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          scrollToMessage(message.replyTo.id);
+                        }}
+                      >
                         <div className="reply-preview-content">
                           <span className="reply-user">{message.replyTo.user}</span>
-                          <p className="reply-text">{message.replyTo.text}</p>
+                          <p className="reply-text">
+                            {message.replyTo.type === 'voice' ? (
+                              <span>🎤 Voice message</span>
+                            ) : (
+                              message.replyTo.text
+                            )}
+                          </p>
                         </div>
                       </div>
                     )}
@@ -416,20 +479,14 @@ const Chat = ({ room }) => {
                     )}
                   </span>
                                 
-                                {selectedMessageId === message.id && (
-                  <div className="message-overlay">
-                      <button 
-                        className="overlay-reply-button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleReply(message);
-                          setSelectedMessageId(null);
-                        }}
-                      >
-                        Reply
-                      </button>
-                  </div>
-                  )}
+                                <MessageActions 
+                                  message={message}
+                                  onReply={(msg) => {
+                                    handleReply(msg);
+                                    setSelectedMessageId(null);
+                                  }}
+                                  isSelected={selectedMessageId === message.id}
+                                />
                 </div>
               </div>
             ))}
@@ -441,7 +498,13 @@ const Chat = ({ room }) => {
               <div className="reply-preview">
                 <div className="reply-preview-content">
                   <span className="reply-user">{selectedReply.user}</span>
-                  <p className="reply-text">{selectedReply.text}</p>
+                  <p className="reply-text">
+                    {selectedReply.type === 'voice' ? (
+                      <span>🎤 Voice message</span>
+                    ) : (
+                      selectedReply.text
+                    )}
+                  </p>
                 </div>
                 <button 
                   type="button" 

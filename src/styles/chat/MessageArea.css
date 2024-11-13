@@ -323,6 +323,27 @@
 }
 
 
+.message {
+  transition: background-color 0.3s ease;
+}
+
+.message.highlight {
+  background-color: rgba(79, 70, 229, 0.1);
+}
+
+.reply-reference {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.reply-reference:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.message.sent .reply-reference:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
    
   .message-overlay {
     position: absolute;
