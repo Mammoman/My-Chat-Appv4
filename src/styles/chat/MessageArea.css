@@ -558,22 +558,21 @@
   .voice-message-player-container {
     display: flex;
     align-items: center;
-    background: #4f46e5;
+    background: #f8b13d;
     padding: 8px 16px;
-    border-radius: 24px;
+    border-radius: 50px;
     gap: 12px;
-    width: 250px;
-    margin-left: auto;
+    width: 280px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
 
   .message.received .voice-message-player-container {
     background: #f3f4f6;
-    margin-left: 0;
   }
 
   .waveform-container {
     flex: 1;
-    height: 30px;
+    height: 24px;
     position: relative;
     display: flex;
     align-items: center;
@@ -594,6 +593,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: transform 0.2s;
+  }
+
+  .play-button:hover {
+    transform: scale(1.1);
   }
 
   .message.received .play-button {
@@ -605,6 +609,51 @@
     color: #ffffff;
     min-width: 45px;
     text-align: right;
+    font-weight: 500;
+  }
+
+  .message.received .duration-display {
+    color: #666;
+  }
+
+  .voice-message-bubble {
+    padding: 4px;
+    border-radius: 28px;
+    width: fit-content;
+    max-width: 300px;
+    margin: 4px 0;
+  }
+
+  .message.sent .voice-message-bubble {
+    background: #4f46e5;
+    border-bottom-right-radius: 4px;
+    align-self: flex-end;
+  }
+
+  .message.received .voice-message-bubble {
+    background: #f3f4f6;
+    border-bottom-left-radius: 4px;
+    align-self: flex-start;
+  }
+
+  .voice-message-player-container {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .message.sent .voice-message-player-container {
+    background: transparent;
+  }
+
+  .message.received .voice-message-player-container {
+    background: transparent;
+  }
+
+  .message.sent .duration-display {
+    color: rgba(255, 255, 255, 0.9);
   }
 
   .message.received .duration-display {
