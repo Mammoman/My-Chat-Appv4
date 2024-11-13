@@ -19,6 +19,7 @@ import ChatRequestPopup from './ChatRequestPopup';
 import '../../styles/chat/MessageArea.css';
 import '../../styles/chat/Reactions.css';
 import VoiceMessagePlayer from './VoiceMessagePlayer';
+import MessageActions from './MessageActions';
 
 const Chat = ({ room }) => {
   const [roomData, setRoomData] = useState(null);
@@ -416,20 +417,14 @@ const Chat = ({ room }) => {
                     )}
                   </span>
                                 
-                                {selectedMessageId === message.id && (
-                  <div className="message-overlay">
-                      <button 
-                        className="overlay-reply-button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleReply(message);
-                          setSelectedMessageId(null);
-                        }}
-                      >
-                        Reply
-                      </button>
-                  </div>
-                  )}
+                                <MessageActions 
+                                  message={message}
+                                  onReply={(msg) => {
+                                    handleReply(msg);
+                                    setSelectedMessageId(null);
+                                  }}
+                                  isSelected={selectedMessageId === message.id}
+                                />
                 </div>
               </div>
             ))}
