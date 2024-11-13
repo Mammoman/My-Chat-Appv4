@@ -55,6 +55,10 @@ const Chat = ({ room }) => {
       const messageRef = doc(db, 'rooms', room, 'Messages', messageId);
       const messageDoc = await getDoc(messageRef);
       const currentReactions = messageDoc.data().reactions || {};
+
+        // Prevent scroll position change
+    const messageElement = document.getElementById(`message-${messageId}`);
+    const currentScroll = messageElement?.parentElement?.scrollTop;
       
       // Toggle reaction for current user
       if (currentReactions[reaction]?.includes(auth.currentUser.uid)) {
@@ -66,6 +70,13 @@ const Chat = ({ room }) => {
           [`reactions.${reaction}`]: arrayUnion(auth.currentUser.uid)
         });
       }
+
+
+       // Restore scroll position
+    if (messageElement?.parentElement && currentScroll) {
+      messageElement.parentElement.scrollTop = currentScroll;
+    }
+
     } catch (error) {
       console.error("Error handling reaction:", error);
     }
@@ -90,9 +101,17 @@ const Chat = ({ room }) => {
     fetchRoomData();
   }, [room]);
 
+    
   useEffect(() => {
-    scrollToBottom();
+    const lastMessage = messages[messages.length - 1];
+    const shouldScroll = lastMessage?.user === auth.currentUser?.email && 
+                        lastMessage?.createdAt === null;
+    
+    if (shouldScroll) {
+      scrollToBottom();
+    }
   }, [messages]);
+
 
   useEffect(() => {
     if (!room) return;
@@ -257,14 +276,23 @@ const Chat = ({ room }) => {
 
   const handleDeleteMessage = async (message) => {
     try {
+      const messageElement = document.getElementById(`message-${message.id}`);
+      const currentScroll = messageElement?.parentElement?.scrollTop;
+      
       const messageRef = doc(db, 'rooms', room, 'Messages', message.id);
       await deleteDoc(messageRef);
       setSelectedMessageId(null);
+      
+      // Restore scroll position after a short delay to allow for DOM updates
+      setTimeout(() => {
+        if (messageElement?.parentElement && currentScroll) {
+          messageElement.parentElement.scrollTop = currentScroll;
+        }
+      }, 50);
     } catch (error) {
       console.error("Error deleting message:", error);
     }
   };
-   
 
 
 
