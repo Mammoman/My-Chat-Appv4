@@ -122,6 +122,11 @@
     white-space: pre-wrap;
   }
 
+  .message-bubble .voice-message {
+    background: #e1e1e1;
+    padding: 0;
+  }
+
   .message-bubble-wrapper {
     display: flex;
     flex-direction: column;
@@ -137,10 +142,18 @@
     align-self: flex-end;
   }
 
+  .message.sent .message-bubble.voice-message {
+    background: #f0f0f0;
+  }
+
   .message.received .message-bubble {
      background-color: #f3f4f6;
      color: #1f2937;
      border-bottom-left-radius: 4px;
+  }
+
+  .message.received .message-bubble.voice-message {
+    background: transparent;
   }
   
   .message-bubble p {
