@@ -140,6 +140,7 @@ const Chat = ({ room }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!room || newMessage === "") return;
+    
 
     try {
       const messagesRef = collection(db, 'rooms', room, 'Messages');
@@ -228,7 +229,7 @@ const Chat = ({ room }) => {
     }; 
   };
 
-  
+
 
   const handleMessageClick = (messageId) => {
     setSelectedMessageId(messageId === selectedMessageId ? null : messageId);
