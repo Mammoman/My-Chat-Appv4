@@ -446,9 +446,13 @@
 
 
 
+
+
+
    .voice-preview {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-between;
     gap: 8px;
     width: 100%;
     padding: 8px;
@@ -456,45 +460,63 @@
     border-radius: 12px;
   }
   
-  .voice-message-player {
-    max-width: 200px;
-    height: 40px;
-    border-radius: 20px;
-    background-color: #f0f0f0;
-  }
-
-  .voice-btn {
-    color: #666;
-    transition: color 0.3s;
-  }
-
-  .voice-btn.recording {
-    color: #ff4444;
-    animation: pulse 1.5s infinite;
-  }
-
-  @keyframes pulse {
-    0% { opacity: 1; }
-    50% { opacity: 0.5; }
-    100% { opacity: 1; }
-  }
-
- 
-
   .voice-preview-actions {
     display: flex;
-    gap: 8px;
     justify-content: flex-end;
+    gap: 8px;
+    margin-top: 4px;
   }
 
   .voice-preview-btn {
-    padding: 6px 12px;
+    padding: 8px 16px;
     border-radius: 8px;
     border: none;
-    cursor: pointer;
     font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
     transition: all 0.2s;
   }
+
+  .voice-preview .waveform-container {
+    flex: 1;
+    height: 24px;
+    position: relative;
+    display: flex;
+  }
+  
+  
+
+  .voice-preview .waveform-canvas {
+    width: 100%;
+    height: 100%;
+    border-radius: 14px;
+    
+  }
+
+  .message.received .waveform-canvas {
+    background: transparent;
+  }
+
+  .message.sent .waveform-canvas {
+    background: transparent;
+  }
+
+  .voice-preview .play-button {
+    color: #4f46e5;
+  }
+
+  .voice-preview .voice-message-player-container {
+    background: #f3f4f6;
+  }
+
+  
+.voice-preview .duration-display {
+  color: #4f46e5;
+}
+
+.voice-preview .speed-button {
+  color: #4f46e5;
+}
 
   .voice-preview-btn.cancel {
     background: #f3f4f6;
@@ -509,6 +531,25 @@
   .voice-preview-btn:hover {
     opacity: 0.9;
   }
+
+
+  .audio-player {
+    width: 100%;
+    height: 40px;
+    border-radius: 20px;
+  }
+  
+  
+  .audio-player::-webkit-media-controls-panel {
+    background: #fff;
+  }
+  
+  .audio-player::-webkit-media-controls-current-time-display,
+  .audio-player::-webkit-media-controls-time-remaining-display {
+    color: #4b5563;
+  }
+
+
 
 
   .voice-btn {
@@ -560,7 +601,7 @@
   }
 
   .voice-message-player {
-    max-width: 250px;
+    max-width: 800px;
     height: 40px;
     border-radius: 20px;
     background-color: #f0f0f0;
@@ -576,6 +617,33 @@
     border-radius: 50px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
+
+  .speed-button {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 12px;
+    padding: 4px 8px;
+    padding-left: 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+
+  .message.sent .speed-button {
+    color: #ff2929;
+  }
+  
+  .message.received .speed-button {
+    color: #4f46e5;
+  }
+  
+  .speed-button:hover {
+    background: rgba(0, 0, 0, 0.1);
+  }
+
+
 
 
   .message.received .voice-message-player-container {

@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { PlayIcon, PauseIcon, KeyframesMultipleRemoveIcon } from 'hugeicons-react';
+import { PlayIcon, PauseIcon } from 'hugeicons-react';
 
-const VoiceMessagePlayer = ({ audioUrl, duration, isSent }) => {
+const VoicePreview = ({ audioUrl, onCancel, onSend }) => {
+  // Copy the state and refs from VoiceMessagePlayer
   const canvasRef = useRef(null);
   const audioRef = useRef(null);
   const audioContextRef = useRef(null);
@@ -10,7 +11,8 @@ const VoiceMessagePlayer = ({ audioUrl, duration, isSent }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [playbackRate, setPlaybackRate] = useState(1);
-  
+
+  // Copy the useEffect for visualization from VoiceMessagePlayer
   useEffect(() => {
     const audio = audioRef.current;
     const canvas = canvasRef.current;
@@ -50,9 +52,9 @@ const VoiceMessagePlayer = ({ audioUrl, duration, isSent }) => {
         
         const gradient = ctx.createLinearGradient(0, HEIGHT - barHeight, 0, HEIGHT);
         
-        if (isSent) {
-          gradient.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
-          gradient.addColorStop(1, 'rgba(255, 255, 255, 0.4)');
+        if (onSend) {
+          gradient.addColorStop(0, '#4f46e5');
+          gradient.addColorStop(1, '#818cf8');
         } else {
           gradient.addColorStop(0, '#4f46e5');
           gradient.addColorStop(1, '#818cf8');
@@ -85,8 +87,8 @@ const VoiceMessagePlayer = ({ audioUrl, duration, isSent }) => {
     return () => {
       audio.removeEventListener('timeupdate', handleTimeUpdate);
     };
-  }, [isSent]);
-  
+  }, [onSend]);
+
   const togglePlay = async () => {
     if (audioContextRef.current.state === 'suspended') {
       await audioContextRef.current.resume();
@@ -115,9 +117,9 @@ const VoiceMessagePlayer = ({ audioUrl, duration, isSent }) => {
     const seconds = Math.floor(time % 60);
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
-  
+
   return (
-    <div className={`message-bubble voice-message ${isSent ? 'sent' : 'received'}`}>
+    <div className="voice-preview">
       <div className="voice-message-player-container">
         <button className="play-button" onClick={togglePlay}>
           {isPlaying ? <PauseIcon size={20} /> : <PlayIcon size={20} />}
@@ -136,11 +138,18 @@ const VoiceMessagePlayer = ({ audioUrl, duration, isSent }) => {
         </button>
         
         <audio ref={audioRef} src={audioUrl} preload="metadata" />
+      </div>
 
-      
+      <div className="voice-preview-actions">
+        <button onClick={onCancel} className="voice-preview-btn cancel">
+          Cancel
+        </button>
+        <button onClick={onSend} className="voice-preview-btn send">
+          Send
+        </button>
       </div>
     </div>
   );
 };
 
-export default VoiceMessagePlayer;
+export default VoicePreview;

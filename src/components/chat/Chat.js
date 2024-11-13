@@ -21,6 +21,7 @@ import '../../styles/chat/MessageArea.css';
 import '../../styles/chat/Reactions.css';
 import VoiceMessagePlayer from './VoiceMessagePlayer';
 import MessageActions from './MessageActions';
+import VoicePreview from './VoicePreview';
 
 const Chat = ({ room }) => {
   const [roomData, setRoomData] = useState(null);
@@ -567,27 +568,11 @@ const Chat = ({ room }) => {
             )}
             <div className="message-box">
               {showPreview ? (
-                <div className="voice-preview">
-                  <audio 
-                    controls 
-                    src={previewAudio?.url} 
-                    className="voice-message-player"
-                  />
-                  <div className="voice-preview-actions">
-                    <button 
-                      onClick={cancelRecording} 
-                      className="voice-preview-btn cancel"
-                    >
-                      Cancel
-                    </button>
-                    <button 
-                      onClick={sendVoiceMessage} 
-                      className="voice-preview-btn send"
-                    >
-                      Send
-                    </button>
-                  </div>
-                </div>
+                     <VoicePreview 
+                     audioUrl={previewAudio?.url}
+                     onCancel={cancelRecording}
+                     onSend={sendVoiceMessage}
+                   />
               ) : (
                 <>
                   <input
