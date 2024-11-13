@@ -106,8 +106,8 @@ const VoiceMessagePlayer = ({ audioUrl, duration, isSent }) => {
   };
   
   return (
-    <div className="message-bubble voice-message">
-      <div className={`voice-message-player-container ${isSent ? 'sent' : 'received'}`}>
+    <div className={`message-bubble voice-message ${isSent ? 'sent' : 'received'}`}>
+      <div className="voice-message-player-container">
         <button className="play-button" onClick={togglePlay}>
           {isPlaying ? <PauseIcon size={20} /> : <PlayIcon size={20} />}
         </button>
