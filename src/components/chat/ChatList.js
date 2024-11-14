@@ -9,6 +9,9 @@ import { doc,
    arrayRemove, 
    collection, 
    getDocs, 
+   addDoc,
+   serverTimestamp,
+   deleteDoc,
    writeBatch } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 import DeleteRoomPopup from './DeleteRoomPopup';
@@ -18,6 +21,7 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredRooms, setFilteredRooms] = useState([]);
   const [roomToDelete, setRoomToDelete] = useState(null);
+  const [roomToExit, setRoomToExit] = useState(null);
   const [isDarkMode, setIsDarkMode] = useState(() => {
     const savedMode = localStorage.getItem('darkMode');
     return savedMode === 'true';
@@ -90,6 +94,36 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom }) => {
     }
   };
 
+  const handleRoomExit = async (roomId, isCreator) => {
+    try {
+      const roomRef = doc(db, 'rooms', roomId);
+      
+      // Add leave message
+      const messagesRef = collection(db, 'rooms', roomId, 'Messages');
+      await addDoc(messagesRef, {
+        text: `${auth.currentUser.email} has left the room`,
+        type: 'system',
+        createdAt: serverTimestamp(),
+        user: 'system',
+        room: roomId
+      });
+  
+      if (isCreator) {
+        await deleteDoc(roomRef);
+      } else {
+        await updateDoc(roomRef, {
+          participants: arrayRemove(auth.currentUser.uid)
+        });
+      }
+      
+      if (selectedRoom === roomId) {
+        onSelectRoom(null);
+      }
+    } catch (error) {
+      console.error("Error handling room exit:", error);
+    }
+  };
+
   return (
     <div className="chat-list-container">
       <div className="chat-list-header">
@@ -136,12 +170,16 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom }) => {
               </div>
             </div>
             <button 
-              className="room-action-btn"
-              onClick={(e) => {
-                e.stopPropagation();
-                const isCreator = room.createdBy === auth.currentUser.uid;
-                setRoomToDelete({ id: room.id, isCreator });
-              }}
+                className="room-action-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const isCreator = room.createdBy === auth.currentUser.uid;
+                  if (isCreator) {
+                    setRoomToDelete({ id: room.id, isCreator: true });
+                  } else {
+                    setRoomToExit({ id: room.id, isCreator: false });
+                  }
+            }}      
             >
               {room.createdBy === auth.currentUser.uid ? 'Delete' : 'Exit'}
             </button>
@@ -163,6 +201,17 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom }) => {
           onCancel={() => setRoomToDelete(null)}
         />
       )}
+        
+                {roomToExit && (
+          <DeleteRoomPopup
+            isCreator={false}
+            onConfirm={() => {
+              handleRoomExit(roomToExit.id, false);
+              setRoomToExit(null);
+            }}
+                  onCancel={() => setRoomToExit(null)}
+                />
+              )}
     </div>
 
   );
