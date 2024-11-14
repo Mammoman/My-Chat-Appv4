@@ -107,8 +107,9 @@ export const Auth = (props) => {
                             <GoogleIcon size={44} onClick={handleEmailPasswordSignUp} />
                         </div>
                         
-                        <input type="text" placeholder="Name" required />
+                        <input className="form-container-input-name" type="text" placeholder="Name" required />
                         <input
+                            className="form-container-input"
                             type="email"
                             placeholder="Email"
                             value={email}
@@ -116,13 +117,14 @@ export const Auth = (props) => {
                             required
                         />
                         <input
+                            className="form-container-input"
                             type="password"
                             placeholder="Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
                         />
-                        <button type="submit" onClick={handleEmailPasswordSignUp}>Sign Up</button>
+                        <button className="form-container-button" type="submit" onClick={handleEmailPasswordSignUp}>Sign Up</button>
                     </form>
                 ) : (
                     <form className="form-container" onSubmit={handleEmailPasswordSignIn}>
@@ -140,13 +142,14 @@ export const Auth = (props) => {
                             required
                         />
                         <input
+                        className="form-container-input"
                             type="password"
                             placeholder="Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
                         />
-                        <button type="submit">Sign In</button>
+                        <button className="form-container-button" type="submit">Sign In</button>
                         <a href="#">Forgot your password?</a>
                     </form>
                 )}

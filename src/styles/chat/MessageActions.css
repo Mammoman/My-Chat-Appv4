@@ -45,3 +45,12 @@
     transform: translateY(-50%) translateX(0);
   }
 }
+
+
+.action-button.delete-button {
+  color: #dc2626;
+}
+
+.action-button.delete-button:hover {
+  background: rgba(220, 38, 38, 0.1);
+}

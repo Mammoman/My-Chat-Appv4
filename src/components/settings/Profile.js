@@ -22,11 +22,11 @@ const Profile = () => {
           <ProfilePictureSelector onSelect={handlePictureChange} />
         </div>
       </div>
-      <label>Profile name</label>
+      <label className='Profile-name'>Profile name</label>
       <input type="text" defaultValue="Dayniel" />
       <label>Username</label>
       <input type="text" value={username} onChange={handleUsernameChange} />
-      <label>About me</label>
+      <label className='About-me'>About me</label>
       <textarea defaultValue="What can I say?" />
       <button className="save-changes">Save changes</button>
     </div>

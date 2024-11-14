@@ -9,6 +9,7 @@ import {
   doc,
   getDoc,
   updateDoc,
+  deleteDoc,
   arrayUnion,
   arrayRemove
 } from 'firebase/firestore';
@@ -20,6 +21,7 @@ import '../../styles/chat/MessageArea.css';
 import '../../styles/chat/Reactions.css';
 import VoiceMessagePlayer from './VoiceMessagePlayer';
 import MessageActions from './MessageActions';
+import VoicePreview from './VoicePreview';
 
 const Chat = ({ room }) => {
   const [roomData, setRoomData] = useState(null);
@@ -39,6 +41,7 @@ const Chat = ({ room }) => {
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
   const timerRef = useRef(null);
+  const inputRef = useRef(null);
 
   const MAX_DURATION = 60; // Maximum duration in seconds
 
@@ -53,6 +56,10 @@ const Chat = ({ room }) => {
       const messageRef = doc(db, 'rooms', room, 'Messages', messageId);
       const messageDoc = await getDoc(messageRef);
       const currentReactions = messageDoc.data().reactions || {};
+
+        // Prevent scroll position change
+    const messageElement = document.getElementById(`message-${messageId}`);
+    const currentScroll = messageElement?.parentElement?.scrollTop;
       
       // Toggle reaction for current user
       if (currentReactions[reaction]?.includes(auth.currentUser.uid)) {
@@ -64,6 +71,13 @@ const Chat = ({ room }) => {
           [`reactions.${reaction}`]: arrayUnion(auth.currentUser.uid)
         });
       }
+
+
+       // Restore scroll position
+    if (messageElement?.parentElement && currentScroll) {
+      messageElement.parentElement.scrollTop = currentScroll;
+    }
+
     } catch (error) {
       console.error("Error handling reaction:", error);
     }
@@ -88,9 +102,17 @@ const Chat = ({ room }) => {
     fetchRoomData();
   }, [room]);
 
+    
   useEffect(() => {
-    scrollToBottom();
+    const lastMessage = messages[messages.length - 1];
+    const shouldScroll = lastMessage?.user === auth.currentUser?.email && 
+                        lastMessage?.createdAt === null;
+    
+    if (shouldScroll) {
+      scrollToBottom();
+    }
   }, [messages]);
+
 
   useEffect(() => {
     if (!room) return;
@@ -234,6 +256,12 @@ const Chat = ({ room }) => {
         type: message.type || 'text'  // Default to 'text' for normal messages
       });
     }; 
+       
+       // Focus the input immediately
+  setTimeout(() => {
+    inputRef.current?.focus();
+  }, 0);
+
   };
 
 
@@ -243,6 +271,27 @@ const Chat = ({ room }) => {
       messageElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
       messageElement.classList.add('highlight');
       setTimeout(() => messageElement.classList.remove('highlight'), 2000);
+    }
+  };
+
+
+  const handleDeleteMessage = async (message) => {
+    try {
+      const messageElement = document.getElementById(`message-${message.id}`);
+      const currentScroll = messageElement?.parentElement?.scrollTop;
+      
+      const messageRef = doc(db, 'rooms', room, 'Messages', message.id);
+      await deleteDoc(messageRef);
+      setSelectedMessageId(null);
+      
+      // Restore scroll position after a short delay to allow for DOM updates
+      setTimeout(() => {
+        if (messageElement?.parentElement && currentScroll) {
+          messageElement.parentElement.scrollTop = currentScroll;
+        }
+      }, 50);
+    } catch (error) {
+      console.error("Error deleting message:", error);
     }
   };
 
@@ -485,7 +534,9 @@ const Chat = ({ room }) => {
                                     handleReply(msg);
                                     setSelectedMessageId(null);
                                   }}
+                                  onDelete={handleDeleteMessage}
                                   isSelected={selectedMessageId === message.id}
+                                  canDelete={message.user === auth.currentUser?.email}
                                 />
                 </div>
               </div>
@@ -500,7 +551,7 @@ const Chat = ({ room }) => {
                   <span className="reply-user">{selectedReply.user}</span>
                   <p className="reply-text">
                     {selectedReply.type === 'voice' ? (
-                      <span>🎤 Voice message</span>
+                      <span className='reply-voice'>🎤 Voice message</span>
                     ) : (
                       selectedReply.text
                     )}
@@ -511,43 +562,29 @@ const Chat = ({ room }) => {
                   className="cancel-reply" 
                   onClick={() => setSelectedReply(null)}
                 >
-                  <Cancel02Icon/>
+                  <Cancel02Icon className='cancel-reply-icon'/>
                 </button>
               </div>
             )}
             <div className="message-box">
               {showPreview ? (
-                <div className="voice-preview">
-                  <audio 
-                    controls 
-                    src={previewAudio?.url} 
-                    className="voice-message-player"
-                  />
-                  <div className="voice-preview-actions">
-                    <button 
-                      onClick={cancelRecording} 
-                      className="voice-preview-btn cancel"
-                    >
-                      Cancel
-                    </button>
-                    <button 
-                      onClick={sendVoiceMessage} 
-                      className="voice-preview-btn send"
-                    >
-                      Send
-                    </button>
-                  </div>
-                </div>
+                     <VoicePreview 
+                     audioUrl={previewAudio?.url}
+                     onCancel={cancelRecording}
+                     onSend={sendVoiceMessage}
+                   />
               ) : (
                 <>
-                  <input
+                <div className='message-input-container '>
+                <input
+                   ref={inputRef}
                     type="text"
                     className='message-input'
                     placeholder='Type here...'
                     onChange={(e) => setNewMessage(e.target.value)}
                     value={newMessage}
-                  />
-                  <button 
+                    />
+                    <button 
                     type="button" 
                     className={`action-btn voice-btn ${isRecording ? 'recording' : ''}`}
                     onClick={isRecording ? stopRecording : startRecording}
@@ -561,6 +598,9 @@ const Chat = ({ room }) => {
                       <Mic02Icon />
                     )}
                   </button>
+                 
+                </div>
+                 
                 </>
               )}
             </div>

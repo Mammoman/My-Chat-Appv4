@@ -58,13 +58,13 @@
     background-color: #4f46e5;
 }
 
-label {
+.Profile-name, .About-me {
     font-size: 14px;
     margin-bottom: 5px;
     color: #1e2022;
 }
 
-input[type="text"],
+.profile-settings input[type="text"],
 input[type="email"],
 textarea {
     width:  80%;
@@ -75,12 +75,12 @@ textarea {
     font-size: 14px;
 }
 
-textarea {
+ .profile-settings textarea {
     height: 80px;
     resize: none;
 }
 
-button.save-changes {
+.profile-settings .profile-settingsbutton.save-changes {
     padding: 10px 20px;
     border: none;
     border-radius: 4px;
@@ -90,7 +90,7 @@ button.save-changes {
     transition: background-color 0.3s;
 }
 
-button.save-changes:hover {
+.profile-settings button.save-changes:hover {
     background-color: #4f46e5;
 }
 

@@ -49,36 +49,6 @@ body {
     transition: all 0.6s ease-in-out;
 }
 
-form.form-container{
-    width: 50%;
-    height: 50%;
-}
-
-
-.form-container input{
-    border: none;
-    height: 50%;
-    font-size: 20px;
-    margin: 14px;
-    padding: 20px;
-}
-
-.form-container-input{
-    border: none;
-    height: 50%;
-    font-size: 20px;
-    margin: 14px;
-    padding: 20px;
-}
-
-.form-container input:hover{
-   outline-style: inherit;
-   box-shadow: 4px 4px 4px rgb(162, 159, 159);
-   transition: smooth 0.4s;
-}
-
-
- 
 .form-container-create{
     display: flex;
     flex-direction: column;
@@ -89,6 +59,25 @@ form.form-container{
     height: 100%;
     transition: all 0.6s ease-in-out;
 }
+
+
+.form-container-create .form-container-input{
+    border: none;
+    height: 50%;
+    font-size: 20px;
+    margin: 14px;
+    padding: 20px;
+}
+
+
+.form-container-create .form-container-input:hover{
+   outline-style: inherit;
+   box-shadow: 4px 4px 4px rgb(162, 159, 159);
+   transition: smooth 0.4s;
+}
+
+
+ 
 
  .container form.form-container-create{
     width: 70%;
@@ -102,12 +91,12 @@ form.form-container{
    justify-content: space-between;
 }
 
-form.form-container-create{
+.form-container-create{
     width: 50%;
     height: 50%;
 }
 
-.form-container-create input{
+.form-container-create .form-container-input{
     border: none;
     height: 20%;
     font-size: 20px;
@@ -115,7 +104,7 @@ form.form-container-create{
     padding: 12px;
 }
 
-button {
+.form-container-button {
 	border-radius: 20px;
 	border: 1px solid #ff4b2b;
 	background-color: #ff4b2b;
@@ -128,15 +117,15 @@ button {
 	transition: transform 80ms ease-in;
 }
 
-button:active {
+.form-container-button:active {
 	transform: scale(0.95);
 }
 
-button:focus {
+.form-container-button:focus {
 	outline: none;
 }
 
-button.ghost {
+.form-container-button.ghost {
 	background-color: transparent;
 	border-color: #ffffff;
 }

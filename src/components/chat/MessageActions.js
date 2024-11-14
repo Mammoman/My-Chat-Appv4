@@ -1,10 +1,17 @@
 import React from 'react';
 import '../../styles/chat/MessageActions.css';
 
-const MessageActions = ({ message, onReply, isSelected }) => {
+const MessageActions = ({ message, onReply, onDelete, isSelected, canDelete }) => {
   const handleReply = (e) => {
     e.stopPropagation();
     onReply(message);
+  };
+
+  const handleDelete = (e) => {
+    e.stopPropagation();
+    if (window.confirm('Are you sure you want to delete this message?')) {
+      onDelete(message);
+    }
   };
 
   return (
@@ -17,7 +24,14 @@ const MessageActions = ({ message, onReply, isSelected }) => {
           >
             Reply
           </button>
-          {/* Add other action buttons here */}
+          {canDelete && (
+            <button 
+              className="action-button delete-button"
+              onClick={handleDelete}
+            >
+              Delete
+            </button>
+          )}
         </div>
       )}
     </>
