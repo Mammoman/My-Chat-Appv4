@@ -200,6 +200,54 @@
   border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
+.error-popup {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  animation: slideIn 0.3s ease-out;
+}
+
+.error-popup-content {
+  background: #dc3545;
+  padding: 12px 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+
+.error-popup-content.error {
+  background: #dc3545;
+  color: white;
+}
+
+.error-popup-content.success {
+  background: #28a745;
+  color: white;
+}
+
+.error-popup-content.info {
+  background: #17a2b8;
+  color: white;
+}
+
+
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 
 .darkmode {
   position: relative;

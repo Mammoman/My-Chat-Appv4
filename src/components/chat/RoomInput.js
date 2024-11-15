@@ -14,13 +14,20 @@ import {
 }                                                  from 'firebase/firestore';
 import                                          '../../styles/chat/RoomInput.css';
 
-function RoomInput({ setRoom }) {
+function RoomInput({ setRoom, onError }) {
   const roomInputRef = useRef(null);
   const [roomType, setRoomType] = useState('public');
   const [showPopup, setShowPopup] = useState(false);
   const [existingRoomId, setExistingRoomId] = useState(null);
   const [error, setError] = useState('');
   const [isValidating, setIsValidating] = useState(false);
+  const [showErrorPopup, setShowErrorPopup] = useState(false);
+  
+  const showError = (message) => {
+    setError(message);
+    onError(message); // Pass error up to parent
+  };
+
 
   const validateRoomName = (name) => {
     if (!name) return 'Room name cannot be empty';
@@ -59,7 +66,7 @@ function RoomInput({ setRoom }) {
             pendingRequests: arrayUnion(requestData)
           });
           
-          setError('Join request sent to room creator');
+          onError('Join request sent to room creator');
         }
       }
     } catch (error) {
@@ -77,7 +84,7 @@ function RoomInput({ setRoom }) {
     
     const validationError = validateRoomName(roomName);
     if (validationError) {
-      setError(validationError);
+      onError(validationError);
       setIsValidating(false);
       return;
     }
@@ -173,7 +180,7 @@ function RoomInput({ setRoom }) {
       placeholder='Enter room name'
       />
       <select
-       className='room-type' 
+       className='room-type-select' 
        value={roomType} 
        onChange={(e) => setRoomType(e.target.value)}>
         <option className='room-type-option' value="public">Public Room</option>
@@ -181,12 +188,7 @@ function RoomInput({ setRoom }) {
       </select>
       </div>
        
-      <div className='room-btn'>
-      {error && <p className="error-message">{error}</p>}
-      <button className='custom-btn btn-12' onClick={createRoom}>
-        <span>Created!</span><span>Create Room</span></button>
-      
-      </div>
+  
      
 
       {showPopup && (
@@ -200,6 +202,23 @@ function RoomInput({ setRoom }) {
           </div>
         </div>
       )}
+
+          {/* Error Popup */}
+          {showErrorPopup && (
+        <div className="error-popup">
+          <div className="error-popup-content">
+            <span className="error-message">{error}</span>
+          </div>
+        </div>
+      )}
+
+
+    <div className='room-btn'>
+      <button className='custom-btn btn-12' onClick={createRoom}>
+        <span>Created!</span><span>Create Room</span></button>
+      
+      </div>
+
     </div>
   );
 }

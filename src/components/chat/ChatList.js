@@ -24,6 +24,8 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom }) => {
   const [filteredRooms, setFilteredRooms] = useState([]);
   const [roomToDelete, setRoomToDelete] = useState(null);
   const [roomToExit, setRoomToExit] = useState(null);
+  const [error, setError] = useState('');
+  const [showErrorPopup, setShowErrorPopup] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(() => {
   const savedMode = localStorage.getItem('darkMode');
     return savedMode === 'true';
@@ -135,6 +137,20 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom }) => {
     }
   };
 
+  const handleError = (errorMessage) => {
+    setError(errorMessage);
+    setShowErrorPopup(true);
+    // Clear any existing timeout
+    if (window.errorTimeout) {
+      clearTimeout(window.errorTimeout);
+    }
+    // Set new timeout
+    window.errorTimeout = setTimeout(() => {
+      setShowErrorPopup(false);
+      setError('');
+    }, 3000);
+  };
+
   return (
     <div className="chat-list-container">
       <div className="chat-list-header">
@@ -203,7 +219,9 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom }) => {
       </div>
 
       <div className="room-input-wrapper">
-        <RoomInput setRoom={onSelectRoom} />
+        <RoomInput 
+        setRoom={onSelectRoom}
+        onError={handleError}/>
       </div>
 
       {roomToDelete && (
@@ -216,6 +234,14 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom }) => {
           onCancel={() => setRoomToDelete(null)}
         />
       )}
+
+          {showErrorPopup && (
+          <div className="error-popup">
+            <div className="error-popup-content">
+              <span className="error-message">{error}</span>
+            </div>
+          </div>
+        )}
         
                 {roomToExit && (
           <DeleteRoomPopup
