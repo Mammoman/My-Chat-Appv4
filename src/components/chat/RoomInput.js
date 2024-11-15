@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { auth, db } from '../../config/firebase';
+import React, { useRef, useState }                  from 'react';
+import { auth, db }                                  from '../../config/firebase';
 import { 
   collection, 
   addDoc, 
@@ -11,8 +11,8 @@ import {
   updateDoc,
   arrayUnion,
   serverTimestamp
-} from 'firebase/firestore';
-import '../../styles/chat/RoomInput.css';
+}                                                  from 'firebase/firestore';
+import                                          '../../styles/chat/RoomInput.css';
 
 function RoomInput({ setRoom }) {
   const roomInputRef = useRef(null);

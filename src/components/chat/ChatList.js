@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import '../../styles/chat/ChatList.css';
-import RoomInput from './RoomInput';
-import { Moon01Icon, Search02Icon, Sun02Icon } from 'hugeicons-react';
-import { auth } from '../../config/firebase';
+import React, { useState, useEffect }                                      from 'react';
+import { Moon01Icon, Search02Icon, Sun02Icon }                             from 'hugeicons-react';
+import { auth }                                                            from '../../config/firebase';
 import { doc,
    getDoc, 
    updateDoc, 
@@ -12,9 +10,13 @@ import { doc,
    addDoc,
    serverTimestamp,
    deleteDoc,
-   writeBatch } from 'firebase/firestore';
-import { db } from '../../config/firebase';
-import DeleteRoomPopup from './DeleteRoomPopup';
+   writeBatch }                                                            from 'firebase/firestore';
+import { db }                                                              from '../../config/firebase';
+import DeleteRoomPopup                                                     from './DeleteRoomPopup';
+import RoomInput                                                           from './RoomInput';
+import                                                                     '../../styles/chat/ChatList.css';
+
+
 
 const ChatList = ({ rooms, selectedRoom, onSelectRoom }) => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -23,7 +25,7 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom }) => {
   const [roomToDelete, setRoomToDelete] = useState(null);
   const [roomToExit, setRoomToExit] = useState(null);
   const [isDarkMode, setIsDarkMode] = useState(() => {
-    const savedMode = localStorage.getItem('darkMode');
+  const savedMode = localStorage.getItem('darkMode');
     return savedMode === 'true';
   });
 

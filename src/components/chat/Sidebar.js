@@ -1,10 +1,10 @@
-import React from 'react';
-import { useState } from 'react';
-import { Settings02Icon, Folder01Icon, Logout02Icon, Mail01Icon } from 'hugeicons-react';
-import { useNavigate } from 'react-router-dom';
-import { auth } from '../../config/firebase';
-import '../../styles/chat/Sidebar.css';
-import Settings from '../settings/Settings';
+import React                                                                              from 'react';
+import { useState }                                                                       from 'react';
+import { Settings02Icon, Folder01Icon, Logout02Icon, Mail01Icon }                          from 'hugeicons-react';
+import { useNavigate }                                                                    from 'react-router-dom';
+import { auth }                                                                           from '../../config/firebase';
+import                                                                                    '../../styles/chat/Sidebar.css';
+import Settings                                                                            from '../settings/Settings';
 
 const Sidebar = ({ signUserOut }) => {
   const navigate = useNavigate();

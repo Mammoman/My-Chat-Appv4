@@ -1,5 +1,5 @@
-import React from 'react';
-import '../../styles/chat/ChatRequestPopup.css';
+import                                                                     React from 'react';
+import                                                                  '../../styles/chat/ChatRequestPopup.css';
 
 const ChatRequestPopup = ({ requestingUser, onAccept, onDecline }) => {
   return (

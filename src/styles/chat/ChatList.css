@@ -49,9 +49,7 @@
   align-items: center;
 }
 
-.darkmode-icon toggle-icon-1{
-    background-color: yellow;
-}
+
 
 .search {
   margin: 20px 0;
@@ -93,6 +91,10 @@
   width: 100%;
 }
 
+.darkmode-icon toggle-icon-1{
+  background-color: yellow;
+}
+
 .rooms-container {
   flex: 1;
   overflow-y: auto;
@@ -118,6 +120,12 @@
 .room-item.active {
   background: rgba(79, 70, 229, 0.1);
   border-left: 3px solid #4f46e5;
+}
+
+.room-content {
+  display: flex;
+  align-items: center;
+  flex: 1;
 }
 
 .room-avatar {
@@ -149,17 +157,6 @@
   margin: 0;
 }
 
-.room-input-wrapper {
-  padding: 4px;
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.room-content {
-  display: flex;
-  align-items: center;
-  flex: 1;
-}
-
 .room-action-btn {
   padding: 6px 12px;
   border-radius: 6px;
@@ -179,6 +176,12 @@
 .room-action-btn:hover {
   background-color: rgba(220, 53, 69, 0.1);
 }
+
+.room-input-wrapper {
+  padding: 4px;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
 
 .darkmode {
   position: relative;

@@ -238,6 +238,39 @@ body.dark-theme {
 
 
 /* Input Areas Dark Theme */
+ .dark-theme .reply-preview{
+  background: #2c2c2c;
+ }
  
+.dark-theme .message-box-reply-preview{
+  background: #2c2c2c;
+}
+
+.dark-theme .reply-preview-content{
+  background: #2c2c2c;
+  color: aliceblue;
+}
+
+.dark-theme .message-box-reply-preview .reply-text{
+  color: #fff;
+}
+
+.dark-theme .cancel-reply{
+  color: rgb(242, 242, 242);
+  background: transparent;
+}
+
+.dark-theme .cancel-reply:hover{
+  color: #f94b0c;
+}
+
+.dark-theme .reply-preview-content{
+  background-color: transparent;
+}
+
+.dark-theme .reply-preview-content:hover{
+  opacity: 0.8;
+}
+
 
 

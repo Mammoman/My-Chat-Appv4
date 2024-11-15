@@ -1,5 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { PlayIcon, PauseIcon } from 'hugeicons-react';
+import React, { useEffect, useRef, useState }                                 from 'react';
+import { PlayIcon, PauseIcon }                                               from 'hugeicons-react';
+import                                                                       '../../styles/chat/VoicePreview.css';               
+
 
 const VoicePreview = ({ audioUrl, onCancel, onSend }) => {
   // Copy the state and refs from VoiceMessagePlayer

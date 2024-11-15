@@ -1,3 +1,25 @@
+.message.system {
+  display: flex;
+  justify-content: center;
+  margin: 8px 0;
+}
+
+.message.system .message-bubble {
+  background: rgba(0, 0, 0, 0.05);
+  color: #666;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-style: italic;
+}
+
+.dark-theme .message.system .message-bubble {
+  background: rgba(255, 255, 255, 0.1);
+  color: #999;
+}
+
+
+
 .message-area {
     display: flex;
     flex: 1;
@@ -26,6 +48,9 @@
    width: max-content;
  }
   
+
+                      /*message-header*/
+
   .message-header {
     padding:  10px;
     padding-bottom: 0;
@@ -86,7 +111,7 @@
 
 
 
-  
+                       /*message-content*/
   .message-content {
     flex: 1;
     padding: 24px;
@@ -115,7 +140,6 @@
     flex-direction: row-reverse;
   }
 
-
   .message-user-avatar {
     width: 36px;
     height: 36px;
@@ -139,7 +163,7 @@
   
 
 
-
+                 /*message-content-wrapper*/
   .message-content-wrapper {
     display: flex;
     flex-direction: column;
@@ -148,8 +172,6 @@
     max-width: 100%;
     width: fit-content;
   }
-
-
 
  .message.sent .message-user-email {
     font-size: 12px;
@@ -166,8 +188,6 @@
     display: flex;
     align-self: flex-start;
   }
-
-  
 
   .message-bubble-wrapper {
     display: flex;
@@ -190,11 +210,7 @@
     width: fit-content;
     align-self: flex-start;
   }
-
-
-
-  
-  
+                    /*message-bubble*/
   .message-bubble {
     background: #f8f9fc;
     padding: 12px 16px;
@@ -206,18 +222,28 @@
     white-space: pre-wrap;
   }
 
+        /*  .message.sent .message-bubble*/
   .message.sent .message-bubble {
     background: #4f46e5;
     color: #ffffff;
     border-bottom-right-radius: 4px;
     margin-left: auto;
   }
-  
+
+  .message.sent .waveform-canvas {
+    background: transparent;
+  }
+
+        /*   .message.received  .message-bubble*/
   .message.received .message-bubble {
     background-color: #f3f4f6;
     color: #1f2937;
     border-bottom-left-radius: 4px;
     margin-right: auto;
+  }
+
+  .message.received .waveform-canvas {
+    background: transparent;
   }
   
   .message-bubble p {
@@ -230,7 +256,6 @@
     white-space: pre-wrap;
     transition: all 0.3s ease;
     overflow-y: auto;
-  
   }
 
   .message-bubble span{
@@ -244,9 +269,81 @@
     color: #77838f;
     margin-left: 8px;
   }
-  
- 
 
+
+
+  
+
+                   /*reply-reference*/
+  .reply-reference {
+    padding: 6px 10px;
+    margin-bottom: 8px;
+    background: rgba(0, 0, 0, 0.05);
+    border-left: 2px solid #4f46e5;
+    border-radius: 4px;
+    max-width: 100%;
+    overflow: hidden;
+  }
+  
+  .message.sent .reply-reference {
+    background: rgba(255, 255, 255, 0.1);
+    border-left-color: #fff;
+  }
+
+  .reply-reference .reply-preview-content {
+    flex: 1;
+    padding-right: 8px;
+    overflow: hidden;
+  }
+  
+            
+  .reply-reference .reply-user {
+    font-size: 11px;
+    color: #4f46e5;
+    margin-bottom: 2px;
+  }
+  
+  .message.sent .reply-reference .reply-user {
+    color: rgba(255, 255, 255, 0.9);
+  }
+  
+  .reply-reference .reply-text {
+    font-size: 12px;
+    color: #666;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .message.sent .reply-reference .reply-text {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  
+  .message {
+    transition: background-color 0.3s ease;
+  }
+  
+  .message.highlight {
+    background-color: rgba(79, 70, 229, 0.1);
+  }
+  
+  .reply-reference {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .reply-reference:hover {
+    background-color: rgba(0, 0, 0, 0.08);
+  }
+  
+  .message.sent .reply-reference:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+  }
+
+  
+                   /*message-status*/
   .message-status {
     font-size: 12px;
     color: #6c757d;
@@ -284,79 +381,158 @@
   }
 
 
-  .reply-reference {
-  padding: 6px 10px;
-  margin-bottom: 8px;
-  background: rgba(0, 0, 0, 0.05);
-  border-left: 2px solid #4f46e5;
-  border-radius: 4px;
-  max-width: 100%;
-  overflow: hidden;
-}
-
-.message.sent .reply-reference {
-  background: rgba(255, 255, 255, 0.1);
-  border-left-color: #fff;
-}
-
-.reply-reference .reply-user {
-  font-size: 11px;
-  color: #4f46e5;
-  margin-bottom: 2px;
-}
-
-.message.sent .reply-reference .reply-user {
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.reply-reference .reply-text {
-  font-size: 12px;
-  color: #666;
-  margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.message.sent .reply-reference .reply-text {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-
-.message {
-  transition: background-color 0.3s ease;
-}
-
-.message.highlight {
-  background-color: rgba(79, 70, 229, 0.1);
-}
-
-.reply-reference {
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.reply-reference:hover {
-  background-color: rgba(0, 0, 0, 0.08);
-}
-
-.message.sent .reply-reference:hover {
-  background-color: rgba(255, 255, 255, 0.15);
-}
-
-   
-  .message-overlay {
-    position: absolute;
-    top: 50%;
-    right: -60px;
-    transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.95);
+                   /*  message-box-reply-preview   */
+  .message-box-reply-preview {
+    display: flex;
+    justify-content: end;
+    padding-top: 0;
+    margin-top: 0;
+    background-color: #f9f9f9;
     border-radius: 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    padding: 4px;
-    z-index: 10;
+    
+    width: 100%;
+  }
+
+  .message-box-reply-preview .reply-preview {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-top: 0;
+    padding-bottom: 0;
+    background: #f2ecec;
+    border-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-left: 3px solid #000000;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    overflow: hidden;
     animation: fadeIn 0.2s ease-in-out;
   }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+
+  .message-box-reply-preview .reply-preview-content {
+    flex: 1;
+    padding-right: 8px;
+    overflow: hidden;
+  }
+
+  .message-box-reply-preview .reply-user{
+    display: flex;
+    font-size: 14px;
+    justify-self: end;
+
+  }
+
+  .message-box-reply-preview .reply-text{
+    font-size: 12px;
+    color: #666;
+    margin: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 90%;
+    justify-self: end;
+  }
+
+ .message-box-reply-preview  .reply-text .reply-voice {
+    font-size: 10px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .message-box-reply-preview .cancel-reply{
+    border: none;
+    border-radius: 40px;
+    color: #000000;
+    padding: 0;
+  }
+
+  .cancel-reply:hover{
+    color: #e1e1e1;
+  }
+
+
+                    /*  message-box   */
+  .message-box {
+    display: flex;
+    justify-content: end;
+    padding-top: 0;
+    margin-top: 0;
+    padding: 4px;
+    background-color: #f9f9f9;
+    border-radius: 20px;
+    width: 100%;
+  }
+   
+  
+  .message-box .message-input-container {
+    display: flex;
+    width: 100%;
+    padding: 2px 8px;
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+
+  .message-box .message-input{
+    flex: 1;
+    padding:  0 10px;
+    border: none;
+    background: transparent;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    overflow-y: auto;
+    max-height: 100px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-y: scroll;
+    resize: none;
+    margin-bottom: 0;
+  }
+
+  .message-box .message-input:focus {
+    border: none;
+    outline: none;
+
+  }
+
+  /* Adjust line break behavior */
+  .message-box .message-input::before {
+  content: attr(data-replicated-value) " ";
+  white-space: pre-wrap;
+  visibility: hidden;
+}
+
+.message-box .message-input::-webkit-scrollbar {
+  width: 6px;
+}
+
+.message-box .message-input::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.message-box .message-input::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+   
+.message-box .message-container.sent {
+    display: flex;
+    flex-direction: row-reverse;
+    margin-left: auto;
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+
 
   .overlay-reply-button {
     background: none;
@@ -373,217 +549,9 @@
     background: rgba(0, 0, 0, 0.05);
     color: #333;
   }
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(-50%) translateX(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(-50%) translateX(0);
-    }
-  }
-
-  .message.sent .message-overlay {
-    left: -60px;
-    right: auto;
-  }
-
-
-
-  .message-box {
-    display: flex;
-    justify-content: end;
-    padding-top: 0;
-    margin-top: 0;
-    padding: 4px;
-    background-color: #f9f9f9;
-    border-radius: 12px;
-    width: 100%;
-  }
-
-  .reply-preview {
-    display: flex;
-    align-items: center;
-    background: #f5f5f5;
-    padding: 8px 12px;
-    margin: 0 8px 8px 8px;
-    border-radius: 8px;
-    border-left: 3px solid #000000;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    max-width: 40%;
-    overflow: hidden;
-    animation: fadeIn 0.2s ease-in-out;
-  }
-
-  .reply-preview-content {
-    flex: 1;
-    padding-right: 8px;
-    overflow: hidden;
-  }
-
- 
-  .reply-preview {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-around;
-    background: #f5f5f5;
-    border-radius: 8px;
-    border-left: 3px solid #000000;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    max-width: 60%;
-    overflow: hidden;
-    animation: fadeIn 0.2s ease-in-out;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  .reply-preview-content {
-    display: flex;
-    flex-direction: column;
-    max-width: 100%;
-  }
-  
-  .cancel-reply{
-    color: #000000;
-    padding: 0;
-  }
-
- .reply-preview span{
-  font-size: 12px;
-  }
-
-  .reply-user{
-    font-size: 14px;
-  }
-
-  .reply-text{
-    font-size: 12px;
-    color: #666;
-    margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 200px; 
-  }
-
-  .reply-text .reply-voice {
-    font-size: 10px;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-  }
-
-
-
-
-   .voice-preview {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 8px;
-    width: 100%;
-    padding: 8px;
-    background: #f8f9fc;
-    border-radius: 12px;
-  }
-  
-  .voice-preview-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-    margin-top: 4px;
-  }
-
-  .voice-preview-btn {
-    padding: 8px 16px;
-    border-radius: 8px;
-    border: none;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .voice-preview .waveform-container {
-    flex: 1;
-    height: 24px;
-    position: relative;
-    display: flex;
-  }
-  
   
 
-  .voice-preview .waveform-canvas {
-    width: 100%;
-    height: 100%;
-    border-radius: 14px;
-    
-  }
-
-  .message.received .waveform-canvas {
-    background: transparent;
-  }
-
-  .message.sent .waveform-canvas {
-    background: transparent;
-  }
-
-  .voice-preview .play-button {
-    color: #4f46e5;
-  }
-
-  .voice-preview .voice-message-player-container {
-    background: #f3f4f6;
-  }
-
-  
-.voice-preview .duration-display {
-  color: #4f46e5;
-}
-
-.voice-preview .speed-button {
-  color: #4f46e5;
-}
-
-  .voice-preview-btn.cancel {
-    background: #f3f4f6;
-    color: #666;
-  }
-
-  .voice-preview-btn.send {
-    background: #4f46e5;
-    color: white;
-  }
-
-  .voice-preview-btn:hover {
-    opacity: 0.9;
-  }
-
-
-  .audio-player {
-    width: 100%;
-    height: 40px;
-    border-radius: 20px;
-  }
-  
-  
-  .audio-player::-webkit-media-controls-panel {
-    background: #fff;
-  }
-  
-  .audio-player::-webkit-media-controls-current-time-display,
-  .audio-player::-webkit-media-controls-time-remaining-display {
-    color: #4b5563;
-  }
-
-
-
+           /*  voice-btn */
 
   .voice-btn {
     width: 40px;
@@ -617,9 +585,9 @@
   .recording-indicator {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 4px;
     background: rgba(255, 68, 68, 0.1);
-    padding: 8px 12px;
+    padding: 6px 10px;
     border-radius: 20px;
   }
   
@@ -645,6 +613,44 @@
     }
   }
 
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  .voice-preview-btn:hover {
+    opacity: 0.9;
+  }
+
+
+  .audio-player {
+    width: 100%;
+    height: 40px;
+    border-radius: 20px;
+  }
+  
+  
+  .audio-player::-webkit-media-controls-panel {
+    background: #fff;
+  }
+  
+  .audio-player::-webkit-media-controls-current-time-display,
+  .audio-player::-webkit-media-controls-time-remaining-display {
+    color: #4b5563;
+  }
+
+
+
+
+ 
   .message-bubble .voice-message {
     background: #e1e1e1;
     padding: 0;
@@ -670,112 +676,7 @@
   }
 
 
-  .voice-message-player-container {
-    display: flex;
-    align-items: center;
-    padding: 8px 16px;
-    gap: 12px;
-    width: 100%;
-    border-radius: 50px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }
-
-  .speed-button {
-    background: none;
-    border: none;
-    color: inherit;
-    font-size: 12px;
-    padding: 4px 8px;
-    padding-left: 12px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-
-  .message.sent .speed-button {
-    color: #ff2929;
-  }
-  
-  .message.received .speed-button {
-    color: #4f46e5;
-  }
-  
-  .speed-button:hover {
-    background: rgba(0, 0, 0, 0.1);
-  }
-
-
-
-
-  .message.received .voice-message-player-container {
-    background: #f3f4f6;
-  }
-
-  .message.sent .voice-message-player-container {
-    background: #f3f4f6;
-  }
-
-  .waveform-container {
-    flex: 1;
-    height: 24px;
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-
-  .waveform-canvas {
-    width: 100px;
-    height: 100%;
-    padding-right: 14px;
-    border-radius: 14px;
-  }
-
-  .message.received .waveform-canvas {
-    background: transparent;
-  }
-
-  .message.sent .waveform-canvas {
-    background: transparent;
-  }
-
-  .play-button {
-    background: none;
-    border: none;
-    color: #ffffff;
-    cursor: pointer;
-    padding: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.2s;
-  }
-
-  .play-button:hover {
-    transform: scale(1.1);
-  }
-
-  .message.sent .play-button {
-    color: #ff2929;
-  }
-
-  .message.received .play-button {
-    color: #4f46e5;
-  }
-
-  .duration-display {
-    font-size: 12px;
-    color: #ffffff;
-    font-weight: 500;
-  }
-
-  .message.received .duration-display {
-    color: #0045f4;
-  }
-
-  .message.sent .duration-display {
-    color: #ff2929;
-  }
+ 
   
 
 
@@ -794,89 +695,13 @@
  
 
 
-  .message-input-container {
-    display: flex;
-    width: 100%;
-    gap: 12px;
-    padding: 8px 16px;
-    background: #fff;
-    border-radius: 16px;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  }
 
 
-  .message-input{
-    flex: 1;
-    padding: 10px 15px;
-    border: none;
-    background: transparent;
-    font-size: 14px;
-    transition: all 0.3s ease;
-    overflow-y: auto;
-    max-height: 100px;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    resize: none;
-    margin-bottom: 0;
-  }
-
-  .message-input:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
-  }
-
-  /* Adjust line break behavior */
-.message-input::before {
-  content: attr(data-replicated-value) " ";
-  white-space: pre-wrap;
-  visibility: hidden;
-}
-
-.message-input::-webkit-scrollbar {
-  width: 6px;
-}
-
-.message-input::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.message-input::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.1);
-  border-radius: 3px;
-}
-   
-  .message-container.sent {
-    display: flex;
-    flex-direction: row-reverse;
-    margin-left: auto;
-    width: 100%;
-    justify-content: flex-end;
-  }
 
 
 
  
 
-.message.system {
-  display: flex;
-  justify-content: center;
-  margin: 8px 0;
-}
 
-.message.system .message-bubble {
-  background: rgba(0, 0, 0, 0.05);
-  color: #666;
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-style: italic;
-}
-
-.dark-theme .message.system .message-bubble {
-  background: rgba(255, 255, 255, 0.1);
-  color: #999;
-}
 
  

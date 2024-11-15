@@ -1,0 +1,106 @@
+.voice-message-player-container {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    gap: 12px;
+    width: 100%;
+    border-radius: 50px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .speed-button {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 12px;
+    padding: 4px 8px;
+    padding-left: 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+
+  .message.sent .speed-button {
+    color: #ff2929;
+  }
+  
+  .message.received .speed-button {
+    color: #4f46e5;
+  }
+  
+  .speed-button:hover {
+    background: rgba(0, 0, 0, 0.1);
+  }
+
+
+
+
+  .message.received .voice-message-player-container {
+    background: #f3f4f6;
+  }
+
+  .message.sent .voice-message-player-container {
+    background: #f3f4f6;
+  }
+
+  .waveform-container {
+    flex: 1;
+    height: 24px;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .waveform-canvas {
+    width: 100px;
+    height: 100%;
+    padding-right: 14px;
+    border-radius: 14px;
+  }
+
+  .message.received .waveform-canvas {
+    background: transparent;
+  }
+
+  .message.sent .waveform-canvas {
+    background: transparent;
+  }
+
+  .play-button {
+    background: none;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+  }
+
+  .play-button:hover {
+    transform: scale(1.1);
+  }
+
+  .message.sent .play-button {
+    color: #ff2929;
+  }
+
+  .message.received .play-button {
+    color: #4f46e5;
+  }
+
+  .duration-display {
+    font-size: 12px;
+    color: #ffffff;
+    font-weight: 500;
+  }
+
+  .message.received .duration-display {
+    color: #0045f4;
+  }
+
+  .message.sent .duration-display {
+    color: #ff2929;
+  }
