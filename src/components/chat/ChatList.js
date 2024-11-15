@@ -48,14 +48,23 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom }) => {
     // Filter rooms based on permissions and search query
     const userRooms = rooms.filter(room => {
       const matchesSearch = room.name?.toLowerCase().includes(searchQuery.toLowerCase());
-      const hasPermission =
-       room.type === 'public' || 
-        (room.participants && room.participants.includes(auth.currentUser?.uid)) ||
-        room.createdBy === auth.currentUser.uid;
+      const currentTime = new Date();
+      
+      // Check if user is a participant or creator
+      const isParticipant = room.participants?.includes(auth.currentUser.uid);
+      const isCreator = room.createdBy === auth.currentUser.uid;
 
-      console.log(room.createdBy, auth.currentUser.uid);
-
-      return matchesSearch && hasPermission;
+      // For public rooms
+      if (room.type === 'public') {
+        return matchesSearch && (
+          isCreator || // Always show to creator
+          isParticipant || // Show to participants
+          (room.publicVisibleAfter && new Date(room.publicVisibleAfter) <= currentTime) // Show if delay passed
+        );
+      }
+      
+      // For private rooms
+      return matchesSearch && (isCreator || isParticipant);
     });
 
     setFilteredRooms(userRooms);
