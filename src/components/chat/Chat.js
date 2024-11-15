@@ -23,7 +23,7 @@ import VoiceMessagePlayer                                                       
 import MessageActions                                                                 from './MessageActions';
 import VoicePreview                                                                   from './VoicePreview';
 
-const Chat = ({ room }) => {
+const Chat = ({ room, onError }) => {
   const [roomData, setRoomData] = useState(null);
   const messageContentRef = useRef(null)
   const [newMessage, setNewMessage] = useState("");

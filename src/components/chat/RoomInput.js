@@ -204,13 +204,7 @@ function RoomInput({ setRoom, onError }) {
       )}
 
           {/* Error Popup */}
-          {showErrorPopup && (
-        <div className="error-popup">
-          <div className="error-popup-content">
-            <span className="error-message">{error}</span>
-          </div>
-        </div>
-      )}
+      
 
 
     <div className='room-btn'>
