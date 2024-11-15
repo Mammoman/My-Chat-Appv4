@@ -27,15 +27,36 @@
   justify-content: space-around;
   margin-bottom: 10px;
 }
-
-.room input{
-   font-size: 14px ;
-   padding-left: ;
-   padding-right: ;
-   padding-bottom: ;
-   padding-right: ;
-   width: 50%;
+.room input {
+  font-size: 14px;
+  padding: 8px 12px;
+  width: 50%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.2s ease;
 }
+
+.room input:focus {
+  outline: none;
+  border-color: #1da95f;
+}
+
+.room input.error {
+  border-color: #dc3545;
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 4px;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 
 .room-type{
   border-radius: 4px;

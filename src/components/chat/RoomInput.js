@@ -20,12 +20,26 @@ function RoomInput({ setRoom }) {
   const [showPopup, setShowPopup] = useState(false);
   const [existingRoomId, setExistingRoomId] = useState(null);
   const [error, setError] = useState('');
+  const [isValidating, setIsValidating] = useState(false);
+
+  const validateRoomName = (name) => {
+    if (!name) return 'Room name cannot be empty';
+    if (name.length < 3) return 'Room name must be at least 3 characters';
+    if (name.length > 30) return 'Room name must be less than 30 characters';
+    if (!/^[a-zA-Z0-9-_\s]+$/.test(name)) return 'Room name can only contain letters, numbers, spaces, hyphens and underscores';
+
+      
+  // Remove multiple spaces and trim
+    const normalizedName = name.replace(/\s+/g, ' ').trim();
+    if (normalizedName !== name) return 'Room name contains invalid spacing';
+    return '';
+  };
 
   const handleJoinPrivateRoom = async (roomId) => {
     try {
       const roomRef = doc(db, 'rooms', roomId);
       const roomDoc = await getDoc(roomRef);
-      
+
       if (!roomDoc.exists()) return;
       
       const roomData = roomDoc.data();
@@ -54,14 +68,24 @@ function RoomInput({ setRoom }) {
     }
   };
 
+
+
   const createRoom = async () => {
+
     const roomName = roomInputRef.current.value.trim();
-    if (!roomName) return;
+    setIsValidating(true);
+    
+    const validationError = validateRoomName(roomName);
+    if (validationError) {
+      setError(validationError);
+      setIsValidating(false);
+      return;
+    }
        
     try {
       const roomsRef = collection(db, "rooms");
-      
-      const q = query(roomsRef, where("name", "==", roomName.toLowerCase()));
+
+      const q = query(roomsRef, where("exactName", "==", roomName));
       const querySnapshot = await getDocs(q);
       
       if (!querySnapshot.empty) {
@@ -86,6 +110,7 @@ function RoomInput({ setRoom }) {
       }
       const newRoom = {
         name: roomName.toLowerCase(),
+        exactName: roomName,
         displayName: roomName,
         createdBy: auth.currentUser.uid,
         createdAt: new Date(),
@@ -104,9 +129,12 @@ function RoomInput({ setRoom }) {
       setRoom(docRef.id);
       roomInputRef.current.value = '';
       setError('');
+      setIsValidating(false);
     } catch (error) {
       console.error("Error creating room:", error);
       setError('Error creating room, omo go beg');
+      setIsValidating(false);
+
     }
   };
 
@@ -135,8 +163,16 @@ function RoomInput({ setRoom }) {
     <div className='room'>
       <label className='room-label'>Enter Room name: </label>
       <div className='room-input'>
-      <input ref={roomInputRef} />
-      <select className='room-type' value={roomType} onChange={(e) => setRoomType(e.target.value)}>
+      <input 
+      ref={roomInputRef}
+      className={`room-input ${error ? 'error' : ''}`}
+      type='text'
+      placeholder='Enter room name'
+      />
+      <select
+       className='room-type' 
+       value={roomType} 
+       onChange={(e) => setRoomType(e.target.value)}>
         <option className='room-type-option' value="public">Public Room</option>
         <option className='room-type-option' value="private">Private Room</option>
       </select>
