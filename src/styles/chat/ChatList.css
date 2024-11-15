@@ -141,6 +141,24 @@
   background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
 }
 
+
+.room-type-badge {
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 12px;
+  margin-left: 8px;
+}
+
+.room-type-badge.public {
+  background-color: #1da95f;
+  color: white;
+}
+
+.room-type-badge.private {
+  background-color: #dc3545;
+  color: white;
+}
+
 .room-info {
   flex: 1;
 }
@@ -180,6 +198,43 @@
 .room-input-wrapper {
   padding: 4px;
   border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.error-popup {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  animation: slideIn 0.3s ease-out;
+}
+
+.error-popup-content {
+  background: #dc3545;
+  padding: 12px 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+.error-popup-content .error-message {
+  font-size: 14px;
+  color: white;
+  font-weight: 500;
+}
+
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 

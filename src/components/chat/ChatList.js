@@ -24,6 +24,9 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom }) => {
   const [filteredRooms, setFilteredRooms] = useState([]);
   const [roomToDelete, setRoomToDelete] = useState(null);
   const [roomToExit, setRoomToExit] = useState(null);
+  const [error, setError] = useState('');
+  const [errorType, setErrorType] = useState('error');
+  const [showErrorPopup, setShowErrorPopup] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(() => {
   const savedMode = localStorage.getItem('darkMode');
     return savedMode === 'true';
@@ -135,6 +138,27 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom }) => {
     }
   };
 
+  const handleError = (errorData) => {
+    if (typeof errorData === 'string') {
+      setError(errorData);
+      setErrorType('error');
+    } else {
+      setError(errorData.message);
+      setErrorType(errorData.type || 'error');
+    }
+    
+    setShowErrorPopup(true);
+    
+    if (window.errorTimeout) {
+      clearTimeout(window.errorTimeout);
+    }
+    
+    window.errorTimeout = setTimeout(() => {
+      setShowErrorPopup(false);
+      setError('');
+    }, 3000);
+  };
+
   return (
     <div className="chat-list-container">
       <div className="chat-list-header">
@@ -176,8 +200,12 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom }) => {
                 <div className="avatar-placeholder" />
               </div>
               <div className="room-info">
-                <h4>{room.displayName || room.name || room.id}</h4>
-                <p>{room.type === 'private' ? 'Private Chat' : 'Public Room'}</p>
+              <h4>{room.displayName}</h4>
+        <div className="room-type-info">
+          <span className={`room-type-badge ${room.type}`}>
+            {room.type}
+                  </span>
+                </div>
               </div>
             </div>
             <button 
@@ -199,7 +227,9 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom }) => {
       </div>
 
       <div className="room-input-wrapper">
-        <RoomInput setRoom={onSelectRoom} />
+        <RoomInput 
+        setRoom={onSelectRoom}
+        onError={handleError}/>
       </div>
 
       {roomToDelete && (
@@ -212,6 +242,14 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom }) => {
           onCancel={() => setRoomToDelete(null)}
         />
       )}
+
+      {showErrorPopup && (
+              <div className="error-popup">
+                <div className={`error-popup-content ${errorType}`}>
+                  <span className="error-message">{error}</span>
+                </div>
+              </div>
+            )}
         
                 {roomToExit && (
           <DeleteRoomPopup

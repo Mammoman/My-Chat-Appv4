@@ -14,18 +14,39 @@ import {
 }                                                  from 'firebase/firestore';
 import                                          '../../styles/chat/RoomInput.css';
 
-function RoomInput({ setRoom }) {
+function RoomInput({ setRoom, onError }) {
   const roomInputRef = useRef(null);
   const [roomType, setRoomType] = useState('public');
   const [showPopup, setShowPopup] = useState(false);
   const [existingRoomId, setExistingRoomId] = useState(null);
   const [error, setError] = useState('');
+  const [isValidating, setIsValidating] = useState(false);
+  const [showErrorPopup, setShowErrorPopup] = useState(false);
+  
+  const showError = (message) => {
+    setError(message);
+    onError(message); // Pass error up to parent
+  };
+
+
+  const validateRoomName = (name) => {
+    if (!name) return 'Room name cannot be empty';
+    if (name.length < 3) return 'Room name must be at least 3 characters';
+    if (name.length > 30) return 'Room name must be less than 30 characters';
+    if (!/^[a-zA-Z0-9-_\s]+$/.test(name)) return 'Room name can only contain letters, numbers, spaces, hyphens and underscores';
+
+      
+  // Remove multiple spaces and trim
+    const normalizedName = name.replace(/\s+/g, ' ').trim();
+    if (normalizedName !== name) return 'Room name contains invalid spacing';
+    return '';
+  };
 
   const handleJoinPrivateRoom = async (roomId) => {
     try {
       const roomRef = doc(db, 'rooms', roomId);
       const roomDoc = await getDoc(roomRef);
-      
+
       if (!roomDoc.exists()) return;
       
       const roomData = roomDoc.data();
@@ -45,23 +66,35 @@ function RoomInput({ setRoom }) {
             pendingRequests: arrayUnion(requestData)
           });
           
-          setError('Join request sent to room creator');
+          onError({ message: 'Join request sent to room creator', type: 'info'   });
         }
       }
-    } catch (error) {
+    }  catch (error) {
       console.error("Error joining private room:", error);
-      setError('Error joining room');
+      onError({ message: 'Error joining room', type: 'error' });
     }
   };
 
+
+
   const createRoom = async () => {
+
     const roomName = roomInputRef.current.value.trim();
-    if (!roomName) return;
+    setIsValidating(true);
+    
+    const validationError = validateRoomName(roomName);
+    if (validationError) {
+      onError(validationError);
+      setIsValidating(false);
+      return;
+    }
        
     try {
       const roomsRef = collection(db, "rooms");
-      
-      const q = query(roomsRef, where("name", "==", roomName.toLowerCase()));
+
+      const q = query(roomsRef,
+         where("exactName", "==", roomName),
+         where("type", "==", roomType));
       const querySnapshot = await getDocs(q);
       
       if (!querySnapshot.empty) {
@@ -86,7 +119,9 @@ function RoomInput({ setRoom }) {
       }
       const newRoom = {
         name: roomName.toLowerCase(),
+        exactName: roomName,
         displayName: roomName,
+        uniqueId: `${roomName.toLowerCase()}_${roomType}`,
         createdBy: auth.currentUser.uid,
         createdAt: new Date(),
         type: roomType,
@@ -104,9 +139,12 @@ function RoomInput({ setRoom }) {
       setRoom(docRef.id);
       roomInputRef.current.value = '';
       setError('');
+      setIsValidating(false);
     } catch (error) {
       console.error("Error creating room:", error);
       setError('Error creating room, omo go beg');
+      setIsValidating(false);
+
     }
   };
 
@@ -135,19 +173,22 @@ function RoomInput({ setRoom }) {
     <div className='room'>
       <label className='room-label'>Enter Room name: </label>
       <div className='room-input'>
-      <input ref={roomInputRef} />
-      <select className='room-type' value={roomType} onChange={(e) => setRoomType(e.target.value)}>
+      <input 
+      ref={roomInputRef}
+      className={`room-input ${error ? 'error' : ''}`}
+      type='text'
+      placeholder='Enter room name'
+      />
+      <select
+       className='room-type-select' 
+       value={roomType} 
+       onChange={(e) => setRoomType(e.target.value)}>
         <option className='room-type-option' value="public">Public Room</option>
         <option className='room-type-option' value="private">Private Room</option>
       </select>
       </div>
        
-      <div className='room-btn'>
-      {error && <p className="error-message">{error}</p>}
-      <button className='custom-btn btn-12' onClick={createRoom}>
-        <span>Created!</span><span>Create Room</span></button>
-      
-      </div>
+  
      
 
       {showPopup && (
@@ -161,6 +202,23 @@ function RoomInput({ setRoom }) {
           </div>
         </div>
       )}
+
+          {/* Error Popup */}
+          {showErrorPopup && (
+        <div className="error-popup">
+          <div className="error-popup-content">
+            <span className="error-message">{error}</span>
+          </div>
+        </div>
+      )}
+
+
+    <div className='room-btn'>
+      <button className='custom-btn btn-12' onClick={createRoom}>
+        <span>Created!</span><span>Create Room</span></button>
+      
+      </div>
+
     </div>
   );
 }
