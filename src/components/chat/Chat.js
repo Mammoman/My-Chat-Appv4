@@ -33,7 +33,7 @@ const Chat = ({ room }) => {
   const [isRoomCreator, setIsRoomCreator] = useState(false);
   const [selectedReply, setSelectedReply] = useState(null);
   const [selectedMessageId, setSelectedMessageId] = useState(null);
-  const reactions = ['🔥', '🙌', '🤬', '😊','🫠','😭'];
+  const reactions = ['🔥', '😂', '🤬', '😊','🫠','😭'];
   const [isRecording, setIsRecording] = useState(false);
   const [recordingDuration, setRecordingDuration] = useState(0);
   const [previewAudio, setPreviewAudio] = useState(null);

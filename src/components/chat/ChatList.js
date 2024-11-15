@@ -25,6 +25,7 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom }) => {
   const [roomToDelete, setRoomToDelete] = useState(null);
   const [roomToExit, setRoomToExit] = useState(null);
   const [error, setError] = useState('');
+  const [errorType, setErrorType] = useState('error');
   const [showErrorPopup, setShowErrorPopup] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(() => {
   const savedMode = localStorage.getItem('darkMode');
@@ -137,14 +138,21 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom }) => {
     }
   };
 
-  const handleError = (errorMessage) => {
-    setError(errorMessage);
+  const handleError = (errorData) => {
+    if (typeof errorData === 'string') {
+      setError(errorData);
+      setErrorType('error');
+    } else {
+      setError(errorData.message);
+      setErrorType(errorData.type || 'error');
+    }
+    
     setShowErrorPopup(true);
-    // Clear any existing timeout
+    
     if (window.errorTimeout) {
       clearTimeout(window.errorTimeout);
     }
-    // Set new timeout
+    
     window.errorTimeout = setTimeout(() => {
       setShowErrorPopup(false);
       setError('');
@@ -235,13 +243,13 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom }) => {
         />
       )}
 
-          {showErrorPopup && (
-          <div className="error-popup">
-            <div className="error-popup-content">
-              <span className="error-message">{error}</span>
-            </div>
-          </div>
-        )}
+      {showErrorPopup && (
+              <div className="error-popup">
+                <div className={`error-popup-content ${errorType}`}>
+                  <span className="error-message">{error}</span>
+                </div>
+              </div>
+            )}
         
                 {roomToExit && (
           <DeleteRoomPopup

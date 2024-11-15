@@ -66,12 +66,12 @@ function RoomInput({ setRoom, onError }) {
             pendingRequests: arrayUnion(requestData)
           });
           
-          onError('Join request sent to room creator');
+          onError({ message: 'Join request sent to room creator', type: 'info'   });
         }
       }
-    } catch (error) {
+    }  catch (error) {
       console.error("Error joining private room:", error);
-      setError('Error joining room');
+      onError({ message: 'Error joining room', type: 'error' });
     }
   };
 

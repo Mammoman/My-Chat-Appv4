@@ -219,22 +219,11 @@
   justify-content: center;
 }
 
-
-.error-popup-content.error {
-  background: #dc3545;
+.error-popup-content .error-message {
+  font-size: 14px;
   color: white;
+  font-weight: 500;
 }
-
-.error-popup-content.success {
-  background: #28a745;
-  color: white;
-}
-
-.error-popup-content.info {
-  background: #17a2b8;
-  color: white;
-}
-
 
 
 @keyframes slideIn {
