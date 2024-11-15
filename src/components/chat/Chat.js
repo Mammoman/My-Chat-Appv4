@@ -22,6 +22,7 @@ import                                                                          
 import VoiceMessagePlayer                                                             from './VoiceMessagePlayer';
 import MessageActions                                                                 from './MessageActions';
 import VoicePreview                                                                   from './VoicePreview';
+import SpotifyPlayer                                                                from '../spotify/SpotifyPlayer';
 
 const Chat = ({ room, onError }) => {
   const [roomData, setRoomData] = useState(null);
@@ -424,6 +425,7 @@ const Chat = ({ room, onError }) => {
               )}
             </div>
             <div className="header-actions">
+            <SpotifyPlayer room={room} />
             <span className="member-count">
                 {roomData?.participants?.length || 0} members
               </span>
