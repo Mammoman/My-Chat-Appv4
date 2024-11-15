@@ -74,14 +74,16 @@ function RoomInput({ setRoom }) {
           return;
         }
 
+        // For public rooms, add user to participants
+        await updateDoc(doc(db, 'rooms', existingRoom.id), {
+          participants: arrayUnion(auth.currentUser.uid)
+        });
         
         setRoom(existingRoom.id);
-        // Add join message for existing room
         await addSystemMessage(existingRoom.id, `${auth.currentUser.email} has joined ${roomName}`);
         roomInputRef.current.value = '';
         return;
       }
-
       const newRoom = {
         name: roomName.toLowerCase(),
         displayName: roomName,
@@ -91,7 +93,11 @@ function RoomInput({ setRoom }) {
         participants: [auth.currentUser.uid],
         isActive: true,
         pendingRequests: [],
-        lastMessage: null
+        lastMessage: null,
+        isPubliclyVisible: false,
+        publicVisibleAfter: roomType === 'public' ? 
+          new Date(Date.now() + (24 * 60 * 60 * 1000)) : // 24 hours for public rooms
+          null // No delay for private rooms
       };
 
       const docRef = await addDoc(roomsRef, newRoom);
