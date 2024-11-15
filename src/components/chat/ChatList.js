@@ -176,8 +176,12 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom }) => {
                 <div className="avatar-placeholder" />
               </div>
               <div className="room-info">
-                <h4>{room.displayName || room.name || room.id}</h4>
-                <p>{room.type === 'private' ? 'Private Chat' : 'Public Room'}</p>
+              <h4>{room.displayName}</h4>
+        <div className="room-type-info">
+          <span className={`room-type-badge ${room.type}`}>
+            {room.type}
+                  </span>
+                </div>
               </div>
             </div>
             <button 

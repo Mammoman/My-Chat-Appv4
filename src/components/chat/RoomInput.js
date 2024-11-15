@@ -85,7 +85,9 @@ function RoomInput({ setRoom }) {
     try {
       const roomsRef = collection(db, "rooms");
 
-      const q = query(roomsRef, where("exactName", "==", roomName));
+      const q = query(roomsRef,
+         where("exactName", "==", roomName),
+         where("type", "==", roomType));
       const querySnapshot = await getDocs(q);
       
       if (!querySnapshot.empty) {
@@ -112,6 +114,7 @@ function RoomInput({ setRoom }) {
         name: roomName.toLowerCase(),
         exactName: roomName,
         displayName: roomName,
+        uniqueId: `${roomName.toLowerCase()}_${roomType}`,
         createdBy: auth.currentUser.uid,
         createdAt: new Date(),
         type: roomType,
