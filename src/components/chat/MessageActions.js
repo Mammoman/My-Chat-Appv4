@@ -1,5 +1,5 @@
-import React from 'react';
-import '../../styles/chat/MessageActions.css';
+import React                                                                 from 'react';
+import                                                                        '../../styles/chat/MessageActions.css';
 
 const MessageActions = ({ message, onReply, onDelete, isSelected, canDelete }) => {
   const handleReply = (e) => {

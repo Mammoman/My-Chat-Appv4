@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef }                                         from 'react';
 import { 
   addDoc, 
   collection, 
@@ -12,16 +12,16 @@ import {
   deleteDoc,
   arrayUnion,
   arrayRemove
-} from 'firebase/firestore';
-import { auth, db } from '../../config/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
-import { Call02Icon, PlusSignIcon, Cancel02Icon, MoreVerticalIcon, TelegramIcon, StopIcon, Mic02Icon } from 'hugeicons-react';
-import ChatRequestPopup from './ChatRequestPopup';
-import '../../styles/chat/MessageArea.css';
-import '../../styles/chat/Reactions.css';
-import VoiceMessagePlayer from './VoiceMessagePlayer';
-import MessageActions from './MessageActions';
-import VoicePreview from './VoicePreview';
+}                                                                                     from 'firebase/firestore';
+import { auth, db }                                                                   from '../../config/firebase';
+import { onAuthStateChanged }                                                         from 'firebase/auth';
+import { Call02Icon, Cancel02Icon, MoreVerticalIcon, StopIcon, Mic02Icon }            from 'hugeicons-react';
+import ChatRequestPopup                                                               from './ChatRequestPopup';
+import                                                                                '../../styles/chat/MessageArea.css';
+import                                                                               '../../styles/chat/Reactions.css';
+import VoiceMessagePlayer                                                             from './VoiceMessagePlayer';
+import MessageActions                                                                 from './MessageActions';
+import VoicePreview                                                                   from './VoicePreview';
 
 const Chat = ({ room }) => {
   const [roomData, setRoomData] = useState(null);
@@ -543,7 +543,7 @@ const Chat = ({ room }) => {
             ))}
           </div>
         
-          <form onSubmit={handleSubmit} className='message-box'>
+          <form onSubmit={handleSubmit} className='message-box-reply-preview'>
             
             {selectedReply && (
               <div className="reply-preview">

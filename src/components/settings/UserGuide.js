@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import "../../styles/auth/UserGuide.css"
-import { ArrowRight03Icon, Cancel02Icon } from 'hugeicons-react';
+import React, { useState, useEffect }                                             from "react";
+import                                                                             "../../styles/auth/UserGuide.css"
+import { ArrowRight03Icon, Cancel02Icon }                                         from 'hugeicons-react';
 
 const UserGuide = ({ onClose }) => {
   const [currentPage, setCurrentPage] = useState(1);

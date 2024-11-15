@@ -1,5 +1,5 @@
-import React from 'react';
-import '../../styles/chat/DeleteRoomPopup.css';
+import                                                                  React from 'react';
+import                                                                  '../../styles/chat/DeleteRoomPopup.css';
 
 const DeleteRoomPopup = ({ isCreator, onConfirm, onCancel }) => {
   return (

@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import Profile from './Profile';
-import Account from './Account';
-import Appearance from './Appearance';
-import UserGuide from './UserGuide';
-import '../../styles/settings/Settings.css'
+import React, { useState }                                  from 'react';
+import Profile from                                         './Profile';
+import Account from                                         './Account';
+import Appearance from                                       './Appearance';
+import UserGuide from                                        './UserGuide';
+import                                                        '../../styles/settings/Settings.css'
 
 const Settings = () => {
   const [activeTab, setActiveTab] = useState('profile');

@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { auth, db } from '../../config/firebase';
+import React, { useRef, useState }                  from 'react';
+import { auth, db }                                  from '../../config/firebase';
 import { 
   collection, 
   addDoc, 
@@ -9,9 +9,10 @@ import {
   doc, 
   getDoc, 
   updateDoc,
-  arrayUnion 
-} from 'firebase/firestore';
-import '../../styles/chat/RoomInput.css';
+  arrayUnion,
+  serverTimestamp
+}                                                  from 'firebase/firestore';
+import                                          '../../styles/chat/RoomInput.css';
 
 function RoomInput({ setRoom }) {
   const roomInputRef = useRef(null);
@@ -72,8 +73,11 @@ function RoomInput({ setRoom }) {
           setShowPopup(true);
           return;
         }
+
         
         setRoom(existingRoom.id);
+        // Add join message for existing room
+        await addSystemMessage(existingRoom.id, `${auth.currentUser.email} has joined ${roomName}`);
         roomInputRef.current.value = '';
         return;
       }
@@ -97,6 +101,21 @@ function RoomInput({ setRoom }) {
     } catch (error) {
       console.error("Error creating room:", error);
       setError('Error creating room, omo go beg');
+    }
+  };
+
+  const addSystemMessage = async (roomId, message) => {
+    try {
+      const messagesRef = collection(db, 'rooms', roomId, 'Messages');
+      await addDoc(messagesRef, {
+        text: message,
+        type: 'system',
+        createdAt: serverTimestamp(),
+        user: 'system',
+        room: roomId
+      });
+    } catch (error) {
+      console.error("Error adding system message:", error);
     }
   };
 
