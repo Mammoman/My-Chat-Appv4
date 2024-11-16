@@ -15,13 +15,13 @@ import {
 }                                                                                     from 'firebase/firestore';
 import { auth, db }                                                                   from '../../config/firebase';
 import { onAuthStateChanged }                                                         from 'firebase/auth';
-import { Call02Icon, Cancel02Icon, MoreVerticalIcon, StopIcon, Mic02Icon }            from 'hugeicons-react';
 import ChatRequestPopup                                                               from './ChatRequestPopup';
 import                                                                                '../../styles/chat/MessageArea.css';
 import                                                                               '../../styles/chat/Reactions.css';
-import VoiceMessagePlayer                                                             from './VoiceMessagePlayer';
-import MessageActions                                                                 from './MessageActions';
-import VoicePreview                                                                   from './VoicePreview';
+import MessageInput from './MessageInput';
+import MessageHeader from './MessageHeader';
+import MessageContent from './MessageContent';
+
 
 
 const Chat = ({ room, onError }) => {
@@ -411,213 +411,45 @@ const Chat = ({ room, onError }) => {
 
   return (
     <div className="message-area">
-      {room && (
-        
+           {room && (
         <>
-          <div className='message-header'>
-            <div className="header-info">
-            <h1>Welcome to: {roomData?.displayName || roomData?.name}</h1>
-              {userEmail ? (
-                <>
-                  <h2>User Email: {userEmail}</h2>
-                 
-                </>
-              ) : (
-                <p>User not authenticated</p>
-              )}
-            </div>
-            <div className="header-actions">
-
-            <span className="member-count">
-                {roomData?.participants?.length || 0} members
-              </span>
-              <button className="action-btn"><Call02Icon className='phone-ma-btn'/></button>
-              <button className="action-btn"><MoreVerticalIcon className='ellipsisV-ma-btn'/></button>
-
-
-            </div>
-          </div>
+          <MessageHeader 
+            roomData={roomData}
+            userEmail={userEmail}
+          />
           
-          <div className="message-content" ref={messageContentRef}> 
-            {messages.map((message) => (
-              <div 
-                key={message.id} 
-                id={`message-${message.id}`}
-                className={`message ${message.user === userEmail ? 'sent' : 'received'}`}
-                onClick={() => handleMessageClick(message.id)}
-              >
-                <div className="message-user-avatar">
-                  {message.user.charAt(0).toUpperCase()}
-                </div>
-
-
-                <div className="message-content-wrapper">
-                  <span className="message-user-email">{message.user}</span>
-                  <div className="message-bubble-wrapper">
-                  <div className="message-bubble">
-                    {message.replyTo && (
-                      <div 
-                        className="reply-reference"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          scrollToMessage(message.replyTo.id);
-                        }}
-                      >
-                        <div className="reply-preview-content">
-                          <span className="reply-user">{message.replyTo.user}</span>
-                          <p className="reply-text">
-                            {message.replyTo.type === 'voice' ? (
-                              <span>🎤 Voice message</span>
-                            ) : (
-                              message.replyTo.text
-                            )}
-                          </p>
-                        </div>
-                      </div>
-                    )}
-                    {message.type === 'voice' ? (
-                      <VoiceMessagePlayer 
-                        audioUrl={message.audioData} 
-                        duration={message.duration}
-                        isSent={message.userId === auth.currentUser?.uid}
-                      />
-                    ) : (
-                      <p>{message.text}</p>
-                    )}
-                  </div>
-                
-                  <div className="reactions-container">
-  <div className="reactions-popup">
-    {reactions.map((reaction, index) => (
-      <button
-        key={reaction}
-        className="reaction-btn"
-        style={{ animationDelay: `${index * 0.05}s` }}
-        onClick={(e) => {
-          e.stopPropagation();
-          handleReaction(message.id, reaction);
-        }}
-      >
-        {reaction}
-      </button>
-    ))}
-  </div>
-  
-  <div className="reaction-badges">
-    {message.reactions && 
-      Object.entries(message.reactions)
-        .filter(([_, users]) => users && users.length > 0)
-        .map(([reaction, users], index) => (
-          <div 
-            key={reaction} 
-            className="reaction-badge"
-            style={{ animationDelay: `${index * 0.05}s` }}
-            onClick={(e) => {
-              e.stopPropagation();
-              handleReaction(message.id, reaction);
-            }}
-          >
-            <span className="reaction-emoji">{reaction}</span>
-            <span className="reaction-count">{users.length}</span>
-            <div className="reaction-tooltip">
-              {users.join(', ')}
-            </div>
-          </div>
-        ))
-    }
-  </div>
-</div>
-
-                  </div>
-                
-                  <span className="message-status">
-                    {message.createdAt ? (
-                      <span className="status-icon status-received">✓✓</span>
-                    ) : (
-                      <span className="status-icon status-pending">⏳</span>
-                    )}
-                  </span>
-                                
-                                <MessageActions 
-                                  message={message}
-                                  onReply={(msg) => {
-                                    handleReply(msg);
-                                    setSelectedMessageId(null);
-                                  }}
-                                  onDelete={handleDeleteMessage}
-                                  isSelected={selectedMessageId === message.id}
-                                  canDelete={message.user === auth.currentUser?.email}
-                                />
-                </div>
-              </div>
-            ))}
-          </div>
-        
-          <form onSubmit={handleSubmit} className='message-box-reply-preview'>
-            
-            {selectedReply && (
-              <div className="reply-preview">
-                <div className="reply-preview-content">
-                  <span className="reply-user">{selectedReply.user}</span>
-                  <p className="reply-text">
-                    {selectedReply.type === 'voice' ? (
-                      <span className='reply-voice'>🎤 Voice message</span>
-                    ) : (
-                      selectedReply.text
-                    )}
-                  </p>
-                </div>
-                <button 
-                  type="button" 
-                  className="cancel-reply" 
-                  onClick={() => setSelectedReply(null)}
-                >
-                  <Cancel02Icon className='cancel-reply-icon'/>
-                </button>
-              </div>
-            )}
-            <div className="message-box">
-              {showPreview ? (
-                     <VoicePreview 
-                     audioUrl={previewAudio?.url}
-                     onCancel={cancelRecording}
-                     onSend={sendVoiceMessage}
-                   />
-              ) : (
-                <>
-                <div className='message-input-container '>
-                <input
-                   ref={inputRef}
-                    type="text"
-                    className='message-input'
-                    placeholder='Type here...'
-                    onChange={(e) => setNewMessage(e.target.value)}
-                    value={newMessage}
-                    />
-                    <button 
-                    type="button" 
-                    className={`action-btn voice-btn ${isRecording ? 'recording' : ''}`}
-                    onClick={isRecording ? stopRecording : startRecording}
-                  >
-                    {isRecording ? (
-                      <div className="recording-indicator">
-                        <StopIcon />
-                        <span className="duration">{formatDuration(recordingDuration)}</span>
-                      </div>
-                    ) : (
-                      <Mic02Icon />
-                    )}
-                  </button>
-                 
-                </div>
-                 
-                </>
-              )}
-            </div>
-          </form>
+          <MessageContent
+            messages={messages}
+            userEmail={userEmail}
+            selectedMessageId={selectedMessageId}
+            handleMessageClick={handleMessageClick}
+            handleReply={handleReply}
+            handleDeleteMessage={handleDeleteMessage}
+            handleReaction={handleReaction}
+            reactions={reactions}
+            messageContentRef={messageContentRef}
+            scrollToMessage={scrollToMessage}
+            auth={auth}
+          />
           
-        
-         
+          <MessageInput
+            handleSubmit={handleSubmit}
+            selectedReply={selectedReply}
+            setSelectedReply={setSelectedReply}
+            showPreview={showPreview}
+            previewAudio={previewAudio}
+            cancelRecording={cancelRecording}
+            sendVoiceMessage={sendVoiceMessage}
+            inputRef={inputRef}
+            newMessage={newMessage}
+            setNewMessage={setNewMessage}
+            isRecording={isRecording}
+            startRecording={startRecording}
+            stopRecording={stopRecording}
+            recordingDuration={recordingDuration}
+            formatDuration={formatDuration}
+          />
+
           {isRoomCreator && joinRequest && (
             <ChatRequestPopup
               requestingUser={joinRequest}
