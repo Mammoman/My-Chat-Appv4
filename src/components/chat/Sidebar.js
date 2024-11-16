@@ -1,11 +1,11 @@
 import React                                                                              from 'react';
 import { useState }                                                                       from 'react';
-import { Settings02Icon, Folder01Icon, Logout02Icon, Mail01Icon }                          from 'hugeicons-react';
+import { Settings02Icon, Folder01Icon, Logout02Icon, Mail01Icon, SpotifyIcon }                          from 'hugeicons-react';
 import { useNavigate }                                                                    from 'react-router-dom';
 import { auth }                                                                           from '../../config/firebase';
 import                                                                                    '../../styles/chat/Sidebar.css';
 import Settings                                                                            from '../settings/Settings';
-
+import { loginWithSpotify } from '../../config/spotify';
 const Sidebar = ({ signUserOut }) => {
   const navigate = useNavigate();
   const currentUser = auth.currentUser;
@@ -46,6 +46,12 @@ const Sidebar = ({ signUserOut }) => {
         <button className="menu-item">
           <Folder01Icon />
           <p>Archived</p>
+        </button>
+        <button className="menu-item spotify-login-btn"
+        onClick={loginWithSpotify}
+        >
+          <SpotifyIcon />
+          <p>Spotify</p>
         </button>
       </div>
 
