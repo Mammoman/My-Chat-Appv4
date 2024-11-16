@@ -39,8 +39,7 @@
   .message.sent .reactions-popup {
     position: absolute;
     bottom: -40px;
-    align-items: start; /* Center horizontally */
- /* Offset by half width */
+    align-items: start; 
     background: white;
     border-radius: 20px;
     padding: 5px 10px;
@@ -57,8 +56,8 @@
 
   .message-bubble-wrapper {
     position: relative;
-    overflow: visible; /* Allow popup to be visible outside */
-    padding-bottom: 40px; /* Add space for the popup */
+    overflow: visible; 
+    padding-bottom: 40px; 
   }
   
   
@@ -121,14 +120,14 @@
   
   .message.sent .reaction-badges {
     display: flex;
-    justify-content: center;  /* Center the reaction badges */
+    justify-content: center;  
     flex-wrap: wrap;
     gap: 4px;
   }
 
   .message.received .reaction-badges{
     display: flex;
-    justify-content: flex-start;  /* Center the reaction badges */
+    justify-content: flex-start; 
     flex-wrap: wrap;
     gap: 4px;
   }
@@ -177,28 +176,55 @@
   .reaction-tooltip {
     position: absolute;
     bottom: 100%;
-    left: 50%;
     background: rgba(0, 0, 0, 0.8);
     color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 11px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
     white-space: nowrap;
+    pointer-events: none;
     display: none;
-    animation: fadeIn 0.2s;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
     z-index: 1000;
+    animation: tooltipFadeIn 0.2s
   }
-
-  .message.sent .reaction-tooltip {
-    right: -50%;
-  }
+  
 
   .reaction-badge:hover .reaction-tooltip {
     display: block;
   }
+
+  .message.received .reaction-tooltip {
+    left: 0;
+    transform: translateY(-8px);
+  }
   
-  @keyframes fadeIn {
+  .message.sent .reaction-tooltip {
+    right: 0;
+    left: auto;
+    transform: translateY(-8px);
+  }
+
+  @keyframes tooltipSlideRight {
+    from {
+      opacity: 0;
+      transform: translateY(-8px) translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(-8px) translateX(0);
+    }
+  }
+  .reaction-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    border-width: 4px;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
+  }
+  
+  @keyframes tooltipFadeIn {
     from {
       opacity: 0;
       transform: translateX(-50%) translateY(5px);
@@ -208,4 +234,14 @@
       transform: translateX(-50%) translateY(0);
     }
   }
+
+  .message.received .reaction-tooltip::after {
+    left: 10px;
+    transform: none;
+  }
   
+  .message.sent .reaction-tooltip::after {
+    right: 10px;
+    left: auto;
+    transform: none;
+  }
