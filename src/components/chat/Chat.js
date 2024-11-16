@@ -287,7 +287,11 @@ const Chat = ({ room, onError }) => {
       const currentScroll = messageElement?.parentElement?.scrollTop;
       
       const messageRef = doc(db, 'rooms', room, 'Messages', message.id);
-      await deleteDoc(messageRef);
+      await updateDoc(messageRef, {
+        deleted: true,
+        text: "Message has been deleted",
+        reactions: {} // Clear any reactions
+      });
       setSelectedMessageId(null);
       
       // Restore scroll position after a short delay to allow for DOM updates

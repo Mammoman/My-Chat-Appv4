@@ -48,6 +48,15 @@
     justify-content: space-between;
   }
 
+  .message-bubble.deleted {
+    opacity: 0.6;
+  }
+  
+  .deleted-message {
+    font-style: italic;
+    color: #666;
+  }
+
   .message-header h1{
     font-size: 14px;
   }

@@ -3,6 +3,14 @@ import VoiceMessagePlayer from './VoiceMessagePlayer';
 
 const MessageBubble = ({ message, scrollToMessage, auth }) => {
   const isCurrentUser = auth?.currentUser?.uid === message.userId;
+
+  if (message.deleted) {
+    return (
+      <div className="message-bubble deleted">
+        <p className="deleted-message">Message has been deleted</p>
+      </div>
+    );
+  }
   
   return (
     <div className="message-bubble">
