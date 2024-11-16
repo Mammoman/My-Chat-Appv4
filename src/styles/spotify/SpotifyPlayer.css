@@ -1,47 +1,10 @@
 .spotify-player {
     display: flex;
     align-items: center;
-    gap: 12px;
     padding: 8px;
     background: rgba(29, 185, 84, 0.1);
     border-radius: 8px;
     margin-right: 16px;
-  }
-  
-  .spotify-player img {
-    width: 48px;
-    height: 48px;
-    border-radius: 4px;
-  }
-  
-  .track-info {
-    flex: 1;
-  }
-  
-  .track-info h3 {
-    margin: 0;
-    font-size: 14px;
-    font-weight: 600;
-  }
-  
-  .track-info p {
-    margin: 0;
-    font-size: 12px;
-    color: #666;
-  }
-  
-  .spotify-player button {
-    padding: 8px 16px;
-    background: #1DB954;
-    color: white;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  
-  .spotify-player button:hover {
-    background: #1ed760;
   }
   
   .spotify-connect-btn {
@@ -50,11 +13,7 @@
     padding: 8px 16px;
     border: none;
     border-radius: 20px;
-    cursor: pointer;
+    cursor: not-allowed;
     font-weight: 500;
-    transition: background 0.2s;
-  }
-  
-  .spotify-connect-btn:hover {
-    background: #1ed760;
+    opacity: 0.7;
   }
