@@ -1,8 +1,7 @@
 .message-actions-overlay {
   position: absolute;
-  top: 50%;
+  top: 30%;
   right: -60px;
-  transform: translateY(-50%);
   background: rgba(255, 255, 255, 0.95);
   border-radius: 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);

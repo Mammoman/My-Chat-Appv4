@@ -178,6 +178,11 @@ function RoomInput({ setRoom, onError }) {
       className={`room-input ${error ? 'error' : ''}`}
       type='text'
       placeholder='Enter room name'
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          createRoom();
+        }
+      }}
       />
       <select
        className='room-type-select' 
@@ -202,16 +207,6 @@ function RoomInput({ setRoom, onError }) {
           </div>
         </div>
       )}
-
-          {/* Error Popup */}
-      
-
-
-    <div className='room-btn'>
-      <button className='custom-btn btn-12' onClick={createRoom}>
-        <span>Created!</span><span>Create Room</span></button>
-      
-      </div>
 
     </div>
   );

@@ -56,28 +56,33 @@ const Chat = ({ room, onError }) => {
     try {
       const messageRef = doc(db, 'rooms', room, 'Messages', messageId);
       const messageDoc = await getDoc(messageRef);
-      const currentReactions = messageDoc.data().reactions || {};
-
-        // Prevent scroll position change
-    const messageElement = document.getElementById(`message-${messageId}`);
-    const currentScroll = messageElement?.parentElement?.scrollTop;
+      const currentData = messageDoc.data();
       
-      // Toggle reaction for current user
-      if (currentReactions[reaction]?.includes(auth.currentUser.uid)) {
-        await updateDoc(messageRef, {
-          [`reactions.${reaction}`]: arrayRemove(auth.currentUser.uid)
-        });
+      // Initialize reactions object if it doesn't exist
+      const currentReactions = currentData.reactions || {};
+      const currentUsers = currentReactions[reaction] || [];
+      
+      console.log('Current reactions:', currentReactions); // Debug
+      console.log('Current user:', auth.currentUser.uid); // Debug
+      
+      // Check if user already reacted
+      const userIndex = currentUsers.indexOf(auth.currentUser.email);
+      
+      if (userIndex > -1) {
+        // Remove user's reaction
+        currentUsers.splice(userIndex, 1);
       } else {
-        await updateDoc(messageRef, {
-          [`reactions.${reaction}`]: arrayUnion(auth.currentUser.uid)
-        });
+        // Add user's reaction
+        currentUsers.push(auth.currentUser.email);
       }
-
-
-       // Restore scroll position
-    if (messageElement?.parentElement && currentScroll) {
-      messageElement.parentElement.scrollTop = currentScroll;
-    }
+      
+      // Update the reactions in Firestore
+      await updateDoc(messageRef, {
+        reactions: {
+          ...currentReactions,
+          [reaction]: currentUsers
+        }
+      });
 
     } catch (error) {
       console.error("Error handling reaction:", error);
@@ -406,11 +411,8 @@ const Chat = ({ room, onError }) => {
 
   return (
     <div className="message-area">
-      {!room ? (
-        <div className="no-chat-selected">
-          <p>Select a chat to start messaging</p>
-        </div>
-      ) : (
+      {room && (
+        
         <>
           <div className='message-header'>
             <div className="header-info">
@@ -502,21 +504,27 @@ const Chat = ({ room, onError }) => {
   </div>
   
   <div className="reaction-badges">
-    {message.reactions && Object.entries(message.reactions).map(([reaction, users], index) => 
-      users.length > 0 && (
-        <div 
-        key={reaction} 
-        className="reaction-badge"
-        style={{ animationDelay: `${index * 0.05}s` }}
-      >
-        <span className="reaction-emoji">{reaction}</span>
-        <span className="reaction-count">{users.length}</span>
-        <div className="reaction-tooltip">
-          {users.join(', ')}
-        </div>
-      </div>
-      )
-    )}
+    {message.reactions && 
+      Object.entries(message.reactions)
+        .filter(([_, users]) => users && users.length > 0)
+        .map(([reaction, users], index) => (
+          <div 
+            key={reaction} 
+            className="reaction-badge"
+            style={{ animationDelay: `${index * 0.05}s` }}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleReaction(message.id, reaction);
+            }}
+          >
+            <span className="reaction-emoji">{reaction}</span>
+            <span className="reaction-count">{users.length}</span>
+            <div className="reaction-tooltip">
+              {users.join(', ')}
+            </div>
+          </div>
+        ))
+    }
   </div>
 </div>
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { auth, db } from '../../config/firebase';
 import { doc, updateDoc } from 'firebase/firestore';
-import { getSpotifyToken } from '../../config/spotify';
+import { getSpotifyToken, loginWithSpotify } from '../../config/spotify';
 
 
 const SpotifyPlayer = ({ room }) => {
@@ -22,7 +22,9 @@ const SpotifyPlayer = ({ room }) => {
       window.onSpotifyWebPlaybackSDKReady = () => {
         const spotifyPlayer = new window.Spotify.Player({
           name: 'Chat Room Player',
-          getOAuthToken: cb => cb('BQCryZ0c2kanc1z4kEE4bDCABxFYwe7ha2ck98kNoVWPTSUpWCyLBN97f5N4Ea2uu6pGNkTUbNEtpBqyCq2kD78zxug5gLliipHUb06qOK_qljssRrTTwRlLDYTRluvRlej_JMwthX00prlgB3jkePY9BFLZsxv-nEuxnjDFZpLm6bNOOw0OUuvILmveDUAnjgJl3ueHg-bbnvUyvEvZF8HClCwcty_3lyZzf5fwIHjz22PpWmPLWVEVED7GT3jjnk2yfK4tq1RxA0Cxx-QV5RagOP7-2wmf')
+          getOAuthToken: cb => {
+            getSpotifyToken().then(token => cb(token));
+          }
         });
   
         setPlayer(spotifyPlayer);
@@ -59,8 +61,12 @@ const SpotifyPlayer = ({ room }) => {
 
   return (
     <div className="spotify-player">
-      {currentTrack && (
-        <>
+         {!player ? (
+      <button onClick={loginWithSpotify} className="spotify-connect-btn">
+        Connect to Spotify
+      </button>
+    ) : currentTrack && (
+      <>
           <img 
             src={currentTrack.album.images[0].url} 
             alt={currentTrack.name} 

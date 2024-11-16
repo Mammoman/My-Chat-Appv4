@@ -43,3 +43,18 @@
   .spotify-player button:hover {
     background: #1ed760;
   }
+  
+  .spotify-connect-btn {
+    background: #1DB954;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.2s;
+  }
+  
+  .spotify-connect-btn:hover {
+    background: #1ed760;
+  }

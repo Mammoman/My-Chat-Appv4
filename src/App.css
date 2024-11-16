@@ -14,35 +14,40 @@ body{
 
 .mainpage-container {
   display: flex;
-    flex-direction: row;
+  flex-direction: row;
     width: 100%;
     overflow: hidden;
     height: 100vh;
 }
 
-
-.chat-area-container{ 
-  display: flex;
-  flex-direction: column;
-  background: #fff;
-  min-width: 0;
+.no-chat-selected {
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+  width: 850px;
+  height: 95%;
+  text-align: center; 
+  color: #77838f; 
   border-radius: 20px;
-  border:  1px solid  #000000;
-  margin:  14px;
-  overflow-y: auto;
-  height: 100vh;
+  background: #fff;
 }
 
-.chat-area-container4 {
-  flex: 1;
+.dark-theme .no-chat-selected{
+  background: transparent;
+}
+
+.no-chat-selected p{
+  font-size: 18px; 
+}
+
+.chat-area{
+  padding-bottom: 4px;
   display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  width: 100%;
+  align-items: center;
 }
 
 .chat-area p{
-  font-size: 44px;
+
 }
 
 .dark-theme{
@@ -232,7 +237,7 @@ body.dark-theme {
 }
 
 .dark-theme .message-box{
-  background: #1a1a1a;
+  background: transparent;
 }
 
 

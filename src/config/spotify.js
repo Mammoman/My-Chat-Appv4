@@ -13,34 +13,44 @@ export const loginWithSpotify = () => {
 };
 
 export const handleSpotifyCallback = async () => {
+  try {
     const hash = window.location.hash.substring(1);
     const params = new URLSearchParams(hash);
     const accessToken = params.get('access_token');
-  
-    if (accessToken && auth.currentUser) {
-      const userRef = doc(db, 'users', auth.currentUser.uid);
-      const userDoc = await getDoc(userRef);
-      
-      if (!userDoc.exists()) {
-        // Create user document if it doesn't exist
-        await setDoc(userRef, {
-          email: auth.currentUser.email,
-          createdAt: serverTimestamp(),
-          spotifyToken: accessToken,
-          spotifyTokenTimestamp: Date.now()
-        });
-      } else {
-        // Update existing document
-        await updateDoc(userRef, {
-          spotifyToken: accessToken,
-          spotifyTokenTimestamp: Date.now()
-        });
-      }
-      
-      return accessToken;
+
+    if (!accessToken) {
+      console.error('No access token found');
+      return null;
     }
+
+    if (!auth.currentUser) {
+      console.error('No authenticated user');
+      return null;
+    }
+
+    const userRef = doc(db, 'users', auth.currentUser.uid);
+    const userDoc = await getDoc(userRef);
+    
+    if (!userDoc.exists()) {
+      await setDoc(userRef, {
+        email: auth.currentUser.email,
+        createdAt: serverTimestamp(),
+        spotifyToken: accessToken,
+        spotifyTokenTimestamp: Date.now()
+      });
+    } else {
+      await updateDoc(userRef, {
+        spotifyToken: accessToken,
+        spotifyTokenTimestamp: Date.now()
+      });
+    }
+    
+    return accessToken;
+  } catch (error) {
+    console.error('Error in handleSpotifyCallback:', error);
     return null;
-  };
+  }
+};
 
 export const getSpotifyToken = async () => {
   const userRef = doc(db, 'users', auth.currentUser.uid);
