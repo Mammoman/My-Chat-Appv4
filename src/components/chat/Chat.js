@@ -303,8 +303,25 @@ const Chat = ({ room, onError }) => {
       const messageRef = doc(db, 'rooms', room, 'Messages', message.id);
       
       if (message.deleted) {
-        // If message is already deleted, remove it completely
-        await deleteDoc(messageRef);
+        // If message is already deleted, remove it and all references to it
+        const messagesRef = collection(db, 'rooms', room, 'Messages');
+        const q = query(messagesRef);
+        const querySnapshot = await getDocs(q);
+        
+        const batch = writeBatch(db);
+        
+        // Delete the original message
+        batch.delete(messageRef);
+        
+        // Delete all messages that reference this message
+        querySnapshot.forEach((doc) => {
+          const messageData = doc.data();
+          if (messageData.replyTo && messageData.replyTo.id === message.id) {
+            batch.delete(doc.ref);
+          }
+        });
+        
+        await batch.commit();
       } else {
         // First deletion - mark as deleted
         await updateDoc(messageRef, {
@@ -312,7 +329,7 @@ const Chat = ({ room, onError }) => {
           text: "Message has been deleted",
           reactions: {} // Clear any reactions
         });
-  
+
         // Update all messages that reference this message
         const messagesRef = collection(db, 'rooms', room, 'Messages');
         const q = query(messagesRef);
