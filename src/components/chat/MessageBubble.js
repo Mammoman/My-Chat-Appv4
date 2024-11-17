@@ -3,6 +3,14 @@ import VoiceMessagePlayer from './VoiceMessagePlayer';
 
 const MessageBubble = ({ message, scrollToMessage, auth }) => {
   const isCurrentUser = auth?.currentUser?.uid === message.userId;
+
+  if (message.deleted) {
+    return (
+      <div className="message-bubble deleted">
+        <p className="deleted-message">Message has been deleted</p>
+      </div>
+    );
+  }
   
   return (
     <div className="message-bubble">
@@ -17,7 +25,9 @@ const MessageBubble = ({ message, scrollToMessage, auth }) => {
           <div className="reply-preview-content">
             <span className="reply-user">{message.replyTo.user}</span>
             <p className="reply-text">
-              {message.replyTo.type === 'voice' ? (
+              {message.replyTo.deleted ? (
+                "Message has been deleted"
+              ) : message.replyTo.type === 'voice' ? (
                 <span>🎤 Voice message</span>
               ) : (
                 message.replyTo.text

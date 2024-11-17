@@ -85,13 +85,16 @@ const MessageContent = ({
               )}
             </span>
             
-            <MessageActions 
-              message={message}
-              onReply={handleReply}
-              onDelete={handleDeleteMessage}
-              isSelected={selectedMessageId === message.id}
-              canDelete={message.user === auth.currentUser?.email}
-            />
+            {(message.deleted ? message.user === auth.currentUser?.email : true) && (
+              <MessageActions 
+                message={message}
+                onReply={handleReply}
+                onDelete={handleDeleteMessage}
+                isSelected={selectedMessageId === message.id}
+                canDelete={message.user === auth.currentUser?.email}
+                isDeleted={message.deleted}
+              />
+            )}
           </div>
         </div>
       ))}
