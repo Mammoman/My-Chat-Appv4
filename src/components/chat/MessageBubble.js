@@ -25,7 +25,9 @@ const MessageBubble = ({ message, scrollToMessage, auth }) => {
           <div className="reply-preview-content">
             <span className="reply-user">{message.replyTo.user}</span>
             <p className="reply-text">
-              {message.replyTo.type === 'voice' ? (
+              {message.replyTo.deleted ? (
+                "Message has been deleted"
+              ) : message.replyTo.type === 'voice' ? (
                 <span>🎤 Voice message</span>
               ) : (
                 message.replyTo.text

@@ -11,7 +11,9 @@ import {
   updateDoc,
   deleteDoc,
   arrayUnion,
-  arrayRemove
+  arrayRemove,
+  getDocs,
+  writeBatch
 }                                                                                     from 'firebase/firestore';
 import { auth, db }                                                                   from '../../config/firebase';
 import { onAuthStateChanged }                                                         from 'firebase/auth';
@@ -169,7 +171,6 @@ const Chat = ({ room, onError }) => {
     e.preventDefault();
     if (!room || newMessage === "") return;
 
-    // Clear message and reply state immediately
     const messageToSend = newMessage;
     const replyToSend = selectedReply;
     setNewMessage("");
@@ -177,22 +178,35 @@ const Chat = ({ room, onError }) => {
 
     try {
       const messagesRef = collection(db, 'rooms', room, 'Messages');
+      
+      // If replying to a message, check its current state
+      let replyToData = null;
+      if (replyToSend) {
+        const replyMessageRef = doc(db, 'rooms', room, 'Messages', replyToSend.id);
+        const replyMessageDoc = await getDoc(replyMessageRef);
+        
+        if (replyMessageDoc.exists()) {
+          const replyMessageData = replyMessageDoc.data();
+          replyToData = {
+            id: replyToSend.id,
+            text: replyMessageData.deleted ? "Message has been deleted" : replyToSend.text,
+            user: replyToSend.user,
+            type: replyToSend.type,
+            deleted: replyMessageData.deleted || false
+          };
+        }
+      }
+
       await addDoc(messagesRef, {
         text: messageToSend,
         type: 'text',
         createdAt: serverTimestamp(),
         user: auth.currentUser ? auth.currentUser.email : 'Guest',
         room,
-        replyTo: replyToSend ? {
-          id: replyToSend.id,
-          text: replyToSend.text,
-          user: replyToSend.user,
-          type: replyToSend.type
-        } : null
+        replyTo: replyToData
       });
     } catch (error) {
       console.error("Error sending message:", error);
-      // Restore the message if sending fails
       setNewMessage(messageToSend);
       setSelectedReply(replyToSend);
     }
@@ -287,14 +301,38 @@ const Chat = ({ room, onError }) => {
       const currentScroll = messageElement?.parentElement?.scrollTop;
       
       const messageRef = doc(db, 'rooms', room, 'Messages', message.id);
-      await updateDoc(messageRef, {
-        deleted: true,
-        text: "Message has been deleted",
-        reactions: {} // Clear any reactions
-      });
+      
+      if (message.deleted) {
+        // If message is already deleted, remove it completely
+        await deleteDoc(messageRef);
+      } else {
+        // First deletion - mark as deleted
+        await updateDoc(messageRef, {
+          deleted: true,
+          text: "Message has been deleted",
+          reactions: {} // Clear any reactions
+        });
+  
+        // Update all messages that reference this message
+        const messagesRef = collection(db, 'rooms', room, 'Messages');
+        const q = query(messagesRef);
+        const querySnapshot = await getDocs(q);
+        
+        const batch = writeBatch(db);
+        querySnapshot.forEach((doc) => {
+          const messageData = doc.data();
+          if (messageData.replyTo && messageData.replyTo.id === message.id) {
+            batch.update(doc.ref, {
+              'replyTo.deleted': true,
+              'replyTo.text': 'Message has been deleted'
+            });
+          }
+        });
+        await batch.commit();
+      }
+      
       setSelectedMessageId(null);
       
-      // Restore scroll position after a short delay to allow for DOM updates
       setTimeout(() => {
         if (messageElement?.parentElement && currentScroll) {
           messageElement.parentElement.scrollTop = currentScroll;
