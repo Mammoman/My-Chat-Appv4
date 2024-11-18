@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Search02Icon, Calendar02Icon   , UserIcon, FilterIcon } from 'hugeicons-react';
+import { Search02Icon, Calendar02Icon, UserIcon, FilterIcon } from 'hugeicons-react';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 
-const MessageSearch = ({ onSearch, messages = [], users= []}) => {
+const MessageSearch = ({ onSearch, messages = [], users = [] }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [dateRange, setDateRange] = useState([null, null]);
   const [selectedUser, setSelectedUser] = useState('');
@@ -12,15 +12,29 @@ const MessageSearch = ({ onSearch, messages = [], users= []}) => {
 
 
 
+  const handleFilterChange = useCallback((type, value) => {
+    switch(type) {
+      case 'date':
+        setDateRange(value);
+        break;
+      case 'user':
+        setSelectedUser(value);
+        break;
+      case 'type':
+        setMessageType(value);
+        break;
+      default:
+        break;  
+    }
+  }, []);
 
- 
   const handleSearch = useCallback(() => {
     if (!Array.isArray(messages)) return;
     
     const [startDate, endDate] = dateRange;
     
     if (!searchTerm && !startDate && !endDate && !selectedUser && messageType === 'all') {
-      onSearch(null); // Reset search if no filters active
+      onSearch(null);
       return;
     }
     
@@ -38,13 +52,21 @@ const MessageSearch = ({ onSearch, messages = [], users= []}) => {
   }, [searchTerm, dateRange, selectedUser, messageType, messages, onSearch]);
 
   useEffect(() => {
-    const debounceTimer = setTimeout(() => {
-      handleSearch();
-    }, 300); // Add debounce to prevent too many updates
-
+    const debounceTimer = setTimeout(handleSearch, 500); // Increased debounce time
     return () => clearTimeout(debounceTimer);
-  }, [handleSearch]);
+  }, [searchTerm, dateRange, selectedUser, messageType]); 
 
+  const resetSearch = useCallback(() => {
+    setSearchTerm('');
+    setDateRange([null, null]);
+    setSelectedUser('');
+    setMessageType('all');
+    setShowFilters(false);
+    onSearch(null);
+  }, [onSearch]);
+
+     
+ 
 
   return (
     <div className="message-search">
@@ -54,10 +76,7 @@ const MessageSearch = ({ onSearch, messages = [], users= []}) => {
           type="text"
           placeholder="Search messages..."
           value={searchTerm}
-          onChange={(e) => {
-            setSearchTerm(e.target.value);
-         
-          }}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
         <button 
           className="filter-toggle"
@@ -75,7 +94,7 @@ const MessageSearch = ({ onSearch, messages = [], users= []}) => {
               selectsRange
               startDate={dateRange[0]}
               endDate={dateRange[1]}
-              onChange={(dates) => setDateRange(dates)}
+              onChange={(dates) => handleFilterChange('date', dates)}
               placeholderText="Select date range"
             />
           </div>
@@ -84,7 +103,7 @@ const MessageSearch = ({ onSearch, messages = [], users= []}) => {
             <UserIcon size={18} />
             <select 
               value={selectedUser}
-              onChange={(e) => setSelectedUser(e.target.value)}
+              onChange={(e) => handleFilterChange('user', e.target.value)}
             >
               <option value="">All Users</option>
               {users.map(user => (
@@ -98,7 +117,7 @@ const MessageSearch = ({ onSearch, messages = [], users= []}) => {
           <div className="type-filter">
             <select
               value={messageType}
-              onChange={(e) => setMessageType(e.target.value)}
+              onChange={(e) => handleFilterChange('type', e.target.value)}
             >
               <option value="all">All Types</option>
               <option value="text">Text</option>

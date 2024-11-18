@@ -19,7 +19,9 @@ const MessageHeader = ({ roomData,
 
   const handleClose = () => {
     setShowOptions(false);
+    onSearch(null);
   };
+
 
   return (
     <div className='message-header'>

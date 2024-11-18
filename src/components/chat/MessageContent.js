@@ -22,18 +22,13 @@ const MessageContent = ({
 }) => {
 
 
-
-  const [searchResults, setSearchResults] = useState(null);
-  
- 
-  const displayMessages = searchResults || messages;
   
   return (
     <div className="message-content" ref={messageContentRef}>
 
 
       <div className="messages-container">
-        {displayMessages.map((message) => (
+        {messages.map((message) => (
           <div 
             key={message.id} 
             id={`message-${message.id}`}

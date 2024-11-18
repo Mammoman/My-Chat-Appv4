@@ -6,6 +6,12 @@ import '../../styles/chat/MessageOptionsOverlay.css';
 
 
 const MessageOptionsOverlay = ({ onClose, messages = [], users = [], onSearch }) => {
+
+     const handleClose = () => {
+        onClose();
+        onSearch(null);
+     };
+
   return (
     <div className="MessageOptions-overlay">
       <div className="MessageOptions-content">
@@ -13,7 +19,7 @@ const MessageOptionsOverlay = ({ onClose, messages = [], users = [], onSearch })
           <div className="MessageOptions-title">
             <span>Message Options</span>
           </div>
-          <button className="close-btn" onClick={onClose}>×</button>
+          <button className="close-btn" onClick={handleClose}>×</button>
         </div>
         <div className="MessageOptions-list">
           <MessageSearch 

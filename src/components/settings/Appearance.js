@@ -11,9 +11,7 @@ const Appearance = () => {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
-  const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
-  };
+
 
   return (
     <div className="appearance-settings">
