@@ -31,6 +31,16 @@
   .MessageOptions-list {
     padding: 8px 0;
   }
+
+  .MessageOptions-list .message-search {
+    padding: 0;
+    border-bottom: none;
+  }
+  
+  .MessageOptions-list .search-filters {
+    margin-top: 8px;
+    padding: 8px;
+  }
   
   .MessageOptions-item {
     padding: 10px 16px;

@@ -1,17 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Search02Icon, Calendar02Icon   , UserIcon, FilterIcon } from 'hugeicons-react';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 
-const MessageSearch = ({ onSearch, messages, users }) => {
+const MessageSearch = ({ onSearch, messages = [], users= []}) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [dateRange, setDateRange] = useState([null, null]);
   const [selectedUser, setSelectedUser] = useState('');
   const [messageType, setMessageType] = useState('all');
   const [showFilters, setShowFilters] = useState(false);
-  
-  const handleSearch = () => {
+
+
+
+
+ 
+  const handleSearch = useCallback(() => {
+    if (!Array.isArray(messages)) return;
+    
     const [startDate, endDate] = dateRange;
+    
+    if (!searchTerm && !startDate && !endDate && !selectedUser && messageType === 'all') {
+      onSearch(null); // Reset search if no filters active
+      return;
+    }
     
     const filteredMessages = messages.filter(message => {
       const matchesText = message.text?.toLowerCase().includes(searchTerm.toLowerCase());
@@ -24,7 +35,16 @@ const MessageSearch = ({ onSearch, messages, users }) => {
     });
     
     onSearch(filteredMessages);
-  };
+  }, [searchTerm, dateRange, selectedUser, messageType, messages, onSearch]);
+
+  useEffect(() => {
+    const debounceTimer = setTimeout(() => {
+      handleSearch();
+    }, 300); // Add debounce to prevent too many updates
+
+    return () => clearTimeout(debounceTimer);
+  }, [handleSearch]);
+
 
   return (
     <div className="message-search">
@@ -36,7 +56,7 @@ const MessageSearch = ({ onSearch, messages, users }) => {
           value={searchTerm}
           onChange={(e) => {
             setSearchTerm(e.target.value);
-            handleSearch();
+         
           }}
         />
         <button 

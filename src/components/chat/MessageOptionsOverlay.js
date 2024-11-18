@@ -1,9 +1,11 @@
 import React from 'react';
+import MessageSearch from './MessageSearch';
 import '../../styles/chat/MessageOptionsOverlay.css';
 
-const MessageOptionsOverlay = ({ onClose }) => {
-     
-  
+
+
+
+const MessageOptionsOverlay = ({ onClose, messages = [], users = [], onSearch }) => {
   return (
     <div className="MessageOptions-overlay">
       <div className="MessageOptions-content">
@@ -14,15 +16,17 @@ const MessageOptionsOverlay = ({ onClose }) => {
           <button className="close-btn" onClick={onClose}>×</button>
         </div>
         <div className="MessageOptions-list">
-            <div className="MessageOptions-item">
-                <span>Delete</span>
-            </div>
-            <div className="MessageOptions-item">
-                <span>Pin</span>
-            </div>
-            <div className="MessageOptions-item">
-                <span>Reply</span>
-            </div>
+          <MessageSearch 
+            messages={messages}
+            users={users}
+            onSearch={onSearch}
+          />
+          <div className="MessageOptions-item">
+            <span>Pin</span>
+          </div>
+          <div className="MessageOptions-item">
+            <span>Reply</span>
+          </div>
         </div>
       </div>
     </div>

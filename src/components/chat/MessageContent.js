@@ -18,23 +18,20 @@ const MessageContent = ({
   messageContentRef,
   scrollToMessage,
   auth,
-  users
+  users,
 }) => {
+
+
+
   const [searchResults, setSearchResults] = useState(null);
   
-  const handleSearch = (results) => {
-    setSearchResults(results);
-  };
-  
+ 
   const displayMessages = searchResults || messages;
   
   return (
     <div className="message-content" ref={messageContentRef}>
-      <MessageSearch 
-        messages={messages}
-        users={users}
-        onSearch={handleSearch}
-      />
+
+
       <div className="messages-container">
         {displayMessages.map((message) => (
           <div 

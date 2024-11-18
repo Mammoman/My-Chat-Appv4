@@ -2,7 +2,15 @@ import React, { useState } from 'react';
 import { Call02Icon, MoreVerticalIcon, PinIcon } from 'hugeicons-react';
 import MessageOptionsOverlay from './MessageOptionsOverlay';
 
-const MessageHeader = ({ roomData, userEmail, pinnedCount, onPinClick, isPinnedOpen }) => {
+const MessageHeader = ({ roomData,
+   userEmail,
+    pinnedCount,
+     onPinClick,
+      isPinnedOpen, 
+      messages = [], 
+      users = [], 
+      onSearch 
+    }) => {
   const [showOptions, setShowOptions] = useState(false);
 
   const handleOptionsClick = () => {
@@ -40,7 +48,9 @@ const MessageHeader = ({ roomData, userEmail, pinnedCount, onPinClick, isPinnedO
           {showOptions && (
             <MessageOptionsOverlay 
               onClose={handleClose}
-              
+              messages={messages}
+              users={users}
+              onSearch={onSearch}
             />
           )}
         </div>
