@@ -1,0 +1,69 @@
+.MessageOptions-overlay {
+    position: absolute;
+    top: 50px;
+    right: 10px;
+    background: white;
+    border-radius: 12px;
+    width: 200px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    animation: slideDown 0.2s ease-out;
+  }
+  
+  .MessageOptions-content {
+    padding: 8px;
+  }
+  
+  .MessageOptions-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-bottom: 1px solid #edf2f9;
+  }
+  
+  .MessageOptions-title span {
+    font-size: 14px;
+    font-weight: 500;
+    color: #4b5563;
+  }
+  
+  .MessageOptions-list {
+    padding: 8px 0;
+  }
+
+  .MessageOptions-list .message-search {
+    padding: 0;
+    border-bottom: none;
+  }
+  
+  .MessageOptions-list .search-filters {
+    margin-top: 8px;
+    padding: 8px;
+  }
+  
+  .MessageOptions-item {
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #4b5563;
+  }
+  
+  .MessageOptions-item:hover {
+    background: rgba(79, 70, 229, 0.05);
+    color: #4f46e5;
+  }
+  
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }

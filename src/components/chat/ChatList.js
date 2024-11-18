@@ -15,7 +15,7 @@ import { db }                                                              from 
 import DeleteRoomPopup                                                     from './DeleteRoomPopup';
 import RoomInput                                                           from './RoomInput';
 import                                                                     '../../styles/chat/ChatList.css';
-import { PinIcon }                                                        from 'hugeicons-react';
+
 
 
 
@@ -160,7 +160,7 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom, messages, onMessageClick 
     }, 3000);
   };
 
-  const pinnedMessages = messages?.filter(msg => msg.pinned) || [];
+
 
   return (
     <div className="chat-list-container">
@@ -178,7 +178,7 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom, messages, onMessageClick 
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setIsSearchFocused(true)}
                 onBlur={() => setIsSearchFocused(false)}
-              />
+              />  
             </div>
           </div>
           <div className={`darkmode-icon ${isDarkMode ? 'active' : ''}`}

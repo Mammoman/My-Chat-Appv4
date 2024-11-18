@@ -9,9 +9,7 @@ import {
   doc,
   getDoc,
   updateDoc,
-  deleteDoc,
   arrayUnion,
-  arrayRemove,
   getDocs,
   writeBatch
 }                                                                                     from 'firebase/firestore';
@@ -23,7 +21,7 @@ import                                                                          
 import MessageInput from './MessageInput';
 import MessageHeader from './MessageHeader';
 import MessageContent from './MessageContent';
-import PinnedMessages from './PinnedMessages';
+
 import PinnedMessagesOverlay from './PinnedMessagesOverlay';
 
 
@@ -33,6 +31,8 @@ const Chat = ({ room, onError }) => {
   const messageContentRef = useRef(null)
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState([]);
+  const [searchResults, setSearchResults] = useState(null);
+  const [users, setUsers] = useState([]);
   const [userEmail, setUserEmail] = useState(null);
   const [joinRequest, setJoinRequest] = useState(null);
   const [isRoomCreator, setIsRoomCreator] = useState(false);
@@ -489,6 +489,11 @@ const Chat = ({ room, onError }) => {
     }
   };
 
+  const handleSearch = (results) => {
+    setSearchResults(results);
+  };
+
+
   const pinnedCount = messages.filter(msg => msg.pinned).length;
 
   return (
@@ -501,6 +506,9 @@ const Chat = ({ room, onError }) => {
             pinnedCount={pinnedCount}
             onPinClick={() => setIsPinnedOpen(!isPinnedOpen)}
             isPinnedOpen={isPinnedOpen}
+            messages={messages}
+            users={users}
+            onSearch={handleSearch}
           />
           
           {isPinnedOpen && (
@@ -512,7 +520,7 @@ const Chat = ({ room, onError }) => {
           )}
           
           <MessageContent
-            messages={messages}
+            messages={searchResults || messages}  
             userEmail={userEmail}
             selectedMessageId={selectedMessageId}
             handleMessageClick={handleMessageClick}
@@ -523,6 +531,7 @@ const Chat = ({ room, onError }) => {
             reactions={reactions}
             messageContentRef={messageContentRef}
             scrollToMessage={scrollToMessage}
+            users={users}
             auth={auth}
           />
           
