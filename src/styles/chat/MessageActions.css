@@ -1,6 +1,6 @@
 .message-actions-overlay {
   position: absolute;
-  top: 30%;
+  top: 30px;
   right: -60px;
   background: rgba(255, 255, 255, 0.95);
   border-radius: 20px;
