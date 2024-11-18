@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState }                                                  from 'react';
-import { PlayIcon, PauseIcon, KeyframesMultipleRemoveIcon }                                   from 'hugeicons-react';
+import { PlayIcon, PauseIcon }                                   from 'hugeicons-react';
 import                                                                                         '../../styles/chat/VoiceMessagePlayer.css'; 
 
 const VoiceMessagePlayer = ({ audioUrl, duration, isSent }) => {

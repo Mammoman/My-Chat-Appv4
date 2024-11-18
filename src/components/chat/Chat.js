@@ -501,14 +501,14 @@ const Chat = ({ room, onError }) => {
            {room && (
         <>
           <MessageHeader 
-            roomData={roomData}
-            userEmail={userEmail}
-            pinnedCount={pinnedCount}
-            onPinClick={() => setIsPinnedOpen(!isPinnedOpen)}
-            isPinnedOpen={isPinnedOpen}
-            messages={messages}
-            users={users}
-            onSearch={handleSearch}
+              roomData={roomData}
+              userEmail={userEmail}
+              pinnedCount={pinnedCount}
+              onPinClick={() => setIsPinnedOpen(!isPinnedOpen)}
+              isPinnedOpen={isPinnedOpen}
+              messages={messages}
+              users={users}
+              onSearch={handleSearch}
           />
           
           {isPinnedOpen && (
@@ -520,19 +520,19 @@ const Chat = ({ room, onError }) => {
           )}
           
           <MessageContent
-            messages={searchResults || messages}  
-            userEmail={userEmail}
-            selectedMessageId={selectedMessageId}
-            handleMessageClick={handleMessageClick}
-            handleReply={handleReply}
-            handleDeleteMessage={handleDeleteMessage}
-            handleReaction={handleReaction}
-            handlePinMessage={handlePinMessage}
-            reactions={reactions}
-            messageContentRef={messageContentRef}
-            scrollToMessage={scrollToMessage}
-            users={users}
-            auth={auth}
+                  messages={searchResults || messages}
+                  userEmail={userEmail}
+                  selectedMessageId={selectedMessageId}
+                  handleMessageClick={handleMessageClick}
+                  handleReply={handleReply}
+                  handleDeleteMessage={handleDeleteMessage}
+                  handlePinMessage={handlePinMessage}
+                  handleReaction={handleReaction}
+                  reactions={reactions}
+                  messageContentRef={messageContentRef}
+                  scrollToMessage={scrollToMessage}
+                  auth={auth}
+                  users={users}
           />
           
           <MessageInput
