@@ -31,6 +31,7 @@
     animation: slideIn 0.3s ease-out;
     overflow: hidden;
   }
+
   @keyframes slideIn {
     from {
       opacity: 0;
@@ -42,8 +43,6 @@
     }
   }
 
-
-  
   
   .pinned-header {
     display: flex;
