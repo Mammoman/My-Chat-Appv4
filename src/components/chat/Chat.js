@@ -9,9 +9,7 @@ import {
   doc,
   getDoc,
   updateDoc,
-  deleteDoc,
   arrayUnion,
-  arrayRemove,
   getDocs,
   writeBatch
 }                                                                                     from 'firebase/firestore';
@@ -23,7 +21,7 @@ import                                                                          
 import MessageInput from './MessageInput';
 import MessageHeader from './MessageHeader';
 import MessageContent from './MessageContent';
-import PinnedMessages from './PinnedMessages';
+
 import PinnedMessagesOverlay from './PinnedMessagesOverlay';
 
 
