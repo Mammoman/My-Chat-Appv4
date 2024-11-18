@@ -1,5 +1,6 @@
 import React from 'react';
 import { PinIcon } from 'hugeicons-react';
+import '../../styles/chat/PinnedMessagesOverlay.css';
 
 const PinnedMessagesOverlay = ({ messages, onMessageClick, onClose }) => {
   const pinnedMessages = messages.filter(msg => msg.pinned);
@@ -9,7 +10,7 @@ const PinnedMessagesOverlay = ({ messages, onMessageClick, onClose }) => {
       <div className="pinned-messages-content">
         <div className="pinned-header">
           <div className="pinned-title">
-            <PinIcon size={18} />
+            <PinIcon className='pin-icon' size={18} />
             <span>Pinned Messages ({pinnedMessages.length})</span>
           </div>
           <button className="close-btn" onClick={onClose}>×</button>

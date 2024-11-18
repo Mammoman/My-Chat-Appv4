@@ -279,3 +279,22 @@ body.dark-theme {
 
 
 
+/* Pinned Messages Dark Theme */
+
+
+.dark-mode .pinned-messages-content{
+  background: #1a1a1a;
+}
+
+.dark-mode .pinned-message{
+  background: #27272a;
+  border: 1px solid #27272a;
+}
+
+.dark-mode .pinned-by{
+  color: #fafafa;
+}
+
+.dark-mode .pinned-text{
+  color: #fafafa;
+}
