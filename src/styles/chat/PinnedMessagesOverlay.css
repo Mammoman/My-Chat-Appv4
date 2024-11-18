@@ -1,0 +1,169 @@
+.pinned-messages-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease-out;
+    padding: 44px;
+  }
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+
+  .pinned-messages-content {
+    background: white;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 8px 32px rgba(79, 70, 229, 0.15);
+    animation: slideIn 0.3s ease-out;
+    overflow: hidden;
+  }
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+
+  
+  
+  .pinned-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    color: #6e6abc;
+    font-weight: 500;
+    justify-content: space-between;
+    padding: 12px;
+   }
+
+
+   .pinned-title {
+    display: flex;
+    gap: 4px;
+    padding: 12px;
+  }    
+
+
+  .pinned-header span{
+    font-size: 18px;
+    background: linear-gradient(135deg, #1a1a1a 0%, #abb334 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradient 8s ease infinite;
+  }
+  
+  @keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }        
+
+  .pin-icon{
+    color: #e13f23;
+    size: 20px; 
+  }
+  
+  .close-btn {
+    background: none;
+    border: none;
+    color: #6b7280;
+    font-size: 24px;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-self: flex-start;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  
+  .close-btn:hover {
+    background: rgba(79, 70, 229, 0.1);
+    color: #4f46e5;
+  }
+
+
+  .pinned-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+    padding-right: 8px;
+  }
+  
+ 
+  .pinned-message {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+
+
+  .pinned-message::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 6px;
+    border-right: 2px solid #94a3b8;
+    border-bottom: 2px solid #94a3b8;
+    transform: translateY(-50%) rotate(-45deg);
+  }
+
+  .pinned-message:hover {
+    background: #f1f5f9;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+  
+
+  .pinned-by {
+    font-size: 12px;
+    color: #000000;
+    margin-bottom: 4px;
+    display: block;
+  }
+
+  
+  
+  .pinned-text {
+    color: #000000;
+    font-size: 13px;
+    line-height: 1.4;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  
+  

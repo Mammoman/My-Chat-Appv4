@@ -23,6 +23,8 @@ import                                                                          
 import MessageInput from './MessageInput';
 import MessageHeader from './MessageHeader';
 import MessageContent from './MessageContent';
+import PinnedMessages from './PinnedMessages';
+import PinnedMessagesOverlay from './PinnedMessagesOverlay';
 
 
 
@@ -45,6 +47,7 @@ const Chat = ({ room, onError }) => {
   const audioChunksRef = useRef([]);
   const timerRef = useRef(null);
   const inputRef = useRef(null);
+  const [isPinnedOpen, setIsPinnedOpen] = useState(false);
 
   const MAX_DURATION = 60; // Maximum duration in seconds
 
@@ -303,8 +306,25 @@ const Chat = ({ room, onError }) => {
       const messageRef = doc(db, 'rooms', room, 'Messages', message.id);
       
       if (message.deleted) {
-        // If message is already deleted, remove it completely
-        await deleteDoc(messageRef);
+        // If message is already deleted, remove it and all references to it
+        const messagesRef = collection(db, 'rooms', room, 'Messages');
+        const q = query(messagesRef);
+        const querySnapshot = await getDocs(q);
+        
+        const batch = writeBatch(db);
+        
+        // Delete the original message
+        batch.delete(messageRef);
+        
+        // Delete all messages that reference this message
+        querySnapshot.forEach((doc) => {
+          const messageData = doc.data();
+          if (messageData.replyTo && messageData.replyTo.id === message.id) {
+            batch.delete(doc.ref);
+          }
+        });
+        
+        await batch.commit();
       } else {
         // First deletion - mark as deleted
         await updateDoc(messageRef, {
@@ -312,7 +332,7 @@ const Chat = ({ room, onError }) => {
           text: "Message has been deleted",
           reactions: {} // Clear any reactions
         });
-  
+
         // Update all messages that reference this message
         const messagesRef = collection(db, 'rooms', room, 'Messages');
         const q = query(messagesRef);
@@ -451,6 +471,26 @@ const Chat = ({ room, onError }) => {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
+  const handlePinMessage = async (messageId) => {
+    try {
+      const messageRef = doc(db, 'rooms', room, 'Messages', messageId);
+      const messageDoc = await getDoc(messageRef);
+      
+      if (messageDoc.exists()) {
+        const currentPinned = messageDoc.data().pinned || false;
+        await updateDoc(messageRef, {
+          pinned: !currentPinned,
+          pinnedAt: !currentPinned ? serverTimestamp() : null,
+          pinnedBy: !currentPinned ? auth.currentUser.email : null
+        });
+      }
+    } catch (error) {
+      console.error("Error pinning message:", error);
+    }
+  };
+
+  const pinnedCount = messages.filter(msg => msg.pinned).length;
+
   return (
     <div className="message-area">
            {room && (
@@ -458,7 +498,18 @@ const Chat = ({ room, onError }) => {
           <MessageHeader 
             roomData={roomData}
             userEmail={userEmail}
+            pinnedCount={pinnedCount}
+            onPinClick={() => setIsPinnedOpen(!isPinnedOpen)}
+            isPinnedOpen={isPinnedOpen}
           />
+          
+          {isPinnedOpen && (
+            <PinnedMessagesOverlay
+              messages={messages}
+              onMessageClick={scrollToMessage}
+              onClose={() => setIsPinnedOpen(false)}
+            />
+          )}
           
           <MessageContent
             messages={messages}
@@ -468,6 +519,7 @@ const Chat = ({ room, onError }) => {
             handleReply={handleReply}
             handleDeleteMessage={handleDeleteMessage}
             handleReaction={handleReaction}
+            handlePinMessage={handlePinMessage}
             reactions={reactions}
             messageContentRef={messageContentRef}
             scrollToMessage={scrollToMessage}

@@ -317,3 +317,12 @@
   position: relative;
   display: inline-block;
 }
+
+.pinned-messages-group {
+  background: rgba(79, 70, 229, 0.03);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+

@@ -1,16 +1,18 @@
 import React from 'react';
-import { Call02Icon, MoreVerticalIcon } from 'hugeicons-react';
+import { Call02Icon, MoreVerticalIcon, PinIcon } from 'hugeicons-react';
 
-const MessageHeader = ({ roomData, userEmail }) => {
+const MessageHeader = ({ roomData, userEmail, pinnedCount, onPinClick, isPinnedOpen }) => {
   return (
     <div className='message-header'>
       <div className="header-info">
         <h1>Welcome to: {roomData?.displayName || roomData?.name}</h1>
-        {userEmail ? (
-          <h2>User Email: {userEmail}</h2>
-        ) : (
-          <p>User not authenticated</p>
-        )}
+        <div className="header-details">
+          {userEmail && <h2>User Email: {userEmail}</h2>}
+          <div className="pin-info" onClick={onPinClick}>
+            <PinIcon size={18} className={`header-pin-icon ${isPinnedOpen ? 'active' : ''}`} />
+            <span>{pinnedCount} pinned messages</span>
+          </div>
+        </div>
       </div>
       <div className="header-actions">
         <span className="member-count">

@@ -2,6 +2,7 @@ import React from 'react';
 import MessageBubble from './MessageBubble';
 import MessageActions from './MessageActions';
 
+
 const MessageContent = ({
   messages,
   userEmail,
@@ -9,6 +10,7 @@ const MessageContent = ({
   handleMessageClick,
   handleReply,
   handleDeleteMessage,
+  handlePinMessage,
   handleReaction,
   reactions,
   messageContentRef,
@@ -90,9 +92,11 @@ const MessageContent = ({
                 message={message}
                 onReply={handleReply}
                 onDelete={handleDeleteMessage}
+                onPin={handlePinMessage}
                 isSelected={selectedMessageId === message.id}
                 canDelete={message.user === auth.currentUser?.email}
                 isDeleted={message.deleted}
+                isRoomCreator={message.user === auth.currentUser?.email}
               />
             )}
           </div>
@@ -101,5 +105,6 @@ const MessageContent = ({
     </div>
   );
 };
+
 
 export default MessageContent;

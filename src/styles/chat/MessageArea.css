@@ -615,17 +615,6 @@
 
 
 
-
-  
-
-
-
-
-
-  
-
-
-
   .voice-preview-btn:hover {
     opacity: 0.9;
   }
@@ -675,14 +664,6 @@
     background-color: #f0f0f0;
   }
 
-
- 
-  
-
-
-  
-
-
   .last-message {
     font-size: 0.8em;
     color: #666;
@@ -691,16 +672,66 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
+
   
- 
+
+.message-bubble .pin-indicator {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  color: #4f46e5;
+  
+}
+
+.pin-icon {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s ease;
+}
+
+.pin-icon.pinned {
+  color: #4f46e5;
+  transform: rotate(-45deg);
+}
+
+.message-action-btn:hover .pin-icon {
+  transform: scale(1.1);
+}
+
+.message-action-btn:hover .pin-icon.pinned {
+  transform: rotate(-45deg) scale(1.1);
+}
+
+.header-details {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.pin-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #4f46e5;
+  font-size: 13px;
+}
+
+.header-pin-icon {
+  transform: rotate(45deg);
+}
+
+
+
+
+
+       
 
 
 
 
 
 
-
- 
 
 
 
