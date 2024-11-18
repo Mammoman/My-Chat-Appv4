@@ -23,6 +23,7 @@ import                                                                          
 import MessageInput from './MessageInput';
 import MessageHeader from './MessageHeader';
 import MessageContent from './MessageContent';
+import PinnedMessages from './PinnedMessages';
 
 
 
@@ -468,6 +469,24 @@ const Chat = ({ room, onError }) => {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
+  const handlePinMessage = async (messageId) => {
+    try {
+      const messageRef = doc(db, 'rooms', room, 'Messages', messageId);
+      const messageDoc = await getDoc(messageRef);
+      
+      if (messageDoc.exists()) {
+        const currentPinned = messageDoc.data().pinned || false;
+        await updateDoc(messageRef, {
+          pinned: !currentPinned,
+          pinnedAt: !currentPinned ? serverTimestamp() : null,
+          pinnedBy: !currentPinned ? auth.currentUser.email : null
+        });
+      }
+    } catch (error) {
+      console.error("Error pinning message:", error);
+    }
+  };
+
   return (
     <div className="message-area">
            {room && (
@@ -475,6 +494,11 @@ const Chat = ({ room, onError }) => {
           <MessageHeader 
             roomData={roomData}
             userEmail={userEmail}
+          />
+          
+          <PinnedMessages 
+            messages={messages}
+            onMessageClick={scrollToMessage}
           />
           
           <MessageContent
@@ -485,6 +509,7 @@ const Chat = ({ room, onError }) => {
             handleReply={handleReply}
             handleDeleteMessage={handleDeleteMessage}
             handleReaction={handleReaction}
+            handlePinMessage={handlePinMessage}
             reactions={reactions}
             messageContentRef={messageContentRef}
             scrollToMessage={scrollToMessage}

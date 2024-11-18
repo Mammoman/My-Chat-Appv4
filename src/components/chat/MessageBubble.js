@@ -1,5 +1,6 @@
 import React from 'react';
 import VoiceMessagePlayer from './VoiceMessagePlayer';
+import { PinIcon } from 'hugeicons-react';
 
 const MessageBubble = ({ message, scrollToMessage, auth }) => {
   const isCurrentUser = auth?.currentUser?.uid === message.userId;
@@ -14,6 +15,12 @@ const MessageBubble = ({ message, scrollToMessage, auth }) => {
   
   return (
     <div className="message-bubble">
+      {message.pinned && (
+        <div className="pin-indicator">
+          <PinIcon size={16} />
+        </div>
+      )}
+
       {message.replyTo && (
         <div 
           className="reply-reference"

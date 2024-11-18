@@ -696,12 +696,117 @@
 
 
 
-
+  .pinned-messages {
+    background: #f4f4f4;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 2px 4px;
+    margin-bottom: 8px;
+  }
+  
+  .pinned-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    color: #6e6abc;
+    font-weight: 500;
+  }
+  
+  .pinned-header .pin-icon {
+    transform: rotate(45deg);
+  }
+  
+  .pinned-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 150px;
+    overflow-y: auto;
+    padding-right: 8px;
+  }
+  
+  .pinned-message {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+  
+  .pinned-message:hover {
+    background: #f1f5f9;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+  
+  .pinned-by {
+    font-size: 12px;
+    color: #64748b;
+    margin-bottom: 4px;
+    display: block;
+  }
+  
+  .pinned-text {
+    color: #334155;
+    font-size: 13px;
+    line-height: 1.4;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  
+  .pinned-message::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 6px;
+    border-right: 2px solid #94a3b8;
+    border-bottom: 2px solid #94a3b8;
+    transform: translateY(-50%) rotate(-45deg);
+  }
 
 
 
  
 
 
+
+ 
+
+
+.message-bubble .pin-indicator {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  color: #4f46e5;
+  transform: rotate(45deg);
+}
+
+.pin-icon {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s ease;
+}
+
+.pin-icon.pinned {
+  color: #4f46e5;
+  transform: rotate(-45deg);
+}
+
+.message-action-btn:hover .pin-icon {
+  transform: scale(1.1);
+}
+
+.message-action-btn:hover .pin-icon.pinned {
+  transform: rotate(-45deg) scale(1.1);
+}
 
  
