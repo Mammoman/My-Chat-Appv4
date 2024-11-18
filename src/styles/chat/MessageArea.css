@@ -723,6 +723,28 @@
 
 
 
+       /*  options-containe */
+
+.options-container {
+  position: relative;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.2s;
+  color: #6b7280;
+}
+
+.action-btn:hover {
+  background: rgba(79, 70, 229, 0.1);
+  color: #4f46e5;
+}
+
+
 
 
        

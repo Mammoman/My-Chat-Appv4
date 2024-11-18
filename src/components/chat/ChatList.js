@@ -178,7 +178,7 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom, messages, onMessageClick 
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setIsSearchFocused(true)}
                 onBlur={() => setIsSearchFocused(false)}
-              />
+              />  
             </div>
           </div>
           <div className={`darkmode-icon ${isDarkMode ? 'active' : ''}`}
