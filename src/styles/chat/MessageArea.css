@@ -720,7 +720,7 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    max-height: 150px;
+   
     overflow-y: auto;
     padding-right: 8px;
   }
@@ -807,6 +807,135 @@
 
 .message-action-btn:hover .pin-icon.pinned {
   transform: rotate(-45deg) scale(1.1);
+}
+
+.header-details {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.pin-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #4f46e5;
+  font-size: 13px;
+}
+
+.header-pin-icon {
+  transform: rotate(45deg);
+}
+
+
+
+
+
+       
+.pinned-messages-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+ 
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+  padding: 44px;
+}
+
+.pinned-messages-content {
+  background: white;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 8px 32px rgba(79, 70, 229, 0.15);
+  animation: slideIn 0.3s ease-out;
+  overflow: hidden;
+}
+
+.pinned-overlay-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: rgba(79, 70, 229, 0.03);
+  border-bottom: 1px solid rgba(79, 70, 229, 0.1);
+}
+
+.pinned-overlay-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #4f46e5;
+  font-weight: 500;
+}
+
+.close-overlay-btn {
+  background: none;
+  border: none;
+  color: #6b7280;
+  font-size: 24px;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.close-overlay-btn:hover {
+  background: rgba(79, 70, 229, 0.1);
+  color: #4f46e5;
+}
+
+.pinned-messages-list {
+  padding: 20px;
+  overflow-y: auto;
+  max-height: calc(80vh - 70px);
+}
+
+.pinned-overlay-message {
+  background: white;
+  border: 1px solid rgba(79, 70, 229, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.pinned-overlay-message:hover {
+  transform: translateX(8px);
+  background: rgba(79, 70, 229, 0.03);
+  border-color: rgba(79, 70, 229, 0.2);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
  

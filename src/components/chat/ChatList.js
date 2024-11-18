@@ -15,10 +15,11 @@ import { db }                                                              from 
 import DeleteRoomPopup                                                     from './DeleteRoomPopup';
 import RoomInput                                                           from './RoomInput';
 import                                                                     '../../styles/chat/ChatList.css';
+import { PinIcon }                                                        from 'hugeicons-react';
 
 
 
-const ChatList = ({ rooms, selectedRoom, onSelectRoom }) => {
+const ChatList = ({ rooms, selectedRoom, onSelectRoom, messages, onMessageClick }) => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredRooms, setFilteredRooms] = useState([]);
@@ -159,34 +160,37 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom }) => {
     }, 3000);
   };
 
+  const pinnedMessages = messages?.filter(msg => msg.pinned) || [];
+
   return (
     <div className="chat-list-container">
       <div className="chat-list-header">
         <h2 className="gradient-text">Chat Rooms</h2>
-    <div className='header-buttom'>
-    <div className={`search ${isSearchFocused ? 'focused' : ''}`}>
-          <div className="chat-search-container">
-            <Search02Icon className="search-icon" />
-            <input 
-            className='search-input'
-              type="text" 
-              placeholder="Search rooms..." 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onFocus={() => setIsSearchFocused(true)}
-              onBlur={() => setIsSearchFocused(false)}
-            />
+        <div className='header-buttom'>
+          <div className={`search ${isSearchFocused ? 'focused' : ''}`}>
+            <div className="chat-search-container">
+              <Search02Icon className="search-icon" />
+              <input 
+              className='search-input'
+                type="text" 
+                placeholder="Search rooms..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => setIsSearchFocused(true)}
+                onBlur={() => setIsSearchFocused(false)}
+              />
+            </div>
           </div>
-        </div>
-        <div className={`darkmode-icon ${isDarkMode ? 'active' : ''}`}
-          onClick={toggleDarkMode}
-          title="Toggle dark mode">
-          {!isDarkMode ? <Moon01Icon/> : <Sun02Icon className='toggle-icon-1'/>}
-        </div>
+          <div className={`darkmode-icon ${isDarkMode ? 'active' : ''}`}
+            onClick={toggleDarkMode}
+            title="Toggle dark mode">
+            {!isDarkMode ? <Moon01Icon/> : <Sun02Icon className='toggle-icon-1'/>}
+          </div>
         </div>
       </div>
 
       <div className="rooms-container">
+
         {filteredRooms.map((room) => (
           <div 
             key={room.id}

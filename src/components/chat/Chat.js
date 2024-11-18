@@ -24,6 +24,7 @@ import MessageInput from './MessageInput';
 import MessageHeader from './MessageHeader';
 import MessageContent from './MessageContent';
 import PinnedMessages from './PinnedMessages';
+import PinnedMessagesOverlay from './PinnedMessagesOverlay';
 
 
 
@@ -46,6 +47,7 @@ const Chat = ({ room, onError }) => {
   const audioChunksRef = useRef([]);
   const timerRef = useRef(null);
   const inputRef = useRef(null);
+  const [isPinnedOpen, setIsPinnedOpen] = useState(false);
 
   const MAX_DURATION = 60; // Maximum duration in seconds
 
@@ -487,6 +489,8 @@ const Chat = ({ room, onError }) => {
     }
   };
 
+  const pinnedCount = messages.filter(msg => msg.pinned).length;
+
   return (
     <div className="message-area">
            {room && (
@@ -494,12 +498,18 @@ const Chat = ({ room, onError }) => {
           <MessageHeader 
             roomData={roomData}
             userEmail={userEmail}
+            pinnedCount={pinnedCount}
+            onPinClick={() => setIsPinnedOpen(!isPinnedOpen)}
+            isPinnedOpen={isPinnedOpen}
           />
           
-          <PinnedMessages 
-            messages={messages}
-            onMessageClick={scrollToMessage}
-          />
+          {isPinnedOpen && (
+            <PinnedMessagesOverlay
+              messages={messages}
+              onMessageClick={scrollToMessage}
+              onClose={() => setIsPinnedOpen(false)}
+            />
+          )}
           
           <MessageContent
             messages={messages}
