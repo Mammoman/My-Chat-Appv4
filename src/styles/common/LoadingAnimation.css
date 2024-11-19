@@ -3,6 +3,8 @@
     justify-content: center;
     align-items: center;
     padding: 20px;
+    height: 100%;
+    animation: fadeIn 0.3s ease-in;
   }
   
   .message-loading {
@@ -37,4 +39,13 @@
   
   .dark-theme .dot {
     background-color: #818cf8;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }

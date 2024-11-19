@@ -20,15 +20,16 @@ const MessageContent = ({
   scrollToMessage,
   auth,
   users,
+  isLoading
 }) => {
 
 
   
   return (
     <div className="message-content" ref={messageContentRef}>
-{messages.length === 0 && (
-  <LoadingAnimation />
-)}
+        {isLoading ? (
+        <LoadingAnimation />
+      ) : (
          
       <div className="messages-container">
         {messages.map((message) => (
@@ -115,7 +116,8 @@ const MessageContent = ({
           </div>
         ))}
       </div>
-    </div>
+      )}
+    </div> 
   );
 };
 

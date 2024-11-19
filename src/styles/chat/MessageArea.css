@@ -754,6 +754,7 @@
   gap: 6px;
   color: #4f46e5;
   font-size: 13px;
+  cursor: pointer;
 }
 
 .header-pin-icon {
