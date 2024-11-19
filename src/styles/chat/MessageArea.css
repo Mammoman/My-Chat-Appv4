@@ -106,6 +106,67 @@
 
 
 
+  .date-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 24px 0;
+    padding: 0 16px;
+    position: relative;
+    width: 100%;
+  }
+  
+  .date-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      rgba(79, 70, 229, 0.1),
+      rgba(79, 70, 229, 0.1),
+      transparent
+    );
+  }
+  
+  .date-text {
+    background: #ffffff;
+    color: #6b7280;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 12px;
+    margin: 0 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(79, 70, 229, 0.1);
+    transition: all 0.2s ease;
+  }
+  
+  /* Dark mode support */
+  .dark-theme .date-divider .date-text {
+    background: #1a1a1a;
+    color: #9ca3af;
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .dark-theme .date-divider .date-line {
+    background: linear-gradient(
+      to right,
+      transparent,
+      rgba(255, 255, 255, 0.1),
+      rgba(255, 255, 255, 0.1),
+      transparent
+    );
+  }
+  
+  /* Hover effect */
+  .date-divider:hover .date-text {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(79, 70, 229, 0.1);
+    border-color: rgba(79, 70, 229, 0.2);
+  }
+
+
+
                        /*message-content*/
   .message-content {
     flex: 1;
@@ -117,12 +178,14 @@
   }
 
   .message {
+    position: relative;  /* Add this to ensure proper positioning of actions */
     display: flex;
     align-items: flex-start;
     gap: 12px;
     max-width: 80%;
     width: fit-content;
     margin: 8px 0;
+    padding: 4px 8px;  /* Add padding to accommodate the actions */
   }
   
   .message.received {
@@ -184,13 +247,42 @@
     align-self: flex-start;
   }
 
+
   .message-bubble-wrapper {
+    position: relative;
     display: flex;
     flex-direction: column;
     width: fit-content;
-    position: relative;
-    align-items: flex-start;
+    opacity: 1;
+    transition: opacity 0.2s ease;
   }
+
+
+  .message:hover .message-actions {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  
+  /* Position actions */
+  .message-actions {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 10;
+  }
+  
+  .message.sent .message-actions {
+    left: -40px;
+  }
+  
+  .message.received .message-actions {
+    right: -40px;
+  }
+
+
   
   .message.sent .message-bubble-wrapper{
     display: flex;
@@ -264,47 +356,52 @@
       /*message-timestamp*/
 
 
-.serverTimestamp {
- 
-  color: #f0f0f0;
-  margin-top: 4px;
-  display: flex;
-  justify-content: flex-end;
-  position: absolute;
-}
-
-.message.sent .serverTimestamp {
-  color: #ffffff;
-  font-size: 10px;
-  right: -47px;
-}
-
-.message.received .serverTimestamp {
-  color: #ffffff;
-  justify-content: flex-start;
-  left: -47px;
-  font-size: 10px;
-}
-
-.voice-message .serverTimestamp {
-  position: absolute;
-  font-size: 10px;
-  color: #ffffff;
-}
-
-.message.sent .voice-message  .serverTimestamp {
-  right: -54px;
-}
-
-.voice-message.received .serverTimestamp {
-  left: -50px;
-}
-
-.voice-message-player-container {
-  position: relative;
-  margin-bottom: 4px;
-}
-
+      .serverTimestamp {
+        color: #f0f0f0;
+        margin-top: 4px;
+        display: flex;
+        justify-content: flex-end;
+        position: absolute;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+      }
+      
+      .message.sent .serverTimestamp {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 10px;
+        right: -47px;
+      }
+      
+      .message.received .serverTimestamp {
+        color: #666;
+        justify-content: flex-start;
+        left: -47px;
+        font-size: 10px;
+      }
+      
+      .message-bubble:hover .serverTimestamp {
+        opacity: 1;
+      }
+      
+      /* For voice messages */
+      .voice-message .serverTimestamp {
+        position: absolute;
+        font-size: 10px;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+      }
+      
+      .voice-message:hover .serverTimestamp {
+        opacity: 1;
+      }
+      
+      .message.sent .voice-message .serverTimestamp {
+        right: -54px;
+      }
+      
+      .voice-message.received .serverTimestamp {
+        left: -50px;
+      }
   
 
 

@@ -54,12 +54,14 @@ const MessageBubble = ({ message, scrollToMessage, auth }) => {
       )}
       
       {message.type === 'voice' ? (
-        <VoiceMessagePlayer 
-          audioUrl={message.audioData} 
-          duration={message.duration}
-          isSent={isCurrentUser}
-          timestamp={message.createdAt}
-        />
+        <div className="voice-message">
+          <VoiceMessagePlayer 
+            audioUrl={message.audioData} 
+            duration={message.duration}
+            isSent={isCurrentUser}
+          />
+          <span className="serverTimestamp">{formatTimestamp(message.createdAt)}</span>
+        </div>
       ) : (
         <>
           <p>{message.text}</p>
