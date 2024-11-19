@@ -28,7 +28,7 @@ const MessageOptionsOverlay = ({ onClose, messages = [], users = [], onSearch })
             onSearch={onSearch}
           />
           <div className="MessageOptions-item">
-            <span>Pin</span>
+            <span>Search messages</span>
           </div>
           <div className="MessageOptions-item">
             <span>Reply</span>
