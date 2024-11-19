@@ -44,9 +44,14 @@ const MessageSearch = ({ onSearch, messages = [], users = [] }) => {
         (new Date(message.timestamp) >= startDate && new Date(message.timestamp) <= endDate);
       const matchesUser = !selectedUser || message.sender === selectedUser;
       const matchesType = messageType === 'all' || message.type === messageType;
-      
+  
+        
       return matchesText && matchesDate && matchesUser && matchesType;
-    });
+    }).map(message => ({
+      ...message,
+      formattedTime: formatTimestamp(message.timestamp)
+    }));
+    
     
     onSearch(filteredMessages);
   }, [searchTerm, dateRange, selectedUser, messageType, messages, onSearch]);
@@ -64,6 +69,18 @@ const MessageSearch = ({ onSearch, messages = [], users = [] }) => {
     setShowFilters(false);
     onSearch(null);
   }, [onSearch]);
+
+
+  const formatTimestamp = (timestamp) => {
+    if (!timestamp) return '';
+    const date = new Date(timestamp);
+    return date.toLocaleTimeString([], { 
+      hour: '2-digit', 
+      minute: '2-digit',
+      hour12: true 
+    });
+  };
+
 
      
  
