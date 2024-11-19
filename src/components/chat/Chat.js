@@ -102,6 +102,9 @@ const Chat = ({ room, onError }) => {
       try {
         const roomRef = doc(db, 'rooms', room);
         const roomDoc = await getDoc(roomRef);
+
+        
+
         
         if (roomDoc.exists()) {
           setRoomData(roomDoc.data());

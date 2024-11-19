@@ -53,6 +53,7 @@ const MessageHeader = ({ roomData,
               messages={messages}
               users={users}
               onSearch={onSearch}
+              roomData={roomData}
             />
           )}
         </div>
