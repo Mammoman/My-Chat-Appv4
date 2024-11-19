@@ -109,7 +109,7 @@
                        /*message-content*/
   .message-content {
     flex: 1;
-    padding: 16px;
+    padding: 6px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -258,41 +258,55 @@
     color: inherit;
     opacity: 0.8;
   }
-  
-  .message-bubble .serverTimestamp{
-    font-size: 12px;
-    color: #77838f;
-    margin-left: 8px;
-  }
+
 
 
       /*message-timestamp*/
-.message-timestamp {
-  font-size: 11px;
-  opacity: 0.7;
+
+
+.serverTimestamp {
+ 
+  color: #f0f0f0;
   margin-top: 4px;
   display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.message.sent .message-timestamp {
   justify-content: flex-end;
-  color: rgba(255, 255, 255, 0.8);
+  position: absolute;
 }
 
-.message.received .message-timestamp {
+.message.sent .serverTimestamp {
+  color: #ffffff;
+  font-size: 10px;
+  right: -47px;
+}
+
+.message.received .serverTimestamp {
+  color: #ffffff;
   justify-content: flex-start;
-  color: #6b7280;
+  left: -47px;
+  font-size: 10px;
 }
 
-.message-bubble {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+.voice-message .serverTimestamp {
+  position: absolute;
+  font-size: 10px;
+  color: #ffffff;
+}
+
+.message.sent .voice-message  .serverTimestamp {
+  right: -54px;
+}
+
+.voice-message.received .serverTimestamp {
+  left: -50px;
+}
+
+.voice-message-player-container {
+  position: relative;
+  margin-bottom: 4px;
 }
 
   
+
 
                    /*reply-reference*/
   .reply-reference {
@@ -773,6 +787,18 @@
 
 
        
+
+
+
+
+
+
+
+
+
+ 
+
+
 
 
 

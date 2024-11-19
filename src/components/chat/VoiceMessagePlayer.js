@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState }                                   
 import { PlayIcon, PauseIcon }                                   from 'hugeicons-react';
 import                                                                                         '../../styles/chat/VoiceMessagePlayer.css'; 
 
-const VoiceMessagePlayer = ({ audioUrl, duration, isSent }) => {
+const VoiceMessagePlayer = ({ audioUrl, duration, isSent, timestamp }) => {
   const canvasRef = useRef(null);
   const audioRef = useRef(null);
   const audioContextRef = useRef(null);
@@ -117,6 +117,16 @@ const VoiceMessagePlayer = ({ audioUrl, duration, isSent }) => {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
   
+  const formatTimestamp = (timestamp) => {
+    if (!timestamp) return '';
+    const date = new Date(timestamp.seconds * 1000);
+    return date.toLocaleTimeString([], { 
+      hour: '2-digit', 
+      minute: '2-digit',
+      hour12: true 
+    });
+  };
+
   return (
     <div className={`message-bubble voice-message ${isSent ? 'sent' : 'received'}`}>
       <div className="voice-message-player-container">
@@ -137,9 +147,8 @@ const VoiceMessagePlayer = ({ audioUrl, duration, isSent }) => {
         </button>
         
         <audio ref={audioRef} src={audioUrl} preload="metadata" />
-
-      
       </div>
+      <span className="serverTimestamp">{formatTimestamp(timestamp)}</span>
     </div>
   );
 };

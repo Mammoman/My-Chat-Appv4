@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import MessageBubble from './MessageBubble';
 import MessageActions from './MessageActions';
 import MessageSearch from './MessageSearch';
+import LoadingAnimation from '../common/LoadingAnimation';
 
 
 
@@ -25,8 +26,10 @@ const MessageContent = ({
   
   return (
     <div className="message-content" ref={messageContentRef}>
-
-
+{messages.length === 0 && (
+  <LoadingAnimation />
+)}
+         
       <div className="messages-container">
         {messages.map((message) => (
           <div 
