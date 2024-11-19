@@ -29,12 +29,22 @@ const MessageContent = ({
     messages.forEach(message => {
       const messageDate = message.createdAt ? formatMessageDate(message.createdAt) : '';
       
-      if (messageDate !== currentDate) {
-        groupedMessages.push({
-          type: 'date',
-          date: messageDate
-        });
-        currentDate = messageDate;
+      if (messageDate && messageDate !== currentDate) {
+        const prevDate = currentDate ? new Date(currentDate) : null;
+        const newDate = new Date(message.createdAt.seconds * 1000);
+        
+        const isSameDay = prevDate && 
+          prevDate.getFullYear() === newDate.getFullYear() &&
+          prevDate.getMonth() === newDate.getMonth() &&
+          prevDate.getDate() === newDate.getDate();
+
+        if (!isSameDay) {
+          groupedMessages.push({
+            type: 'date',
+            date: messageDate
+          });
+          currentDate = messageDate;
+        }
       }
       
       groupedMessages.push({
