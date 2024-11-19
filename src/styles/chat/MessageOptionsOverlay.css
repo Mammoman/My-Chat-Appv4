@@ -1,10 +1,10 @@
 .MessageOptions-overlay {
-    position: absolute;
-    top: 50px;
-    right: 10px;
+    position: fixed;
+    top: 170px;
+    left: 110px;
     background: white;
     border-radius: 12px;
-    width: 320px;
+    width: 300px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     z-index: 1000;
     animation: slideDown 0.2s ease-out;
