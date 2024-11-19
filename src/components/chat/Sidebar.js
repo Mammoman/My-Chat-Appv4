@@ -6,10 +6,18 @@ import { auth }                                                                 
 import                                                                                    '../../styles/chat/Sidebar.css';
 import Settings                                                                            from '../settings/Settings';
 import { loginWithSpotify } from '../../config/spotify';
-const Sidebar = ({ signUserOut }) => {
+const Sidebar = ({ signUserOut, onFilterChange }) => {
   const navigate = useNavigate();
   const currentUser = auth.currentUser;
   const [showSettings, setShowSettings] = useState(false);
+  const [activeFilter, setActiveFilter] = useState('all');
+ 
+ 
+  
+  const handleFilterClick = (filter) => {
+    setActiveFilter(filter);
+    onFilterChange(filter);
+  };
 
   const handleSignOut = async () => {
     try {
@@ -39,15 +47,23 @@ const Sidebar = ({ signUserOut }) => {
       </div>
 
       <div className="sidebar-menu">
-        <button className="menu-item">
+        <button
+        className={`menu-item-all-icon ${activeFilter === 'all' ? 'active' : ''}`}
+        onClick={() => handleFilterClick('all')}>
           <Home04Icon />
-          <p>All Rooms</p>
+          <p>All</p>
         </button>
-        <button className="menu-item-private-icon">
+
+        <button 
+         className={`menu-item-private-icon ${activeFilter === 'private' ? 'active' : ''}`}
+         onClick={() => handleFilterClick('private')}>
           <Folder01Icon className="private-icon" />
           <p>Private</p>
         </button>
-        <button className="menu-item-public-icon">
+
+        <button 
+         className={`menu-item-public-icon ${activeFilter === 'public' ? 'active' : ''}`}
+         onClick={() => handleFilterClick('public')}>
           <Folder01Icon className="public-icon" />
           <p>Public</p>
         </button>
@@ -55,12 +71,12 @@ const Sidebar = ({ signUserOut }) => {
       </div>
 
       <div className="sidebar-bottom">
-        <button className="menu-item" onClick={toggleSettings}>
+        <button className="menu-item-settings-icon" onClick={toggleSettings}>
           <Settings02Icon />
           <p>Settings</p>
         </button>
         
-        <button className="menu-item" onClick={handleSignOut}>
+        <button className="menu-item-logout-icon" onClick={handleSignOut}>
           <Logout02Icon />
           <p>Logout</p>
         </button>

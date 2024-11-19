@@ -15,6 +15,7 @@ const MainApp = () => {
   const [isAuth, setIsAuth] = useState(cookies.get("auth-token"));
   const [room, setRoom] = useState(null);
   const [rooms, setRooms] = useState([]);
+  const [activeFilter, setActiveFilter] = useState('all');
 
   const signUserOut = async () => {
     await signOut(auth);
@@ -42,9 +43,17 @@ const MainApp = () => {
   
       
       <div className="mainpage-container ">
-      <Sidebar signUserOut={signUserOut} />
+      <Sidebar 
+      signUserOut={signUserOut} 
+      onFilterChange={setActiveFilter}  />
       
-        <ChatList rooms={rooms} selectedRoom={room} onSelectRoom={setRoom} setRoom={setRoom} />
+        <ChatList 
+        rooms={rooms} 
+        selectedRoom={room} 
+        onSelectRoom={setRoom} 
+        setRoom={setRoom} 
+        activeFilter={activeFilter} 
+         />
         <div className="chat-area">
           {room ? (
             <Chat room={room} />

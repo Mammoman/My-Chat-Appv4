@@ -19,7 +19,7 @@ import                                                                     '../.
 
 
 
-const ChatList = ({ rooms, selectedRoom, onSelectRoom, messages, onMessageClick }) => {
+const ChatList = ({ rooms, selectedRoom, onSelectRoom, messages, onMessageClick, activeFilter}) => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredRooms, setFilteredRooms] = useState([]);
@@ -58,6 +58,10 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom, messages, onMessageClick 
       const isParticipant = room.participants?.includes(auth.currentUser.uid);
       const isCreator = room.createdBy === auth.currentUser.uid;
 
+      if (activeFilter !== 'all') {
+        if (room.type !== activeFilter) return false;
+      }
+
       // For public rooms
       if (room.type === 'public') {
         return matchesSearch && (
@@ -72,7 +76,7 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom, messages, onMessageClick 
     });
 
     setFilteredRooms(userRooms);
-  }, [rooms, searchQuery]);
+  }, [rooms, searchQuery, activeFilter]);
 
   const handleDeleteRoom = async (roomId) => {
     try {
