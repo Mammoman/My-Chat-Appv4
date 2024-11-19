@@ -38,7 +38,7 @@ const Chat = ({ room, onError }) => {
   const [isRoomCreator, setIsRoomCreator] = useState(false);
   const [selectedReply, setSelectedReply] = useState(null);
   const [selectedMessageId, setSelectedMessageId] = useState(null);
-  const reactions = ['🔥', '😂', '🤬', '😊','🫠','😭'];
+  const reactions = ['🔥', '😂', '🤬', '😊','🫠','😭','➕'];
   const [isRecording, setIsRecording] = useState(false);
   const [recordingDuration, setRecordingDuration] = useState(0);
   const [previewAudio, setPreviewAudio] = useState(null);
@@ -48,6 +48,7 @@ const Chat = ({ room, onError }) => {
   const timerRef = useRef(null);
   const inputRef = useRef(null);
   const [isPinnedOpen, setIsPinnedOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const MAX_DURATION = 60; // Maximum duration in seconds
 
@@ -143,6 +144,7 @@ const Chat = ({ room, onError }) => {
 
   useEffect(() => {
     if (!room) return;
+    setIsLoading(true); // Set loading when room changes
 
     const messagesRef = collection(db, 'rooms', room, 'Messages');
     const queryMessages = query(messagesRef, orderBy("createdAt"));
@@ -153,6 +155,7 @@ const Chat = ({ room, onError }) => {
         messages.push({ ...doc.data(), id: doc.id });
       });
       setMessages(messages);
+      setIsLoading(false);
     });
 
     return () => unsubscribe();
@@ -533,6 +536,7 @@ const Chat = ({ room, onError }) => {
                   scrollToMessage={scrollToMessage}
                   auth={auth}
                   users={users}
+                  isLoading={isLoading}
           />
           
           <MessageInput

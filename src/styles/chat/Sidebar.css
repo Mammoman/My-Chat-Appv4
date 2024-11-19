@@ -62,40 +62,74 @@
     margin-top: -100%;
 }
 
- .menu-item{
-    font-size: 2.4em;
-    padding: 0;
-    padding-bottom: 4px;
-    margin-bottom: 4px;
-   border-radius: 4px;
-   border: none;
-   color: #cfc9c9;
-   background: none;
-}
 
-.menu-item:hover{
-    background-color: #ffffff;
-    color: #000000;
-    border-radius: 14px;
-}
+
+
 
 .menu-item p{
     font-size: 0.4em;
     margin-top: 4px;
 }
 
-.menu-item:active{
-    color: #636060;
-    background-image: linear-gradient(to right, #636060, #636060);
+
+
+.menu-item-all-icon{
+  padding: 0;
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+ border-radius: 4px;
+ border: none;
+ color: #cfc9c9;
+ background: none;
 }
 
+.menu-item-all-icon:hover{
+  color: #ffffff;
+}
 
-.menu-item.logout {
+.menu-item-all-icon.active{
+  color: #a0cbff;
+}
+
+.menu-item-settings-icon{
+  padding: 0;
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+ border-radius: 4px;
+ border: none;
+ color: #ffffff;
+ background: none;
+}
+
+.menu-item-settings-icon:hover{
+  color: #574e74;
+}
+
+.menu-item-settings-icon.active{
+  color: #7d65ca;
+}
+
+.menu-item-logout-icon{
   color: #dc3545;
 }
 
-.menu-item.logout:hover {
-  background: #f8d7da;
+
+.menu-item-logout-icon{
+  padding: 0;
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+ border-radius: 4px;
+ border: none;
+ color: #ff1313;
+ background: none;
+}
+
+.menu-item-logout-icon:hover {
+  color: #ffffff;
+}
+
+.menu-item-logout-icon.active{
+  color: #ff1313;
 }
 
 .settings-overlay {
@@ -131,6 +165,51 @@
     font-size: 24px;
     color: #1e2022;
 }
+
+.menu-item-private-icon,.menu-item-public-icon{
+  padding: 0;
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+ border-radius: 4px;
+ border: none;
+ color: #cfc9c9;
+ background: none;
+}
+
+.private-icon{
+    color: #c62020;
+    
+}
+
+.public-icon{
+    color: #30c483;
+}
+
+.menu-item-private-icon:hover{
+  color: #ffffff;
+  border-radius: 14px;
+ 
+}
+
+.menu-item-public-icon:hover{
+    color: #ffffff;
+    border-radius: 14px;
+} 
+
+.menu-item-private-icon.active{
+  color: #ff0000;
+ 
+}
+
+.menu-item-public-icon.active{
+  color: #30c483;
+
+}
+
+
+
+
+
   
   .settings-overlay .close-settings {
     position: absolute;

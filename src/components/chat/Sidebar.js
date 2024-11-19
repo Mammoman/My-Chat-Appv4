@@ -1,15 +1,23 @@
 import React                                                                              from 'react';
 import { useState }                                                                       from 'react';
-import { Settings02Icon, Folder01Icon, Logout02Icon, Mail01Icon, SpotifyIcon }                          from 'hugeicons-react';
+import { Settings02Icon, Folder01Icon, Logout02Icon, SpotifyIcon, Home04Icon }                          from 'hugeicons-react';
 import { useNavigate }                                                                    from 'react-router-dom';
 import { auth }                                                                           from '../../config/firebase';
 import                                                                                    '../../styles/chat/Sidebar.css';
 import Settings                                                                            from '../settings/Settings';
 import { loginWithSpotify } from '../../config/spotify';
-const Sidebar = ({ signUserOut }) => {
+const Sidebar = ({ signUserOut, onFilterChange }) => {
   const navigate = useNavigate();
   const currentUser = auth.currentUser;
   const [showSettings, setShowSettings] = useState(false);
+  const [activeFilter, setActiveFilter] = useState('all');
+ 
+ 
+  
+  const handleFilterClick = (filter) => {
+    setActiveFilter(filter);
+    onFilterChange(filter);
+  };
 
   const handleSignOut = async () => {
     try {
@@ -39,29 +47,36 @@ const Sidebar = ({ signUserOut }) => {
       </div>
 
       <div className="sidebar-menu">
-        <button className="menu-item">
-          <Mail01Icon />
-          <p>All Rooms</p>
+        <button
+        className={`menu-item-all-icon ${activeFilter === 'all' ? 'active' : ''}`}
+        onClick={() => handleFilterClick('all')}>
+          <Home04Icon />
+          <p>All</p>
         </button>
-        <button className="menu-item">
-          <Folder01Icon />
-          <p>Archived</p>
+
+        <button 
+         className={`menu-item-private-icon ${activeFilter === 'private' ? 'active' : ''}`}
+         onClick={() => handleFilterClick('private')}>
+          <Folder01Icon className="private-icon" />
+          <p>Private</p>
         </button>
-        <button className="menu-item spotify-login-btn"
-        onClick={loginWithSpotify}
-        >
-          <SpotifyIcon />
-          <p>Spotify</p>
+
+        <button 
+         className={`menu-item-public-icon ${activeFilter === 'public' ? 'active' : ''}`}
+         onClick={() => handleFilterClick('public')}>
+          <Folder01Icon className="public-icon" />
+          <p>Public</p>
         </button>
+         
       </div>
 
       <div className="sidebar-bottom">
-        <button className="menu-item" onClick={toggleSettings}>
+        <button className="menu-item-settings-icon" onClick={toggleSettings}>
           <Settings02Icon />
           <p>Settings</p>
         </button>
         
-        <button className="menu-item" onClick={handleSignOut}>
+        <button className="menu-item-logout-icon" onClick={handleSignOut}>
           <Logout02Icon />
           <p>Logout</p>
         </button>

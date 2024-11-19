@@ -2,6 +2,16 @@ import React from 'react';
 import VoiceMessagePlayer from './VoiceMessagePlayer';
 import { PinIcon } from 'hugeicons-react';
 
+const formatTimestamp = (timestamp) => {
+  if (!timestamp) return '';
+  const date = new Date(timestamp.seconds * 1000);
+  return date.toLocaleTimeString([], { 
+    hour: '2-digit', 
+    minute: '2-digit',
+    hour12: true 
+  });
+};
+
 const MessageBubble = ({ message, scrollToMessage, auth }) => {
   const isCurrentUser = auth?.currentUser?.uid === message.userId;
 
@@ -22,8 +32,7 @@ const MessageBubble = ({ message, scrollToMessage, auth }) => {
       )}
 
       {message.replyTo && (
-        <div 
-          className="reply-reference"
+        <div className="reply-reference"
           onClick={(e) => {
             e.stopPropagation();
             scrollToMessage(message.replyTo.id);
@@ -43,14 +52,21 @@ const MessageBubble = ({ message, scrollToMessage, auth }) => {
           </div>
         </div>
       )}
+      
       {message.type === 'voice' ? (
-        <VoiceMessagePlayer 
-          audioUrl={message.audioData} 
-          duration={message.duration}
-          isSent={isCurrentUser}
-        />
+        <div className="voice-message">
+          <VoiceMessagePlayer 
+            audioUrl={message.audioData} 
+            duration={message.duration}
+            isSent={isCurrentUser}
+          />
+          <span className="serverTimestamp">{formatTimestamp(message.createdAt)}</span>
+        </div>
       ) : (
-        <p>{message.text}</p>
+        <>
+          <p>{message.text}</p>
+          <span className="serverTimestamp">{formatTimestamp(message.createdAt)}</span>
+        </>
       )}
     </div>
   );
