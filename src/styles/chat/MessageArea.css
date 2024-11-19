@@ -367,13 +367,13 @@
       }
       
       .message.sent .serverTimestamp {
-        color: rgba(255, 255, 255, 0.8);
+        color: transparent;
         font-size: 10px;
         right: -47px;
       }
       
       .message.received .serverTimestamp {
-        color: #666;
+        color: transparent;
         justify-content: flex-start;
         left: -47px;
         font-size: 10px;
@@ -381,6 +381,7 @@
       
       .message-bubble:hover .serverTimestamp {
         opacity: 1;
+        color: #f0f0f0;
       }
       
       /* For voice messages */
@@ -393,6 +394,7 @@
       
       .voice-message:hover .serverTimestamp {
         opacity: 1;
+        color: #f0f0f0;
       }
       
       .message.sent .voice-message .serverTimestamp {
@@ -810,14 +812,45 @@
   }
 
 
-  
+    
 
+
+
+  
 .message-bubble .pin-indicator {
   position: absolute;
   top: -8px;
   right: -8px;
-  color: #4f46e5;
+  color: #ffffff;
   
+}
+
+
+.message.sent .message-bubble .pin-indicator {
+  color: #000000;
+}
+
+
+.message.received .message-bubble .pin-indicator {
+   left: -44px;
+   transform: rotate(-90deg);
+   top: -50px;
+   color: #1a1a1a;
+}
+
+.reply-reference .message.received .message-bubble .pin-indicator {
+  left: -44px;
+  transform: rotate(-90deg);
+  top: -50px;
+  color: #1a1a1a;
+}
+
+.dark-theme .message.sent .message-bubble .pin-indicator {
+  color: #ff0202;
+}
+
+.dark-theme .message.received .message-bubble .pin-indicator {
+  color: #ffffff;
 }
 
 .pin-icon {
@@ -831,6 +864,11 @@
   transform: rotate(-45deg);
 }
 
+.message.received .pin-icon.pinned {
+  transform: rotate(45deg);
+}
+
+
 .message-action-btn:hover .pin-icon {
   transform: scale(1.1);
 }
@@ -838,6 +876,8 @@
 .message-action-btn:hover .pin-icon.pinned {
   transform: rotate(-45deg) scale(1.1);
 }
+
+
 
 .header-details {
   display: flex;
@@ -849,13 +889,13 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  color: #4f46e5;
+  color: #c62020;
   font-size: 13px;
   cursor: pointer;
 }
 
 .header-pin-icon {
-  transform: rotate(45deg);
+  transform: rotate(-90deg);
 }
 
 
