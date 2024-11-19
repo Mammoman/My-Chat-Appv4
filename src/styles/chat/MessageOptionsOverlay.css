@@ -9,6 +9,10 @@
     z-index: 1000;
     animation: slideDown 0.2s ease-out;
   }
+
+  .dark-theme .MessageOptions-overlay{
+    background: #171818;
+  }
   
   .MessageOptions-content {
     padding: 8px;
@@ -21,11 +25,19 @@
     padding: 8px 12px;
     border-bottom: 1px solid #edf2f9;
   }
+
+  .dark-theme .MessageOptions-header{
+    border-bottom: 1px solid #272728;
+  }
   
   .MessageOptions-title span {
     font-size: 14px;
     font-weight: 500;
     color: #4b5563;
+  }
+
+  .dark-theme .MessageOptions-title span{
+    color: #f3f4f6;
   }
   
   .MessageOptions-list {
@@ -56,6 +68,15 @@
     outline: none;
   }
 
+  .dark-theme .MessageOptions-list .search-bar input{
+    background: #3f3e3e;
+    color: #f3f4f6;
+  }
+
+  .dark-theme .MessageOptions-list .search-bar input::placeholder{
+    color: #f3f4f6;
+  }
+
 
   .MessageOptions-list .search-bar:focus-within {
     border-color: #4f46e5;
@@ -63,8 +84,8 @@
     box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
   }
 
-  .darkmode .MessageOptions-list .search-bar {
-    background: #1a1a1a;
+  .dark-theme .MessageOptions-list .search-bar {
+    background: #3f3e3e;
   }
 
 
@@ -77,12 +98,24 @@
     border: 1px solid #e5e7eb;
     border-radius: 8px;
   }
+
+  .dark-theme .MessageOptions-list .search-filters{
+    background: #171818;
+    border: 1px solid #272728;
+  }
   
   .MessageOptions-list .date-filter,
   .MessageOptions-list .user-filter,
   .MessageOptions-list .type-filter {
     width: 100%;
     padding: 8px 0;
+  }
+
+  .dark-theme .MessageOptions-list .date-filter,
+  .dark-theme .MessageOptions-list .user-filter,
+  .dark-theme .MessageOptions-list .type-filter{
+    color: #f3f4f6;
+    
   }
   
   .MessageOptions-list select,
@@ -94,6 +127,12 @@
     background: white;
     font-size: 14px;
     color: #374151;
+  }
+
+  .dark-theme .MessageOptions-list select,
+  .dark-theme .MessageOptions-list .react-datepicker-wrapper{
+    background: #3f3e3e;
+    color: #f3f4f6;
   }
   
   .MessageOptions-list select:focus,
@@ -117,11 +156,20 @@
     margin-left: 4px;
     color: #4b5563;
   }
+
+  .dark-theme .MessageOptions-list .filter-toggle{
+    color: #ffffff;
+    background: #3f3e3e;
+  }
   
   .MessageOptions-list .filter-toggle:hover {
     background: rgba(79, 70, 229, 0.08);
     border-radius: 6px;
     color: #4f46e5;
+  }
+
+  .dark-theme .MessageOptions-list .filter-toggle:hover{
+    background: rgba(79, 70, 229, 0.08);
   }
   
   /* Add smooth transitions */
@@ -130,6 +178,24 @@
   .MessageOptions-list .filter-toggle {
     transition: all 0.2s ease;
   }
+
+  .MessageOptions-list .react-datepicker-wrapper input{
+    outline: none;
+    border: none;
+  }
+
+  .dark-theme .MessageOptions-list .react-datepicker-wrapper input{
+    background: #3f3e3e;
+    color: #f3f4f6;
+    border: none;
+    outline: none;
+  }
+
+  .dark-theme .MessageOptions-list .react-datepicker-wrapper input::placeholder{
+    color: #f3f4f6;
+  }
+
+
   
   .MessageOptions-item {
     padding: 10px 16px;
@@ -139,6 +205,10 @@
     align-items: center;
     gap: 8px;
     color: #4b5563;
+  }
+
+  .dark-theme .MessageOptions-item{
+    color: #f3f4f6;
   }
   
   .MessageOptions-item:hover {
