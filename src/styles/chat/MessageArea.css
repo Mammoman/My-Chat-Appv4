@@ -266,6 +266,31 @@
   }
 
 
+      /*message-timestamp*/
+.message-timestamp {
+  font-size: 11px;
+  opacity: 0.7;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.message.sent .message-timestamp {
+  justify-content: flex-end;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.message.received .message-timestamp {
+  justify-content: flex-start;
+  color: #6b7280;
+}
+
+.message-bubble {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
 
   
 
