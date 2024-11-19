@@ -74,8 +74,8 @@
 }
 
 .menu-item:hover{
-    background-color: #ffffff;
-    color: #000000;
+    
+    color: #ffffff;
     border-radius: 14px;
 }
 
@@ -131,6 +131,40 @@
     font-size: 24px;
     color: #1e2022;
 }
+
+.menu-item-private-icon,.menu-item-public-icon{
+  padding: 0;
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+ border-radius: 4px;
+ border: none;
+ color: #cfc9c9;
+ background: none;
+}
+
+.private-icon{
+    color: #c62020;
+    
+}
+
+.public-icon{
+    color: #30c483;
+    
+}
+
+.menu-item-private-icon:hover{
+  color: #ffffff;
+  border-radius: 14px;
+ 
+}
+
+.menu-item-public-icon:hover{
+    color: #ffffff;
+    border-radius: 14px;
+} 
+
+
+
   
   .settings-overlay .close-settings {
     position: absolute;

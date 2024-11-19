@@ -1,13 +1,3 @@
-
-
-
-
-
-
-
-
-// Firebase Firestore Rules for room deletion
-
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
@@ -22,51 +12,96 @@ service cloud.firestore {
     function isRoomParticipant(roomData) {
       return roomData.participants.hasAny([request.auth.uid]);
     }
+    
+    function canAccessRoom(roomData) {
+      return roomData.type == 'public' || 
+             isRoomParticipant(roomData) || 
+             isRoomCreator(roomData);
+    }
+    
+    // Users collection rules
+    match /users/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow update: if request.auth != null && request.auth.uid == userId && 
+        request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['spotifyToken', 'spotifyTokenTimestamp']);
+    }
 
     match /rooms/{roomId} {
       allow read: if isSignedIn();
       allow create: if isSignedIn();
+      allow delete: if isSignedIn() && isRoomCreator(resource.data);
       
-      // Allow delete only if user is the room creator
-      allow delete: if isSignedIn() && 
-        isRoomCreator(resource.data);
-      
-      // Allow updates based on different conditions
+      // Modified update rule to allow participant changes and system messages
       allow update: if isSignedIn() && (
-        // Room creator can make any changes
         isRoomCreator(resource.data) ||
-        
-        // Public rooms can be joined by anyone
         resource.data.type == 'public' ||
-        
-        // Private room updates for participants
         (resource.data.type == 'private' && (
-          // Existing participants can update
           isRoomParticipant(resource.data) ||
-          // New participants can join if room isn't full
           resource.data.participants.size() < 2
         )) ||
-        
-        // Allow participants to remove themselves
         (request.resource.data.diff(resource.data).affectedKeys()
-          .hasOnly(['participants']) &&
-        resource.data.participants.hasAll(request.resource.data.participants))
+          .hasAny(['participants', 'systemMessages'])) ||
+        (request.resource.data.type == resource.data.type &&
+         request.resource.data.createdBy == resource.data.createdBy)
       );
       
-      match /Messages/{messageId} {
+      match /pinnedMessages/{messageId} {
+        allow read: if isSignedIn() && canAccessRoom(get(/databases/$(database)/documents/rooms/$(roomId)).data);
+        allow write: if isSignedIn() && isRoomCreator(get(/databases/$(database)/documents/rooms/$(roomId)).data);
+      }
+      
+      match /typing/{userId} {
         allow read: if isSignedIn() && 
-          isRoomParticipant(get(/databases/$(database)/documents/rooms/$(roomId)).data);
-        
+          canAccessRoom(get(/databases/$(database)/documents/rooms/$(roomId)).data);
         allow write: if isSignedIn() && 
-          isRoomParticipant(get(/databases/$(database)/documents/rooms/$(roomId)).data);
+          request.auth.token.email == userId &&
+          canAccessRoom(get(/databases/$(database)/documents/rooms/$(roomId)).data);
+      }
+
+      match /recording/{userId} {
+        allow read: if isSignedIn() && 
+          canAccessRoom(get(/databases/$(database)/documents/rooms/$(roomId)).data);
+        allow write: if isSignedIn() && 
+          request.auth.token.email == userId &&
+          canAccessRoom(get(/databases/$(database)/documents/rooms/$(roomId)).data);
+      }
+
+      match /Messages/{messageId} {
+        // Enhanced read permission for search functionality
+        allow read, list: if isSignedIn() && 
+          canAccessRoom(get(/databases/$(database)/documents/rooms/$(roomId)).data);
         
-        allow delete: if isSignedIn() && (
-          // Message creator can delete their messages
+        // Allow querying with specific indexes for search
+        allow list: if isSignedIn() && 
+          canAccessRoom(get(/databases/$(database)/documents/rooms/$(roomId)).data) && (
+            request.query.orderBy == 'createdAt' ||
+            request.query.orderBy == 'type' ||
+            request.query.orderBy == 'user' ||
+            request.query.orderBy == 'text' ||
+            request.query.orderBy == 'timestamp'
+          );
+        
+        // Create permission
+        allow create: if isSignedIn() && (
+          canAccessRoom(get(/databases/$(database)/documents/rooms/$(roomId)).data) ||
+          (request.resource.data.type == 'system' && 
+           get(/databases/$(database)/documents/rooms/$(roomId)).data.type == 'public')
+        );
+        
+        // Update permission for reactions and message modifications
+        allow update: if isSignedIn() && (
           resource.data.user == request.auth.token.email ||
-          // Room creator can delete any message
+          (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['reactions', 'pinned', 'pinnedAt', 'pinnedBy', 'deleted']) &&
+           canAccessRoom(get(/databases/$(database)/documents/rooms/$(roomId)).data))
+        );
+        
+        // Delete permission
+        allow delete: if isSignedIn() && (
+          resource.data.user == request.auth.token.email ||
           isRoomCreator(get(/databases/$(database)/documents/rooms/$(roomId)).data)
         );
       }
     }
   }
-} 
+}

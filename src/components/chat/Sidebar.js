@@ -1,6 +1,6 @@
 import React                                                                              from 'react';
 import { useState }                                                                       from 'react';
-import { Settings02Icon, Folder01Icon, Logout02Icon, Mail01Icon, SpotifyIcon }                          from 'hugeicons-react';
+import { Settings02Icon, Folder01Icon, Logout02Icon, SpotifyIcon, Home04Icon }                          from 'hugeicons-react';
 import { useNavigate }                                                                    from 'react-router-dom';
 import { auth }                                                                           from '../../config/firebase';
 import                                                                                    '../../styles/chat/Sidebar.css';
@@ -40,19 +40,18 @@ const Sidebar = ({ signUserOut }) => {
 
       <div className="sidebar-menu">
         <button className="menu-item">
-          <Mail01Icon />
+          <Home04Icon />
           <p>All Rooms</p>
         </button>
-        <button className="menu-item">
-          <Folder01Icon />
-          <p>Archived</p>
+        <button className="menu-item-private-icon">
+          <Folder01Icon className="private-icon" />
+          <p>Private</p>
         </button>
-        <button className="menu-item spotify-login-btn"
-        onClick={loginWithSpotify}
-        >
-          <SpotifyIcon />
-          <p>Spotify</p>
+        <button className="menu-item-public-icon">
+          <Folder01Icon className="public-icon" />
+          <p>Public</p>
         </button>
+         
       </div>
 
       <div className="sidebar-bottom">
