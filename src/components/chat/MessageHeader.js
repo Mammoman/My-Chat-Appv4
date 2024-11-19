@@ -33,9 +33,6 @@ const MessageHeader = ({ roomData,
             <PinIcon size={18} className={`header-pin-icon ${isPinnedOpen ? 'active' : ''}`} />
             <span>{pinnedCount} pinned messages</span>
           </div>
-          <div>
-            <span>Search</span>
-          </div>
         </div>
       </div>
       <div className="header-actions">
