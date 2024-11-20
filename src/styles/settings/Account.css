@@ -34,3 +34,17 @@
     font-weight: 600;
     color: #4f46e5;
   }
+
+  .Account-info-stat-overlay{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .public-room-count{
+    color: #00ff1ac7;
+  }
+
+  .private-room-count{
+    color: #ff2f2f;
+  }

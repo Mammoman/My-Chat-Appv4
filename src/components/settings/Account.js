@@ -1,8 +1,14 @@
 
-import React                                                              from 'react';
+import React, {useState} from 'react';
 import                                                                      '../../styles/settings/Account.css';
 
 const Account = () => {
+
+
+  const [roomDisplay, setRoomDisplay] = useState(false);
+
+
+
   return (
     <div className="account-settings">
       <h3>Account Stats</h3>
@@ -32,6 +38,7 @@ const Account = () => {
                 
               </div>
 
+
               <div className="Account-info-stat">
                 <span className="Account-stat-number">
                 0
@@ -39,19 +46,23 @@ const Account = () => {
           <label>Total Messages Sent</label>
         </div>
 
-        <div className="Account-info-stat">
-                <span className="Account-stat-number">
+
+     <div className='Account-info-stat-overlay'>
+     <div className="Account-info-stat">
+                <span className="Account-stat-number public-room-count ">
                               0
                 </span>
-                <label> Rooms Joined</label>
+                <label> Total Public Rooms</label>
               </div>
 
               <div className="Account-info-stat">
-                <span className="Account-stat-number">
+                <span className="Account-stat-number private-room-count  ">
                               0
                 </span>
-                <label> Rooms Participated</label>
+                <label> Total Private Rooms </label>
               </div>
+     </div>
+        
       </div>
 
     </div>
