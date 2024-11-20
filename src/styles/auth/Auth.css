@@ -15,6 +15,11 @@ body {
     margin: -20px 0 50px;
 }
 
+.dark-theme body{
+    background-color: #ffffff;
+}
+
+
 .container {
     background-color: #fff;
     border-radius: 10px;
@@ -27,16 +32,13 @@ body {
     min-height: 480px;
 }
 
+
 .social{
     size: 20px;
     cursor: pointer;
 }
 
-.social-container {
-   margin: 20px;
-   margin-top: 0;
-   size: 20px;
-}
+
 
 .form-container {
     display: flex;
@@ -60,6 +62,31 @@ body {
     transition: all 0.6s ease-in-out;
 }
 
+.form-container-create h1{
+    color: #000000;
+}
+
+.dark-theme .form-container-create h1{
+    color: #000000;
+}
+
+ .container form.form-container-create{
+    width: 70%;
+}
+
+ .form-container-create .form-container-input-create{
+    border: none;
+    height: 50%;
+    font-size: 20px;
+    margin: 14px;
+    padding: 20px;
+ }
+
+.form-container-create .form-container-input-create:hover{
+    outline-style: inherit;
+    box-shadow: 4px 4px 4px rgb(162, 159, 159);
+    transition: smooth 0.4s;
+}   
 
 .form-container-create .form-container-input{
     border: none;
@@ -79,9 +106,7 @@ body {
 
  
 
- .container form.form-container-create{
-    width: 70%;
-}
+
 
 
 .form-container-create .social-container{
@@ -103,6 +128,83 @@ body {
     margin: 12px;
     padding: 12px;
 }
+
+
+
+.form-container-signin{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transition: all 0.6s ease-in-out;
+}
+
+.sign-in-title{
+    color: #000000;
+}   
+
+.dark-theme .sign-in-title{
+    color: #000000;
+}
+
+.dark-theme .form-container-signin .social-icon{
+    color: #000000;
+}
+
+.form-container-signin span{
+    color: #000000;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.dark-theme .form-container-signin span{
+    color: #000000;
+}
+
+.form-container-signin .form-container-input-signin{
+    border: none;
+    font-size: 20px;
+    margin: 12px;
+    padding: 20px;
+}
+
+.form-container-signin .form-container-input-signin:hover{
+    outline-style: inherit;
+    box-shadow: 4px 4px 4px rgb(162, 159, 159);
+    transition: smooth 0.4s;
+}
+
+.form-container-signin .form-container-button-signin{
+    border-radius: 20px;
+	border: 1px solid #ff4b2b;
+	background-color: #ff4b2b;
+	color: #ffffff;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 12px 45px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	transition: transform 80ms ease-in;
+    margin: 10px;
+}
+
+.form-container-signin .form-container-button-signin:hover{
+    transform: scale(0.95);
+}
+
+.form-container-signin .sign-in-error{
+    color: #ff4b2b;
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+.dark-theme .form-container-signin .sign-in-error{
+    color: #ff4b2b;
+}
+
 
 .form-container-button {
 	border-radius: 20px;
@@ -186,7 +288,7 @@ body {
 .overlay {
     background: #FF416C;
     background: -webkit-linear-gradient(to right, #ff927e, #000000);
-    background: linear-gradient(to right, #151515, #d57070);
+    background: linear-gradient(to right, #151515, #b73434);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 0 0;
@@ -260,4 +362,28 @@ footer i {
 footer a {
     color: #3c97bf;
     text-decoration: none;
+}
+
+.overlay-icon{
+    size: 24px;
+    color: #ffffff;
+    margin: 10px;
+}
+
+.ghost{
+    border-radius: 20px;
+	border: 1px solid #ff4b2b;
+	background-color: #ff4b2b;
+	color: #ffffff;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 12px 45px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	transition: transform 80ms ease-in;
+    margin-top: 10px;
+}
+
+.ghost:hover{
+    transform: scale(0.95);
 }

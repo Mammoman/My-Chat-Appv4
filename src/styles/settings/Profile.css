@@ -64,9 +64,7 @@
     color: #1e2022;
 }
 
-.profile-settings input[type="text"],
-input[type="email"],
-textarea {
+.profile-settings .profile-settings-input{
     width:  80%;
     padding: 10px;
     border: 1px solid #e6e9f0;

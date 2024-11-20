@@ -23,9 +23,18 @@ const Profile = () => {
         </div>
       </div>
       <label className='Profile-name'>Profile name</label>
-      <input type="text" defaultValue="Dayniel" />
+      <input 
+        className='profile-settings-input'
+        type="text" 
+        defaultValue="Dayniel" 
+      />
       <label>Username</label>
-      <input type="text" value={username} onChange={handleUsernameChange} />
+      <input 
+        className='profile-settings-input'
+        type="text" 
+        value={username} 
+        onChange={handleUsernameChange} 
+      />
       <label className='About-me'>About me</label>
       <textarea defaultValue="What can I say?" />
       <button className="save-changes">Save changes</button>
