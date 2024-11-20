@@ -15,6 +15,7 @@ export const Auth = (props) => {
     const [name, setNamme] = useState("");
     const [password, setPassword] = useState("");
     const [isSignUp, setIsSignUp] = useState(false); // State to toggle between sign up and sign in
+    const [errorMessage, setErrorMessage] = useState("");
 
     const handleGoogleSignIn = async () => {
         try {
@@ -26,7 +27,8 @@ export const Auth = (props) => {
             alert("Failed to sign in with Google. Please try again.");
         }
     };
-
+    
+    
     const handleEmailPasswordSignIn = async (e) => {
         e.preventDefault();
         try {
@@ -107,9 +109,14 @@ export const Auth = (props) => {
                             <GoogleIcon size={44} onClick={handleEmailPasswordSignUp} />
                         </div>
                         
-                        <input className="form-container-input-name" type="text" placeholder="Name" required />
+                        <input 
+                            className="form-container-input-create" 
+                            type="text" 
+                            placeholder="Name" 
+                            required 
+                        />
                         <input
-                            className="form-container-input"
+                            className="form-container-input-create"
                             type="email"
                             placeholder="Email"
                             value={email}
@@ -117,7 +124,7 @@ export const Auth = (props) => {
                             required
                         />
                         <input
-                            className="form-container-input"
+                            className="form-container-input-create"
                             type="password"
                             placeholder="Password"
                             value={password}
@@ -127,14 +134,14 @@ export const Auth = (props) => {
                         <button className="form-container-button" type="submit" onClick={handleEmailPasswordSignUp}>Sign Up</button>
                     </form>
                 ) : (
-                    <form className="form-container" onSubmit={handleEmailPasswordSignIn}>
-                        <h1>Sign in</h1>
+                    <form className="form-container-signin" onSubmit={handleEmailPasswordSignIn}>
+                        <h1 className="sign-in-title">Sign in</h1>
                         <div className="social-container">
-                            <GoogleIcon size={44} onClick={handleGoogleSignIn} />
+                            <GoogleIcon size={44} className="social-icon" onClick={handleGoogleSignIn} />
                         </div>
                         <span>or use your account</span>
                         <input
-                            className="form-container-input"
+                            className="form-container-input-signin"
                             type="email"
                             placeholder="Email"
                             value={email}
@@ -142,15 +149,17 @@ export const Auth = (props) => {
                             required
                         />
                         <input
-                        className="form-container-input"
+                        className="form-container-input-signin"
                             type="password"
                             placeholder="Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
                         />
-                        <button className="form-container-button" type="submit">Sign In</button>
+                        <button className="form-container-button-signin" type="submit">Sign In</button>
                         <a href="#">Forgot your password?</a>
+                        <p className="sign-in-error">{errorMessage
+                            }</p>
                     </form>
                 )}
             </div>
@@ -161,14 +170,14 @@ export const Auth = (props) => {
                         <h1>Welcome Back!</h1>
                         <p>To keep connected with us please login with your personal info</p>
                         <p>First Time User ?</p>
-                        <CircleArrowDown02Icon />
+                        <CircleArrowDown02Icon className="overlay-icon" />
                         <button className="ghost" id="signUp" onClick={handleSignUpClick}>Sign Up</button>
                     </div>
                     <div className="overlay-panel overlay-left">
                         <h1>Hello, Friend!</h1>
                         <p>Enter your personal details and start your journey with us</p>
                         <p>Already a user?</p>
-                        <CircleArrowDown02Icon />
+                        <CircleArrowDown02Icon className="overlay-icon" />
                         <button className="ghost" id="signIn" onClick={handleSignInClick}>Sign In</button>  
                     </div>
                 </div>

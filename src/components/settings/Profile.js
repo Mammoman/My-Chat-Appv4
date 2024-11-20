@@ -2,7 +2,7 @@ import React, { useState }                                                   fro
 import                                                                      '../../styles/settings/Profile.css';
 
 const Profile = () => {
-  const [username, setUsername] = useState('@ddd');
+  const [username, setUsername] = useState('@');
   const [profilePicture, setProfilePicture] = useState('/path/to/default.jpg');
 
   const handleUsernameChange = (e) => {
@@ -19,16 +19,34 @@ const Profile = () => {
       <div className="profile-picture">
         <img src={profilePicture} alt="Profile" />
         <div className='profile-picture-option'> 
-          <ProfilePictureSelector onSelect={handlePictureChange} />
+          <ProfilePictureSelector
+           onSelect={handlePictureChange} />
         </div>
       </div>
-      <label className='Profile-name'>Profile name</label>
-      <input type="text" defaultValue="Dayniel" />
+      <label 
+      className='Profile-name'
+      >Profile name</label>
+
+      <input 
+        className='profile-settings-input'
+        type="text" 
+        defaultValue="Dayniel" 
+      />
       <label>Username</label>
-      <input type="text" value={username} onChange={handleUsernameChange} />
-      <label className='About-me'>About me</label>
-      <textarea defaultValue="What can I say?" />
-      <button className="save-changes">Save changes</button>
+      <input 
+        className='profile-settings-input'
+        type="text" 
+        value={username} 
+        onChange={handleUsernameChange} 
+      />
+      <label 
+      className='About-me'
+      >About me</label>
+
+      <textarea
+      className="profile-settings-textarea"
+       defaultValue="What can I say?" />
+      <button className="save-changes-button">Save changes</button>
     </div>
   );
 };
@@ -37,9 +55,6 @@ const ProfilePictureSelector = ({ onSelect }) => {
   const dummyPictures = [
     '/path/to/dummy1.jpg',
     '/path/to/dummy2.jpg',
-    '/path/to/dummy3.jpg',
-    '/path/to/dummy4.jpg',
-    '/path/to/dummy5.jpg',
   ];
 
   return (
