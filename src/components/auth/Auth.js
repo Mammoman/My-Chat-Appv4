@@ -27,7 +27,8 @@ export const Auth = (props) => {
             alert("Failed to sign in with Google. Please try again.");
         }
     };
-
+    
+    
     const handleEmailPasswordSignIn = async (e) => {
         e.preventDefault();
         try {

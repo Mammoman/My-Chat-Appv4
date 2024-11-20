@@ -1,0 +1,36 @@
+.account-settings input{
+    outline: 4px;
+    font-size: 12px;
+    margin: 12px;
+    padding: 10px;
+}
+
+
+
+
+
+.Account-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 16px;
+  }
+  
+  .Account-info-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+    background: #f8f9fa;
+    border-radius: 12px;
+  }
+
+  .dark-theme .Account-info-stat{
+    background: #161718;
+  }
+  
+  .Account-stat-number {
+    font-size: 24px;
+    font-weight: 600;
+    color: #4f46e5;
+  }

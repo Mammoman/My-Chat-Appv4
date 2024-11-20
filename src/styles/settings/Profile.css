@@ -1,15 +1,23 @@
 .profile-settings {
     display: flex;
     flex-direction: column;
-    padding-left: 20px;
+    padding: 20px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     height: 93%;  
 }
 
+.dark-theme .profile-settings{
+    background-color: #1b1b1b;
+}
+
 .profile-settings:hover{
     box-shadow: 4px 4px 30px rgb(221, 221, 230);
+}
+
+.dark-theme .profile-settings:hover{
+    box-shadow: 4px 4px 30px rgb(39, 39, 39);
 }
 
 .profile-settings h3 {
@@ -19,6 +27,10 @@
     margin-top: 4%;
 }
 
+
+.dark-theme  .profile-settings h3{
+    color: #fdfeff;
+}
 
 .profile-picture {
     display: flex;
@@ -42,18 +54,6 @@
     flex-direction: column;
 }
 
-.profile-picture button {
-    margin-right: 10px;
-    margin-bottom: 4px;
-    padding: 8px 12px;
-    border: none;
-    border-radius: 4px;
-    background-color: #6366f1;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
 .profile-picture button:hover {
     background-color: #4f46e5;
 }
@@ -64,21 +64,46 @@
     color: #1e2022;
 }
 
-.profile-settings .profile-settings-input{
-    width:  80%;
-    padding: 10px;
-    border: 1px solid #e6e9f0;
-    border-radius: 4px;
-    margin-bottom: 15px;
-    font-size: 14px;
+.dark-theme .Profile-name,.About-me{
+    color: #fff;
 }
 
- .profile-settings textarea {
-    height: 80px;
+.profile-settings .profile-settings-input{
+    outline: 4px;
+    font-size: 12px;
+    margin: 12px;
+    padding: 12px;
+}
+
+.dark-theme .profile-settings-input{
+   background: #1e2022;
+   color: #fff;
+   outline: none;
+   border: none;
+}
+
+
+
+ .profile-settings-textarea {
+    height: 140px;
     resize: none;
 }
 
-.profile-settings .profile-settingsbutton.save-changes {
+.dark-theme .profile-settings-textarea{
+    background: #1e2022;
+    color: #fff;
+}
+
+.save-changes-button{
+    margin: 4px;
+    background-color: #6366f1;
+    color: #fff;
+    align-self: flex-end;
+    border: none;
+    
+}
+
+.profile-settings .save-changes-button.save-changes {
     padding: 10px 20px;
     border: none;
     border-radius: 4px;
@@ -88,9 +113,13 @@
     transition: background-color 0.3s;
 }
 
-.profile-settings button.save-changes:hover {
-    background-color: #4f46e5;
-}
+
+ .save-changes-button:hover {
+    background-color: #3d3986;
+    color: #ffffff;
+    border: none;
+ }
+
 
 .profile-picture-selector {
     display: flex;
