@@ -4,12 +4,11 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import '../../styles/settings/Account.css';
 import LoadingAnimation from '../common/LoadingAnimation';
 
-const Account = (messages) => {
-
+const Account = () => {
   const [isLoading, setIsLoading] = useState(true); 
-  const [roomDisplay, setRoomDisplay] = useState(false);
   const [roomsCreated, setRoomsCreated] = useState(0);
-  const [totalMessages, setTotalMessages] = useState(0);
+  const [totalMessagesSent, setTotalMessagesSent] = useState(0); // Total messages sent
+  const [totalMessagesReceived, setTotalMessagesReceived] = useState(0); // Total messages received
   const [totalRooms, setTotalRooms] = useState(0);
   const [totalPublicRooms, setTotalPublicRooms] = useState(0);
   const [totalPrivateRooms, setTotalPrivateRooms] = useState(0);
@@ -26,7 +25,7 @@ const Account = (messages) => {
       setRoomsCreated(roomsSnapshot.size);
 
       let totalRoomsCount = 0;
-      const allRoomsRef = collection(db, 'rooms'); // Declare only once
+      const allRoomsRef = collection(db, 'rooms');
       const allRoomsSnapshot = await getDocs(allRoomsRef);
 
       // Count the total rooms the user is a participant in
@@ -41,13 +40,22 @@ const Account = (messages) => {
       setTotalRooms(totalRoomsCount);
 
       let messagesCount = 0;
+      let receivedMessagesCount = 0; // Counter for received messages
       for (const roomDoc of roomsSnapshot.docs) {
         const messagesRef = collection(db, 'rooms', roomDoc.id, 'Messages');
         const messagesSnapshot = await getDocs(messagesRef);
         messagesCount += messagesSnapshot.size; // Count messages for each room
+
+        // Count messages received by the user
+        messagesSnapshot.docs.forEach(messageDoc => {
+          const messageData = messageDoc.data();
+          if (messageData.user !== auth.currentUser.email) { // Check if the message is not sent by the current user
+            receivedMessagesCount++;
+          }
+        });
       }
-      setTotalMessages(messagesCount); // Set the total messages count
-  
+      setTotalMessagesSent(messagesCount); // Set the total messages sent count
+      setTotalMessagesReceived(receivedMessagesCount); // Set the total messages received count
 
       let createdPublicCount = 0;
       let createdPrivateCount = 0;
@@ -83,82 +91,57 @@ const Account = (messages) => {
   }, []);
 
   return (
-    
     <div className="account-settings">
-       {isLoading ? (
-      <LoadingAnimation />
-    ) : (
-      <>
-    
-      <h3>Account Stats</h3>
-     
-      <label>Email</label>
-      <input type="email" defaultValue="...@gmail.com" />
-      <label>Password</label>
-      <input type="password" placeholder="Change password" />
-      <button>Save changes</button>
-      <div className="Account-info-grid">
-        <div className="Account-info-stat">
-          <label>Rooms Created</label>
-          <span 
-          className="Account-stat-number">
-            {roomsCreated}</span>
-        </div>
-
-        <div className="Account-info-stat">
-          <label>Rooms Participant Of</label>
-          <span 
-          className="Account-stat-number">
-            {totalRooms}</span>
-        </div>
-
-        <div className='Account-info-stat-overlay'>
-          <div className="Account-info-stat">
-            <span 
-            className="Account-stat-number 
-            public-room-count">
-              {createdPublicRooms}</span>
-            <label>Public Rooms</label>
+      {isLoading ? (
+        <LoadingAnimation />
+      ) : (
+        <>
+          <h3>Account Stats</h3>
+          <label>Email</label>
+          <input type="email" defaultValue="...@gmail.com" />
+          <label>Password</label>
+          <input type="password" placeholder="Change password" />
+          <button>Save changes</button>
+          <div className="Account-info-grid">
+            <div className="Account-info-stat">
+              <label>Rooms Created</label>
+              <span className="Account-stat-number">{roomsCreated}</span>
+            </div>
+            <div className="Account-info-stat">
+              <label>Rooms Participant Of</label>
+              <span className="Account-stat-number">{totalRooms}</span>
+            </div>
+            <div className='Account-info-stat-overlay'>
+              <div className="Account-info-stat">
+                <span className="Account-stat-number public-room-count">{createdPublicRooms}</span>
+                <label>Public Rooms</label>
+              </div>
+              <div className="Account-info-stat">
+                <span className="Account-stat-number private-room-count">{createdPrivateRooms}</span>
+                <label>Private Rooms</label>
+              </div>
+            </div>
+            <div className='Account-info-stat-overlay'>
+              <div className="Account-info-stat">
+                <span className="Account-stat-number public-room-count">{totalPublicRooms}</span>
+                <label>Total Public Rooms</label>
+              </div>
+              <div className="Account-info-stat">
+                <span className="Account-stat-number private-room-count">{totalPrivateRooms}</span>
+                <label>Total Private Rooms</label>
+              </div>
+            </div>
+            <div className="Account-info-stat">
+              <span className="Account-stat-number">{totalMessagesSent}</span>
+              <label>Total Messages Sent</label>
+            </div>
+            <div className="Account-info-stat">
+              <span className="Account-stat-number">{totalMessagesReceived}</span>
+              <label>Total Messages Received</label>
+            </div>
           </div>
-
-          <div className="Account-info-stat">
-            <span 
-            className="Account-stat-number
-             private-room-count">
-              {createdPrivateRooms}</span>
-            <label>Private Rooms</label>
-          </div>
-        </div>
-
-
-        <div className='Account-info-stat-overlay'>
-          <div className="Account-info-stat">
-            <span
-             className="Account-stat-number 
-             public-room-count">
-              {totalPublicRooms}</span>
-            <label>Total Public Rooms</label>
-          </div>
-
-          <div className="Account-info-stat">
-            <span 
-            className="Account-stat-number 
-            private-room-count">
-              {totalPrivateRooms}</span>
-            <label>Total Private Rooms</label>
-          </div>
-        </div>
-      </div>
-
-      <div className="Account-info-stat">
-            <span 
-            className="Account-stat-number">{totalMessages}</span>
-            <label>Total Messages </label>
-          </div>
-
-          </>
-
-        )}
+        </>
+      )}
     </div>
   );
 };
