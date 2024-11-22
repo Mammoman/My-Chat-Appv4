@@ -19,7 +19,7 @@ import                                                                     '../.
 
 
 
-const ChatList = ({ rooms, selectedRoom, onSelectRoom, messages, onMessageClick, activeFilter}) => {
+const ChatList = ({ rooms, selectedRoom, onSelectRoom, messages, onMessageClick, activeFilter, showNotification}) => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredRooms, setFilteredRooms] = useState([]);
@@ -57,26 +57,42 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom, messages, onMessageClick,
       // Check if user is a participant or creator
       const isParticipant = room.participants?.includes(auth.currentUser.uid);
       const isCreator = room.createdBy === auth.currentUser.uid;
-
+  
+      // Show notification for new join requests
+      if (isCreator && room.pendingRequests?.length > 0) {
+        showNotification('New Join Request', {
+          body: `Someone wants to join ${room.name}`,
+          tag: 'join-request',
+        });
+      }
+  
       if (activeFilter !== 'all') {
         if (room.type !== activeFilter) return false;
       }
-
+  
       // For public rooms
       if (room.type === 'public') {
         return matchesSearch && (
-          isCreator || // Always show to creator
-          isParticipant || // Show to participants
-          (room.publicVisibleAfter && new Date(room.publicVisibleAfter) <= currentTime) // Show if delay passed
+          isCreator || 
+          isParticipant || 
+          (room.publicVisibleAfter && new Date(room.publicVisibleAfter) <= currentTime)
         );
       }
+
       
       // For private rooms
       return matchesSearch && (isCreator || isParticipant);
     });
 
-    setFilteredRooms(userRooms);
-  }, [rooms, searchQuery, activeFilter]);
+
+    const sortedRooms = userRooms.sort((a, b) => {
+      const timeA = a.lastMessageAt?.seconds || 0;
+      const timeB = b.lastMessageAt?.seconds || 0;
+      return timeB - timeA;
+    });
+  
+    setFilteredRooms(sortedRooms);
+  }, [rooms, searchQuery, activeFilter, showNotification]);
 
   const handleDeleteRoom = async (roomId) => {
     try {
@@ -204,16 +220,33 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom, messages, onMessageClick,
               className="room-content"
               onClick={() => onSelectRoom(room.id)}
             >
-              <div className="room-avatar">
-                <div className="avatar-placeholder" />
-              </div>
-              <div className="room-info">
+        <div className="room-avatar">
+            <div className="avatar-placeholder">
+              {room.unreadCounts?.[auth.currentUser.uid] > 0 && (
+                <span className={`unread-count ${room.type}`}>
+                  {room.unreadCounts[auth.currentUser.uid]}
+                </span>
+              )}
+            </div>
+          </div>
+                        <div className="room-info">
               <h4>{room.displayName}</h4>
         <div className="room-type-info">
           <span className={`room-type-badge ${room.type}`}>
             {room.type}
                   </span>
                 </div>
+            {room.lastMessage && (
+              <p className="last-message">
+                <span className="sender">
+                  {room.lastMessage.sender === auth.currentUser?.email 
+                    ? 'New Chat' 
+                    : 'New Message' 
+                  }: 
+                </span>
+                {room.lastMessage.type === 'voice' ? '🎤 Voice message' : room.lastMessage.text}
+              </p>
+            )}
               </div>
             </div>
             <button 

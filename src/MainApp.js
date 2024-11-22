@@ -8,10 +8,12 @@ import { signOut } from 'firebase/auth';
 import { auth, db } from './config/firebase';
 import { collection, onSnapshot } from 'firebase/firestore';
 import './App.css';
+import { useNotifications } from './components/chat/NotificationContext';
 
 const cookies = new Cookies();
 
 const MainApp = () => {
+  const { showNotification } = useNotifications();
   const [isAuth, setIsAuth] = useState(cookies.get("auth-token"));
   const [room, setRoom] = useState(null);
   const [rooms, setRooms] = useState([]);
@@ -53,10 +55,10 @@ const MainApp = () => {
         onSelectRoom={setRoom} 
         setRoom={setRoom} 
         activeFilter={activeFilter} 
-         />
+        showNotification={showNotification}  />
         <div className="chat-area">
           {room ? (
-            <Chat room={room} />
+            <Chat room={room} showNotification={showNotification} />
           ) : (
             <div className="no-chat-selected">
               <p>Select a chat to start messaging</p>

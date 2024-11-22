@@ -26,7 +26,7 @@ import PinnedMessagesOverlay from './PinnedMessagesOverlay';
 
 
 
-const Chat = ({ room, onError }) => {
+const Chat = ({ room, onError, showNotification }) => {
   const [roomData, setRoomData] = useState(null);
   const messageContentRef = useRef(null)
   const [newMessage, setNewMessage] = useState("");
@@ -145,24 +145,75 @@ const Chat = ({ room, onError }) => {
     checkRoomCreator();
   }, [room]);
 
+
   useEffect(() => {
     if (!room) return;
-    setIsLoading(true); // Set loading when room changes
+    
+    // Reset unread count when room is opened
+    const resetUnreadCount = async () => {
+      const roomRef = doc(db, 'rooms', room);
+      await updateDoc(roomRef, {
+        [`unreadCounts.${auth.currentUser.uid}`]: 0
+      });
+    };
+  
+    resetUnreadCount();
+  }, [room]);
 
+ 
+  useEffect(() => {
+    if (!room) return;
+    setIsLoading(true);
+  
     const messagesRef = collection(db, 'rooms', room, 'Messages');
     const queryMessages = query(messagesRef, orderBy("createdAt"));
     
     const unsubscribe = onSnapshot(queryMessages, (snapshot) => {
       const messages = [];
-      snapshot.forEach((doc) => {
-        messages.push({ ...doc.data(), id: doc.id });
+      snapshot.docChanges().forEach((change) => {
+        if (change.type === "added") {
+          const messageData = { ...change.doc.data(), id: change.doc.id };
+          messages.push(messageData);
+          
+          // Update unread count for other users
+          if (messageData.user === auth.currentUser?.email) {
+            const roomRef = doc(db, 'rooms', room);
+            getDoc(roomRef).then(roomDoc => {
+              const roomData = roomDoc.data();
+              const participants = [...(roomData.participants || []), roomData.createdBy];
+              const unreadCounts = roomData.unreadCounts || {};
+              
+              participants.forEach(userId => {
+                if (userId !== auth.currentUser.uid) {
+                  unreadCounts[userId] = (unreadCounts[userId] || 0) + 1;
+                }
+              });
+              
+              updateDoc(roomRef, { unreadCounts });
+            });
+          }
+          
+          // Show notification for new messages
+          const isNewMessage = messageData.createdAt?.seconds >= (Date.now() / 1000 - 2);
+          if (isNewMessage && 
+              messageData.user !== auth.currentUser?.email && 
+              messageData.type !== 'system' &&
+              document.hidden) {
+            showNotification('New Message', {
+              body: `${messageData.user.split('@')[0]}: ${messageData.type === 'voice' ? '🎤 Voice message' : messageData.text}`,
+              tag: `new-message-${change.doc.id}`,
+              icon: '/logo192.png'
+            });
+          }
+        }
       });
-      setMessages(messages);
+      setMessages(prev => [...prev, ...messages]);
       setIsLoading(false);
     });
-
+  
     return () => unsubscribe();
-  }, [room]);
+  }, [room, showNotification]);
+
 
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
@@ -187,7 +238,8 @@ const Chat = ({ room, onError }) => {
 
     try {
       const messagesRef = collection(db, 'rooms', room, 'Messages');
-      
+      const roomRef = doc(db, 'rooms', room);
+
       // If replying to a message, check its current state
       let replyToData = null;
       if (replyToSend) {
@@ -214,6 +266,17 @@ const Chat = ({ room, onError }) => {
         room,
         replyTo: replyToData
       });
+   
+
+      await updateDoc(roomRef, {
+        lastMessageAt: serverTimestamp(),
+        lastMessage: {
+          text: messageToSend,
+          sender: auth.currentUser.email,
+          type: 'text'
+        }
+      });
+
     } catch (error) {
       console.error("Error sending message:", error);
       setNewMessage(messageToSend);
