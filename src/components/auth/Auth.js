@@ -4,11 +4,13 @@ import React, { useState, useEffect } from "react";
 import Cookies from 'universal-cookie';
 import { ArrowRightDoubleIcon, CircleArrowDown02Icon, GoogleIcon } from "hugeicons-react";
 import '../../styles/auth/Auth.css'
+import { useNotifications } from '../chat/NotificationContext';
 
 const cookies = new Cookies();
 
 export const Auth = (props) => {
     const { setIsAuth } = props;
+    const { requestPermission } = useNotifications();
 
     // State for email and password
     const [email, setEmail] = useState("");
@@ -19,14 +21,17 @@ export const Auth = (props) => {
 
     const handleGoogleSignIn = async () => {
         try {
-            const result = await signInWithPopup(auth, provider);
-            cookies.set("auth-token", result.user.refreshToken);
-            setIsAuth(true);
+          const result = await signInWithPopup(auth, provider);
+          cookies.set("auth-token", result.user.refreshToken);
+          setIsAuth(true);
+          
+          // Request notification permission after successful sign-in
+          await requestPermission();
         } catch (err) {
-            console.error("Google Sign-In Error:", err);
-            alert("Failed to sign in with Google. Please try again.");
+          console.error("Google Sign-In Error:", err);
+          alert("Failed to sign in with Google. Please try again.");
         }
-    };
+      };
     
     
     const handleEmailPasswordSignIn = async (e) => {

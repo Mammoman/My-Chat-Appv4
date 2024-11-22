@@ -135,10 +135,70 @@
 }
 
 .avatar-placeholder {
+  position: relative;
   width: 100%;
   height: 100%;
   border-radius: 12px;
   background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+}
+
+.unread-count {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  border: 2px solid white;
+}
+
+.unread-count.public {
+  background-color: #27ce59;
+  box-shadow: 0 0 4px rgba(39, 206, 89, 0.5);
+}
+
+.unread-count.private {
+  background-color: #ef4444;
+  box-shadow: 0 0 4px rgba(239, 68, 68, 0.5);
+}
+
+.dark-theme .unread-count {
+  border-color: #1f2937;
+}
+
+.room-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.last-message {
+  font-size: 0.85em;
+  color: #666;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px;
+}
+
+.last-message .sender {
+  font-weight: 500;
+  color: #444;
+}
+
+.dark-theme .last-message {
+  color: #999;
+}
+
+.dark-theme .last-message .sender {
+  color: #bbb;
 }
 
 

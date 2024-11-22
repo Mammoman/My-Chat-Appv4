@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import MainApp from './MainApp';
 import { useEffect } from 'react';
 import { handleSpotifyCallback } from './config/spotify';
+import { NotificationProvider } from './components/chat/NotificationContext';
 
 const App = () => {
   useEffect(() => {
@@ -13,12 +14,14 @@ const App = () => {
   }, []);
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/callback" element={<div>Connecting to Spotify...</div>} />
-        <Route path="/" element={<MainApp />} />
-      </Routes>
-    </BrowserRouter>
+    <NotificationProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/callback" element={<div>Connecting to Spotify...</div>} />
+          <Route path="/" element={<MainApp />} />
+        </Routes>
+      </BrowserRouter>
+    </NotificationProvider>
   );
 };
 
