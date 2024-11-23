@@ -7,8 +7,8 @@ import LoadingAnimation from '../common/LoadingAnimation';
 const Account = () => {
   const [isLoading, setIsLoading] = useState(true); 
   const [roomsCreated, setRoomsCreated] = useState(0);
-  const [totalMessagesSent, setTotalMessagesSent] = useState(0); // Total messages sent
-  const [totalMessagesReceived, setTotalMessagesReceived] = useState(0); // Total messages received
+  const [totalMessagesSent, setTotalMessagesSent] = useState(0); 
+  const [totalMessagesReceived, setTotalMessagesReceived] = useState(0); 
   const [totalRooms, setTotalRooms] = useState(0);
   const [totalPublicRooms, setTotalPublicRooms] = useState(0);
   const [totalPrivateRooms, setTotalPrivateRooms] = useState(0);
@@ -52,10 +52,10 @@ const Account = () => {
           if (messageData.user !== auth.currentUser.email) { // Check if the message is not sent by the current user
             receivedMessagesCount++;
           }
-        });
+        }); 
       }
-      setTotalMessagesSent(messagesCount); // Set the total messages sent count
-      setTotalMessagesReceived(receivedMessagesCount); // Set the total messages received count
+      setTotalMessagesSent(messagesCount); 
+      setTotalMessagesReceived(receivedMessagesCount);
 
       let createdPublicCount = 0;
       let createdPrivateCount = 0;

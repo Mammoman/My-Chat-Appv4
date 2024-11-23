@@ -1,6 +1,6 @@
 import React                                                                 from 'react';
 import '../../styles/chat/MessageActions.css';
-import { PinIcon } from 'hugeicons-react';
+import { PinIcon, Delete02Icon, RepeatIcon } from 'hugeicons-react';
 
 
 const MessageActions = ({ message, onReply, onPin, onDelete, isSelected, canDelete, isDeleted, isRoomCreator }) => {
@@ -9,6 +9,7 @@ const MessageActions = ({ message, onReply, onPin, onDelete, isSelected, canDele
     onReply(message);
   };
 
+ 
   const handleDelete = (e) => {
     e.stopPropagation();
     if (window.confirm('Are you sure you want to delete this message?')) {
@@ -30,7 +31,7 @@ const MessageActions = ({ message, onReply, onPin, onDelete, isSelected, canDele
               className="action-button reply-button"
               onClick={handleReply}
             >
-              Reply
+             <RepeatIcon/> Reply
             </button>
           )}
           {canDelete && (
@@ -38,15 +39,16 @@ const MessageActions = ({ message, onReply, onPin, onDelete, isSelected, canDele
               className="action-button delete-button"
               onClick={handleDelete}
             >
-              Delete
+               <Delete02Icon/>  Delete
             </button>
           )}
+          
           {isRoomCreator && (
             <button 
               className="action-button pin-button"
               onClick={handlePin}
             >
-              Pin
+              <PinIcon/> Pin
             </button>
           )}
         </div>
