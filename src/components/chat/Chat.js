@@ -169,13 +169,31 @@ const Chat = ({ room, onError, showNotification }) => {
     const queryMessages = query(messagesRef, orderBy("createdAt"));
     
     const unsubscribe = onSnapshot(queryMessages, (snapshot) => {
-      const messages = [];
+      // Create a map of existing messages for efficient lookup
+      const messagesMap = new Map();
+      
+      // Process all messages, both existing and new
+      snapshot.docs.forEach((doc) => {
+        const messageData = { ...doc.data(), id: doc.id };
+        messagesMap.set(doc.id, messageData);
+      });
+  
+      // Convert map to array and sort by timestamp
+      const sortedMessages = Array.from(messagesMap.values()).sort((a, b) => {
+        const timeA = a.createdAt?.seconds || 0;
+        const timeB = b.createdAt?.seconds || 0;
+        return timeA - timeB;
+      });
+  
+      setMessages(sortedMessages);
+      setIsLoading(false);
+  
+      // Handle notifications for new messages
       snapshot.docChanges().forEach((change) => {
         if (change.type === "added") {
           const messageData = { ...change.doc.data(), id: change.doc.id };
-          messages.push(messageData);
           
-          // Update unread count for other users
+          // Update unread counts and show notifications only for new messages
           if (messageData.user === auth.currentUser?.email) {
             const roomRef = doc(db, 'rooms', room);
             getDoc(roomRef).then(roomDoc => {
@@ -192,7 +210,7 @@ const Chat = ({ room, onError, showNotification }) => {
               updateDoc(roomRef, { unreadCounts });
             });
           }
-          
+  
           // Show notification for new messages
           const isNewMessage = messageData.createdAt?.seconds >= (Date.now() / 1000 - 2);
           if (isNewMessage && 
@@ -207,8 +225,6 @@ const Chat = ({ room, onError, showNotification }) => {
           }
         }
       });
-      setMessages(prev => [...prev, ...messages]);
-      setIsLoading(false);
     });
   
     return () => unsubscribe();

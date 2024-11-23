@@ -29,16 +29,23 @@ const MainApp = () => {
   useEffect(() => {
     const roomsRef = collection(db, "rooms");
     const unsubscribe = onSnapshot(roomsRef, (snapshot) => {
-      const roomsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const roomsData = snapshot.docs.map(doc => ({ 
+        id: doc.id, 
+        ...doc.data() 
+      }));
       setRooms(roomsData);
+      
+    
+      if (room) {
+        const updatedRoom = roomsData.find(r => r.id === room);
+        if (updatedRoom) {
+          setRoom(updatedRoom.id);
+        }
+      }
     });
-
+  
     return () => unsubscribe();
-  }, []);
-
-  if (!isAuth) {
-    return <Auth setIsAuth={setIsAuth} />;
-  }
+  }, [room]); 
 
   return (
 
@@ -58,7 +65,10 @@ const MainApp = () => {
         showNotification={showNotification}  />
         <div className="chat-area">
           {room ? (
-            <Chat room={room} showNotification={showNotification} />
+            <Chat
+            key={room} 
+             room={room}
+              showNotification={showNotification} />
           ) : (
             <div className="no-chat-selected">
               <p>Select a chat to start messaging</p>
