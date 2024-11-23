@@ -812,6 +812,36 @@
   }
 
 
+  .unread-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 20px 0;
+    position: relative;
+  }
+  
+  .unread-divider::before,
+  .unread-divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #e74c3c;
+  }
+  
+  .unread-divider span {
+    padding: 0 10px;
+    color: #e74c3c;
+    font-size: 14px;
+    font-weight: 500;
+    background: #fff;
+    margin: 0 10px;
+    border-radius: 12px;
+    padding: 4px 12px;
+    border: 1px solid #e74c3c;
+  }
+  
+  .dark-theme .unread-divider span {
+    background: #1a1a1a;
+  }
     
 
 

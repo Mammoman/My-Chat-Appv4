@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MessageBubble from './MessageBubble';
 import MessageActions from './MessageActions';
 import MessageSearch from './MessageSearch';
@@ -20,31 +20,38 @@ const MessageContent = ({
   scrollToMessage,
   auth,
   users,
-  isLoading
+  isLoading,
+  room
 }) => {
   const groupMessagesByDate = () => {
     let currentDate = null;
+    let lastReadTimestamp = localStorage.getItem(`lastRead_${room}`) || 0;
+    let hasUnreadDividerBeenAdded = false;
     const groupedMessages = [];
 
     messages.forEach(message => {
       const messageDate = message.createdAt ? formatMessageDate(message.createdAt) : '';
+      const messageTimestamp = message.createdAt?.seconds || 0;
+      
+      if (!hasUnreadDividerBeenAdded && 
+          messageTimestamp > lastReadTimestamp && 
+          message.user !== auth.currentUser?.email) {
+        groupedMessages.push({
+          type: 'unread',
+          count: messages.filter(m => 
+            m.createdAt?.seconds > lastReadTimestamp && 
+            m.user !== auth.currentUser?.email
+          ).length
+        });
+        hasUnreadDividerBeenAdded = true;
+      }
       
       if (messageDate && messageDate !== currentDate) {
-        const prevDate = currentDate ? new Date(currentDate) : null;
-        const newDate = new Date(message.createdAt.seconds * 1000);
-        
-        const isSameDay = prevDate && 
-          prevDate.getFullYear() === newDate.getFullYear() &&
-          prevDate.getMonth() === newDate.getMonth() &&
-          prevDate.getDate() === newDate.getDate();
-
-        if (!isSameDay) {
-          groupedMessages.push({
-            type: 'date',
-            date: messageDate
-          });
-          currentDate = messageDate;
-        }
+        groupedMessages.push({
+          type: 'date',
+          date: messageDate
+        });
+        currentDate = messageDate;
       }
       
       groupedMessages.push({
@@ -56,6 +63,15 @@ const MessageContent = ({
     return groupedMessages;
   };
 
+  useEffect(() => {
+    return () => {
+      const lastMessage = messages[messages.length - 1];
+      if (lastMessage?.createdAt) {
+        localStorage.setItem(`lastRead_${room}`, lastMessage.createdAt.seconds);
+      }
+    };
+  }, [messages, room]);
+
   return (
     <div className="message-content" ref={messageContentRef}>
       {isLoading ? (
@@ -65,6 +81,10 @@ const MessageContent = ({
           {groupMessagesByDate().map((item, index) => (
             item.type === 'date' ? (
               <DateDivider key={`date-${index}`} date={item.date} />
+            ) : item.type === 'unread' ? (
+              <div key={`unread-${index}`} className="unread-divider">
+                <span>{item.count} new messages</span>
+              </div>
             ) : (
               <div 
                 key={item.data.id} 
