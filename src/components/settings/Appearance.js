@@ -36,7 +36,7 @@ const Appearance = () => {
         <label>Font Size</label>
         <select>
           <option value="small">Small</option>
-          <option value="medium">Medium</option>
+          <option value="medium">Semi-Medium</option>
           <option value="large">Large</option>
         </select>
       </div>
