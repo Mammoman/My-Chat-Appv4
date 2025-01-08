@@ -71,14 +71,14 @@ const Chat = ({ room, onError, showNotification }) => {
       console.log('Current reactions:', currentReactions); // Debug
       console.log('Current user:', auth.currentUser.uid); // Debug
       
-      // Check if user already reacted
+      // uh Check if user already reacted
       const userIndex = currentUsers.indexOf(auth.currentUser.email);
       
       if (userIndex > -1) {
-        // Remove user's reaction
+        // this should emove user's reaction
         currentUsers.splice(userIndex, 1);
       } else {
-        // Add user's reaction
+        // yh this Adds user's reaction
         currentUsers.push(auth.currentUser.email);
       }
       
@@ -149,7 +149,7 @@ const Chat = ({ room, onError, showNotification }) => {
   useEffect(() => {
     if (!room) return;
     
-    // Reset unread count when room is opened
+    // Reset unread count when room is opened doesn't work?
     const resetUnreadCount = async () => {
       const roomRef = doc(db, 'rooms', room);
       await updateDoc(roomRef, {
@@ -345,7 +345,7 @@ const Chat = ({ room, onError, showNotification }) => {
         id: message.id,
         text: message.text,
         user: message.user,
-        type: message.type || 'text'  // Default to 'text' for normal messages
+        type: message.type || 'text' 
       });
     }; 
        
