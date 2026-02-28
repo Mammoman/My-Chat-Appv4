@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+
 import MessageBubble from './MessageBubble';
 import MessageActions from './MessageActions';
-import MessageSearch from './MessageSearch';
 import LoadingAnimation from '../common/LoadingAnimation';
 import DateDivider from './DateDivider';
 import { formatMessageDate } from '../../utils/dateUtils';

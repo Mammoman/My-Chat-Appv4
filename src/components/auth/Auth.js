@@ -14,10 +14,9 @@ export const Auth = (props) => {
 
     // State for email and password
     const [email, setEmail] = useState("");
-    const [name, setNamme] = useState("");
     const [password, setPassword] = useState("");
     const [isSignUp, setIsSignUp] = useState(false); // State to toggle between sign up and sign in
-    const [errorMessage, setErrorMessage] = useState("");
+    const [errorMessage] = useState("");
 
     const handleGoogleSignIn = async () => {
         try {

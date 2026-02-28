@@ -32,7 +32,7 @@ const Chat = ({ room, onError, showNotification }) => {
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [searchResults, setSearchResults] = useState(null);
-  const [users, setUsers] = useState([]);
+  const [users] = useState([]);
   const [userEmail, setUserEmail] = useState(null);
   const [joinRequest, setJoinRequest] = useState(null);
   const [isRoomCreator, setIsRoomCreator] = useState(false);

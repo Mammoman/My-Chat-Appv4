@@ -20,13 +20,8 @@ function RoomInput({ setRoom, onError }) {
   const [showPopup, setShowPopup] = useState(false);
   const [existingRoomId, setExistingRoomId] = useState(null);
   const [error, setError] = useState('');
-  const [isValidating, setIsValidating] = useState(false);
-  const [showErrorPopup, setShowErrorPopup] = useState(false);
+  const [, setIsValidating] = useState(false);
   
-  const showError = (message) => {
-    setError(message);
-    onError(message); // Pass error up to parent
-  };
 
 
   const validateRoomName = (name) => {

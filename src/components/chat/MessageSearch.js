@@ -59,7 +59,7 @@ const MessageSearch = ({ onSearch, messages = [], users = [] }) => {
   useEffect(() => {
     const debounceTimer = setTimeout(handleSearch, 500); // Increased debounce time
     return () => clearTimeout(debounceTimer);
-  }, [searchTerm, dateRange, selectedUser, messageType]); 
+  }, [searchTerm, dateRange, selectedUser, messageType, handleSearch]); 
 
   const resetSearch = useCallback(() => {
     setSearchTerm('');
