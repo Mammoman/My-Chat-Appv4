@@ -148,19 +148,24 @@ const Chat = ({ room, onError, showNotification }) => {
   }, [room]);
 
 
-  useEffect(() => {
-    if (!room) return;
+useEffect(() => {
+   
+    if (!room || !auth.currentUser?.uid) return;
     
-    // Reset unread count when room is opened doesn't work?
     const resetUnreadCount = async () => {
-      const roomRef = doc(db, 'rooms', room);
-      await updateDoc(roomRef, {
-        [`unreadCounts.${auth.currentUser.uid}`]: 0
-      });
+      try {
+        const roomRef = doc(db, 'rooms', room);
+        await updateDoc(roomRef, {
+          [`unreadCounts.${auth.currentUser.uid}`]: 0
+        });
+      } catch (error) {
+        console.error("Failed to reset unread count:", error);
+      }
     };
   
     resetUnreadCount();
-  }, [room]);
+    
+  }, [room, userEmail]);
 
  
   useEffect(() => {
