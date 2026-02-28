@@ -98,6 +98,8 @@ const Chat = ({ room, onError, showNotification }) => {
   useEffect(() => {
     if (!room) return;
 
+    
+
     const fetchRoomData = async () => {
       try {
         const roomRef = doc(db, 'rooms', room);
@@ -163,6 +165,8 @@ const Chat = ({ room, onError, showNotification }) => {
  
   useEffect(() => {
     if (!room) return;
+
+    setMessages([]);
     setIsLoading(true);
   
     const messagesRef = collection(db, 'rooms', room, 'Messages');
