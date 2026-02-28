@@ -38,7 +38,7 @@ const Chat = ({ room, onError, showNotification }) => {
   const [isRoomCreator, setIsRoomCreator] = useState(false);
   const [selectedReply, setSelectedReply] = useState(null);
   const [selectedMessageId, setSelectedMessageId] = useState(null);
-  const reactions = ['🔥', '😂', '🤬', '😊','🫠','😭','➕'];
+  const reactions = ['🔥', '😂', '🤬', '😊','🫠','😭'];
   const [isRecording, setIsRecording] = useState(false);
   const [recordingDuration, setRecordingDuration] = useState(0);
   const [previewAudio, setPreviewAudio] = useState(null);
@@ -119,14 +119,18 @@ const Chat = ({ room, onError, showNotification }) => {
     fetchRoomData();
   }, [room]);
 
+useEffect(() => {
     
-  useEffect(() => {
-    const lastMessage = messages[messages.length - 1];
-    const shouldScroll = lastMessage?.user === auth.currentUser?.email && 
-                        lastMessage?.createdAt === null;
-    
-    if (shouldScroll) {
-      scrollToBottom();
+    if (messages.length > 0) {
+      
+      setTimeout(() => {
+        if (messageContentRef.current) {
+          messageContentRef.current.scrollTo({
+            top: messageContentRef.current.scrollHeight,
+            behavior: "smooth"
+          });
+        }
+      }, 100); 
     }
   }, [messages]);
 
