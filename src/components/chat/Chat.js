@@ -178,11 +178,19 @@ useEffect(() => {
     const queryMessages = query(messagesRef, orderBy("createdAt"));
     
     const unsubscribe = onSnapshot(queryMessages, (snapshot) => {
-      const messages = [];
+      
+      // 1. THE FIX: Grab all messages from scratch and overwrite the state directly
+      const allMessages = snapshot.docs.map(doc => ({
+        ...doc.data(),
+        id: doc.id
+      }));
+      setMessages(allMessages); // Look! No more 'prev' gluing!
+      setIsLoading(false);
+
+      // 2. Keep all your notification and unread count logic exactly as it was
       snapshot.docChanges().forEach((change) => {
         if (change.type === "added") {
           const messageData = { ...change.doc.data(), id: change.doc.id };
-          messages.push(messageData);
           
           // Update unread count for other users
           if (messageData.user === auth.currentUser?.email) {
@@ -216,12 +224,11 @@ useEffect(() => {
           }
         }
       });
-      setMessages(prev => [...prev, ...messages]);
-      setIsLoading(false);
     });
   
     return () => unsubscribe();
   }, [room, showNotification]);
+ 
 
 
   useEffect(() => {
