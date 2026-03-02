@@ -1,63 +1,102 @@
 .message-actions-overlay {
   position: absolute;
-  top: 30px;
-  right: -60px;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  padding: 4px;
-  z-index: 10;
-  animation: fadeIn 0.2s ease-in-out;
+  top: 50%;
+  transform: translateY(-50%);
+  right: -130px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 8px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  animation: popIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  min-width: 120px;
+  border: 1px solid #eaebec;
 }
 
 .message.sent .message-actions-overlay {
-  left: -60px;
+  left: -130px;
   right: auto;
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
+}
+
+.reactions-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+  padding-bottom: 5px;
+}
+
+.unified-reaction-btn {
+  background: none;
+  border: none;
+  padding: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.unified-reaction-btn:hover {
+  transform: scale(1.2);
+  background-color: #f1f3f5;
+}
+
+.actions-divider {
+  height: 1px;
+  background-color: #eaebec;
+  width: 100%;
+}
+
+.functional-actions-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .action-button {
   background: none;
   border: none;
-  color: #666;
-  font-size: 12px;
-  padding: 6px 12px;
+  color: #4b5563;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 10px;
   cursor: pointer;
   transition: all 0.2s;
-  border-radius: 15px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
 }
 
 .action-button:hover {
-  background: rgba(0, 0, 0, 0.05);
-  color: #333;
+  background: #f3f4f6;
+  color: #111827;
 }
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-50%) translateX(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(-50%) translateX(0);
-  }
-}
-
 
 .action-button.delete-button {
   color: #dc2626;
 }
 
 .action-button.delete-button:hover {
-  background: rgba(220, 38, 38, 0.1);
+  background: #fef2f2;
 }
 
-.action-button.pin-button{
-   color: dimgray;
-}
-
-.action-button.action-button.pin-button:hover{
-  background:  rgba(220, 200, 200, 0.347); ;
+.action-button.pin-button {
+  color: #6b7280;
 }
