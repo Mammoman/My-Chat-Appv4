@@ -716,6 +716,9 @@
   background: rgba(255, 68, 68, 0.1);
   color: #ff4444;
   animation: pulse 1.5s infinite;
+  width: auto;
+  border-radius: 20px;
+  padding: 0 16px;
 }
 
 @keyframes pulse {
@@ -735,17 +738,15 @@
 .recording-indicator {
   display: flex;
   align-items: center;
-  gap: 4px;
-  background: rgba(255, 68, 68, 0.1);
-  padding: 6px 10px;
-  border-radius: 20px;
+  gap: 8px;
 }
 
 .duration {
   font-size: 13px;
   font-weight: 500;
   color: #ff4444;
-  min-width: 40px;
+  min-width: 35px;
+  text-align: center;
 }
 
 @keyframes pulse {
