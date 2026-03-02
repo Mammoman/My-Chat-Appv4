@@ -8,219 +8,174 @@
   width: 100%;
 }
 
-  .message.received .reactions-container {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .message.sent .reactions-container {
-    position: relative;
-    display: flex;
-    flex-direction: column-reverse;
-    align-items: flex-end;
-   
-  }
-  
-  .reactions-popup {
-    position: absolute;
-    bottom: -40px;
-    background: white;
-    border-radius: 20px;
-    padding: 5px 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    display: none;
-    gap: 8px;
-    z-index: 100;
-    right: 0;
+.message.received .reactions-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.message.sent .reactions-container {
+  position: relative;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-end;
+
+}
+
+.message-bubble-wrapper {
+  position: relative;
+  overflow: visible;
+}
+
+.reaction-btn {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s;
+  animation: bounceIn 0.3s ease-out;
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
   }
 
-  .message.sent .reactions-popup {
-    position: absolute;
-    bottom: -40px;
-    align-items: start; 
-    background: white;
-    border-radius: 20px;
-    padding: 5px 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    display: none;
-    gap: 8px;
-    z-index: 100;
-  }
-  
-  .message.received .reactions-popup {
-    right: auto;
-    left: 0;
+  50% {
+    opacity: 0.9;
+    transform: scale(1.1);
   }
 
-  .message-bubble-wrapper {
-    position: relative;
-    overflow: visible; 
-    padding-bottom: 40px; 
-  }
-  
-  
-  .message-bubble-wrapper:hover  .reactions-popup {
-    display: flex;
-    animation: slideUp 0.4s ease-out;
-  }
-  
-  @keyframes slideUp {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-
-  .reaction-btn {
-    background: none;
-    border: none;
-    padding: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: all 0.2s;
-    animation: bounceIn 0.3s ease-out;
+  80% {
+    opacity: 1;
+    transform: scale(0.9);
   }
 
-  @keyframes bounceIn {
-    0% {
-      opacity: 0;
-      transform: scale(0.3);
-    }
-    50% {
-      opacity: 0.9;
-      transform: scale(1.1);
-    }
-    80% {
-      opacity: 1;
-      transform: scale(0.9);
-    }
-    100% {
-      opacity: 1;
-      transform: scale(1);
-    }
+  100% {
+    opacity: 1;
+    transform: scale(1);
   }
-  
-  .reaction-btn:hover {
-    transform: scale(1.3) rotate(10deg);
-  }
+}
+
+.reaction-btn:hover {
+  transform: scale(1.3) rotate(10deg);
+}
 
 
 
-  .reaction-badge:hover {
-    transform: scale(1.05);
-    transition: transform 0.2s ease;
-  }
-  
-  .message.sent .reaction-badges {
-    display: flex;
-    justify-content: center;  
-    flex-wrap: wrap;
-    gap: 4px;
+.reaction-badge:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
+}
+
+.message.sent .reaction-badges {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.message.received .reaction-badges {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.reaction-badge {
+  display: inline-flex;
+  align-items: center;
+  background: rgb(255, 253, 253);
+  border-radius: 12px;
+  padding: 2px 6px;
+  gap: 2px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  animation: popIn 0.2s ease-out;
+  position: relative;
+}
+
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
   }
 
-  .message.received .reaction-badges{
-    display: flex;
-    justify-content: flex-start; 
-    flex-wrap: wrap;
-    gap: 4px;
-  }
-  
-  .reaction-badge {
-    display: inline-flex;
-    align-items: center;
-    background: rgb(255, 253, 253);
-    border-radius: 12px;
-    padding: 2px 6px;
-    gap: 2px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-    animation: popIn 0.2s ease-out;
-    position: relative;
+  70% {
+    transform: scale(1.1);
   }
 
-  @keyframes popIn {
-    0% {
-      opacity: 0;
-      transform: scale(0.5);
-    }
-    70% {
-      transform: scale(1.1);
-    }
-    100% {
-      opacity: 1;
-      transform: scale(1);
-    }
+  100% {
+    opacity: 1;
+    transform: scale(1);
   }
-  
-  .reaction-emoji {
-    font-size: 12px;
-    transition: transform 0.2s;
-  }
-  
-  .reaction-badge:hover .reaction-emoji {
-    transform: scale(1.2);
-  }
-  
-  .reaction-count {
-    font-size: 11px;
-    color: #65676B;
-  }
-  
-  .reaction-tooltip {
-    position: absolute;
-    bottom: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 12px;
-    white-space: nowrap;
-    pointer-events: none;
-    display: none;
-    margin-bottom: 8px;
-    z-index: 1000;
-  }
-  
+}
 
-  .reaction-badge:hover .reaction-tooltip {
-    display: block;
-  }
+.reaction-emoji {
+  font-size: 12px;
+  transition: transform 0.2s;
+}
 
-  .message.received .reaction-tooltip {
-    left: 0;
-    transform: translateY(-8px);
-  }
-  
-  .message.sent .reaction-tooltip {
-    right: 0;
-    left: auto;
-    transform: translateY(-8px);
-  }
+.reaction-badge:hover .reaction-emoji {
+  transform: scale(1.2);
+}
+
+.reaction-count {
+  font-size: 11px;
+  color: #65676B;
+}
+
+.reaction-tooltip {
+  position: absolute;
+  bottom: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  pointer-events: none;
+  display: none;
+  margin-bottom: 8px;
+  z-index: 1000;
+}
 
 
-  .reaction-tooltip::after {
-    content: '';
-    position: absolute;
-    top: 100%;
-    border-width: 4px;
-    border-style: solid;
-    border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
-  }
+.reaction-badge:hover .reaction-tooltip {
+  display: block;
+}
+
+.message.received .reaction-tooltip {
+  left: 0;
+  transform: translateY(-8px);
+}
+
+.message.sent .reaction-tooltip {
+  right: 0;
+  left: auto;
+  transform: translateY(-8px);
+}
 
 
-  .message.received .reaction-tooltip::after {
-    left: 10px;
-    transform: none;
-  }
-  
-  .message.sent .reaction-tooltip::after {
-    right: 10px;
-    left: auto;
-    transform: none;
-  }
+.reaction-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  border-width: 4px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
+}
+
+
+.message.received .reaction-tooltip::after {
+  left: 10px;
+  transform: none;
+}
+
+.message.sent .reaction-tooltip::after {
+  right: 10px;
+  left: auto;
+  transform: none;
+}
