@@ -674,26 +674,126 @@
   justify-content: flex-end;
 }
 
+/* New Modern Reply Preview UI */
+.reply-preview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(243, 244, 246, 0.85);
+  backdrop-filter: blur(8px);
+  border-left: 4px solid #4f46e5;
+  border-top-right-radius: 12px;
+  border-top-left-radius: 12px;
+  padding: 10px 14px;
+  margin: 0 4px;
+  /* Align neatly with the input box below it */
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid #e5e7eb;
+}
 
+.dark-theme .reply-preview {
+  background: rgba(30, 30, 30, 0.85);
+  border-bottom: 1px solid #333;
+}
 
-.overlay-reply-button {
+.reply-preview-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.reply-preview-content .reply-user {
+  font-size: 13px;
+  font-weight: 600;
+  color: #4f46e5;
+  margin-bottom: 2px;
+}
+
+.dark-theme .reply-preview-content .reply-user {
+  color: #818cf8;
+}
+
+.reply-preview-content .reply-text {
+  font-size: 13px;
+  color: #4b5563;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 90%;
+}
+
+.dark-theme .reply-preview-content .reply-text {
+  color: #d1d5db;
+}
+
+.cancel-reply {
   background: none;
   border: none;
-  color: #666;
-  font-size: 12px;
-  padding: 6px 12px;
+  color: #9ca3af;
+  padding: 4px;
   cursor: pointer;
-  transition: all 0.2s;
-  border-radius: 15px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
 }
 
-.overlay-reply-button:hover {
+.cancel-reply:hover {
   background: rgba(0, 0, 0, 0.05);
-  color: #333;
+  color: #4b5563;
+}
+
+.dark-theme .cancel-reply:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #f3f4f6;
+}
+
+/*  message-box   */
+.message-box {
+  display: flex;
+  justify-content: end;
+  padding-top: 0;
+  margin-top: 0;
+  padding: 4px;
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 14px;
+  background-color: transparent;
+  width: 100%;
+  border: none;
+  outline: none;
 }
 
 
-/*  voice-btn */
+.message-box .message-input-container {
+  display: flex;
+  width: 100%;
+  padding: 2px 4px;
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  outline: none;
+
+}
+
+
+.message-box .message-input {
+  flex: 1;
+  padding: 0 10px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  overflow-y: auto;
+  max-height: 100px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-y: scroll;
+  resize: none;
+  margin-bottom: 0;
+}
 
 .voice-btn {
   width: 40px;
@@ -716,6 +816,9 @@
   background: rgba(255, 68, 68, 0.1);
   color: #ff4444;
   animation: pulse 1.5s infinite;
+  width: auto;
+  border-radius: 20px;
+  padding: 0 16px;
 }
 
 @keyframes pulse {
@@ -735,17 +838,15 @@
 .recording-indicator {
   display: flex;
   align-items: center;
-  gap: 4px;
-  background: rgba(255, 68, 68, 0.1);
-  padding: 6px 10px;
-  border-radius: 20px;
+  gap: 8px;
 }
 
 .duration {
   font-size: 13px;
   font-weight: 500;
   color: #ff4444;
-  min-width: 40px;
+  min-width: 35px;
+  text-align: center;
 }
 
 @keyframes pulse {
@@ -835,32 +936,25 @@
   position: absolute;
   top: -8px;
   right: -8px;
+  background: rgba(79, 70, 229, 0.9);
   color: #ffffff;
-
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 5;
 }
-
-
-.message.sent .message-bubble .pin-indicator {
-  color: #000000;
-}
-
 
 .message.received .message-bubble .pin-indicator {
-  left: -44px;
-  transform: rotate(-90deg);
-  top: -50px;
-  color: #1a1a1a;
-}
-
-.reply-reference .message.received .message-bubble .pin-indicator {
-  left: -44px;
-  transform: rotate(-90deg);
-  top: -50px;
-  color: #1a1a1a;
+  right: auto;
+  left: -8px;
 }
 
 .dark-theme .message.sent .message-bubble .pin-indicator {
-  color: #ff0202;
+  background: rgba(220, 38, 38, 0.9);
+  color: #ffffff;
 }
 
 .dark-theme .message.received .message-bubble .pin-indicator {
@@ -899,19 +993,61 @@
   gap: 16px;
 }
 
-.pin-info {
+.header-badges {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pin-info,
+.mention-info {
   display: flex;
   align-items: center;
   gap: 6px;
-  color: #c62020;
   font-size: 13px;
+  padding: 4px 10px;
+  border-radius: 20px;
   cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pin-info {
+  color: #e53e3e;
+  background: rgba(229, 62, 62, 0.1);
+}
+
+.mention-info {
+  color: #4CAF50;
+  background: rgba(76, 175, 80, 0.1);
+}
+
+.pin-info:hover {
+  background: rgba(229, 62, 62, 0.2);
+  transform: translateY(-1px);
+}
+
+.mention-info:hover {
+  background: rgba(76, 175, 80, 0.2);
+  transform: translateY(-1px);
 }
 
 .header-pin-icon {
   transform: rotate(-90deg);
+  transition: transform 0.2s;
 }
 
+.header-pin-icon.active {
+  transform: rotate(0deg);
+  /* Adjust open state if needed, but original was -90 in css and rotated to 45 in JS */
+}
+
+.header-mention-icon {
+  transition: transform 0.2s;
+}
+
+.header-mention-icon.active {
+  transform: scale(1.1);
+}
 
 
 /*  options-containe */
