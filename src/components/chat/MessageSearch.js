@@ -13,7 +13,7 @@ const MessageSearch = ({ onSearch, messages = [], users = [] }) => {
 
 
   const handleFilterChange = useCallback((type, value) => {
-    switch(type) {
+    switch (type) {
       case 'date':
         setDateRange(value);
         break;
@@ -24,66 +24,56 @@ const MessageSearch = ({ onSearch, messages = [], users = [] }) => {
         setMessageType(value);
         break;
       default:
-        break;  
+        break;
     }
   }, []);
 
   const handleSearch = useCallback(() => {
     if (!Array.isArray(messages)) return;
-    
+
     const [startDate, endDate] = dateRange;
-    
+
     if (!searchTerm && !startDate && !endDate && !selectedUser && messageType === 'all') {
       onSearch(null);
       return;
     }
-    
+
     const filteredMessages = messages.filter(message => {
       const matchesText = message.text?.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesDate = (!startDate || !endDate) ? true : 
+      const matchesDate = (!startDate || !endDate) ? true :
         (new Date(message.timestamp) >= startDate && new Date(message.timestamp) <= endDate);
       const matchesUser = !selectedUser || message.sender === selectedUser;
       const matchesType = messageType === 'all' || message.type === messageType;
-  
-        
+
+
       return matchesText && matchesDate && matchesUser && matchesType;
     }).map(message => ({
       ...message,
       formattedTime: formatTimestamp(message.timestamp)
     }));
-    
-    
+
+
     onSearch(filteredMessages);
   }, [searchTerm, dateRange, selectedUser, messageType, messages, onSearch]);
 
   useEffect(() => {
     const debounceTimer = setTimeout(handleSearch, 500); // Increased debounce time
     return () => clearTimeout(debounceTimer);
-  }, [searchTerm, dateRange, selectedUser, messageType, handleSearch]); 
-
-  const resetSearch = useCallback(() => {
-    setSearchTerm('');
-    setDateRange([null, null]);
-    setSelectedUser('');
-    setMessageType('all');
-    setShowFilters(false);
-    onSearch(null);
-  }, [onSearch]);
-
+  }, [searchTerm, dateRange, selectedUser, messageType, handleSearch]);
 
   const formatTimestamp = (timestamp) => {
     if (!timestamp) return '';
     const date = new Date(timestamp);
-    return date.toLocaleTimeString([], { 
-      hour: '2-digit', 
+    return date.toLocaleTimeString([], {
+      hour: '2-digit',
       minute: '2-digit',
-      hour12: true 
+      hour12: true
     });
   };
 
 
-     
- 
+
+
 
   return (
     <div className="message-search">
@@ -95,14 +85,14 @@ const MessageSearch = ({ onSearch, messages = [], users = [] }) => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <button 
+        <button
           className="filter-toggle"
           onClick={() => setShowFilters(!showFilters)}
         >
           <FilterIcon size={20} />
         </button>
       </div>
-      
+
       {showFilters && (
         <div className="search-filters">
           <div className="date-filter">
@@ -115,10 +105,10 @@ const MessageSearch = ({ onSearch, messages = [], users = [] }) => {
               placeholderText="Select date range"
             />
           </div>
-          
+
           <div className="user-filter">
             <UserIcon size={18} />
-            <select 
+            <select
               value={selectedUser}
               onChange={(e) => handleFilterChange('user', e.target.value)}
             >
@@ -130,7 +120,7 @@ const MessageSearch = ({ onSearch, messages = [], users = [] }) => {
               ))}
             </select>
           </div>
-          
+
           <div className="type-filter">
             <select
               value={messageType}
