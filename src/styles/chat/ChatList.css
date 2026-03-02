@@ -8,8 +8,8 @@
   border: none;
   display: flex;
   flex-direction: column;
-  margin: 14px;
-  border-radius: 20px;
+  margin: 0;
+  border-radius: 0;
   justify-content: space-between;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
@@ -38,12 +38,20 @@
 }
 
 @keyframes gradient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
-.header-buttom{
+.header-buttom {
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -91,7 +99,7 @@
   width: 100%;
 }
 
-.darkmode-icon toggle-icon-1{
+.darkmode-icon toggle-icon-1 {
   background-color: yellow;
 }
 
@@ -307,6 +315,7 @@
     transform: translateX(100%);
     opacity: 0;
   }
+
   to {
     transform: translateX(0);
     opacity: 1;
@@ -384,5 +393,3 @@
   padding: 12px;
   margin-bottom: 16px;
 }
-
-

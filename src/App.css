@@ -4,54 +4,54 @@
   background-color: #0A0A0A;
 }
 
-body{
+body {
   display: flex;
   height: 100vh;
   margin: 0;
-  
+
 }
 
 
 .mainpage-container {
   display: flex;
   flex-direction: row;
-    width: 100%;
-    overflow: hidden;
-    height: 100vh;
-    background-color: #0A0A0A;
+  width: 100%;
+  overflow: hidden;
+  height: 100vh;
+  background-color: #0A0A0A;
 }
 
 .no-chat-selected {
-  display: flex; 
-  justify-content: center; 
+  display: flex;
+  justify-content: center;
   align-items: center;
-  width: 850px;
-  height: 95%;
-  text-align: center; 
-  color: #77838f; 
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  color: #77838f;
   border-radius: 20px;
   background: #fff;
 }
 
-.dark-theme .no-chat-selected{
+.dark-theme .no-chat-selected {
   background: transparent;
 }
 
-.no-chat-selected p{
-  font-size: 18px; 
+.no-chat-selected p {
+  font-size: 18px;
 }
 
-.chat-area{
-  padding-bottom: 4px;
+.chat-area {
   display: flex;
   align-items: center;
+  flex: 1;
+  height: 100%;
+  width: 100%;
 }
 
-.chat-area p{
+.chat-area p {}
 
-}
-
-.dark-theme{
+.dark-theme {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -75,20 +75,20 @@ body.dark-theme {
   background-color: #3a3a3a;
 }
 
- ::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 8px;
 }
 
- ::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
   background: #bebebe;
 }
 
- ::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   background: #ece8e8;
   border-radius: 4px;
 }
 
- ::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
 
@@ -130,12 +130,12 @@ body.dark-theme {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.darkmode--icon{
+.darkmode--icon {
   position: relative;
   z-index: 100px;
 }
 
-.dark-theme .toggle-icon-1{
+.dark-theme .toggle-icon-1 {
   color: yellow;
   border-radius: 14px;
   width: 40px;
@@ -147,7 +147,7 @@ body.dark-theme {
   -webkit-background-clip: text;
 }
 
-.darkmode .room-label{
+.darkmode .room-label {
   color: aliceblue;
 }
 
@@ -173,11 +173,11 @@ body.dark-theme {
 
 
 /* Room Items Dark Theme */
-.dark-theme .room-input-wrapper{
-   padding: 0;
+.dark-theme .room-input-wrapper {
+  padding: 0;
 }
 
-.dark-theme .room{
+.dark-theme .room {
   background: #221f1f;
   padding: 4px;
 }
@@ -202,7 +202,7 @@ body.dark-theme {
   color: #999;
 }
 
-.dark-theme .room-label{
+.dark-theme .room-label {
   transition: all;
   background: linear-gradient(135deg, #d89393 0%, #deff3b 100%);
   -webkit-background-clip: text;
@@ -211,9 +211,17 @@ body.dark-theme {
 }
 
 @keyframes gradient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 
@@ -237,44 +245,44 @@ body.dark-theme {
   background: #4f46e5;
 }
 
-.dark-theme .message-box{
+.dark-theme .message-box {
   background: transparent;
 }
 
 
 
 /* Input Areas Dark Theme */
- .dark-theme .reply-preview{
-  background: #2c2c2c;
- }
- 
-.dark-theme .message-box-reply-preview{
+.dark-theme .reply-preview {
   background: #2c2c2c;
 }
 
-.dark-theme .reply-preview-content{
+.dark-theme .message-box-reply-preview {
+  background: #2c2c2c;
+}
+
+.dark-theme .reply-preview-content {
   background: #2c2c2c;
   color: aliceblue;
 }
 
-.dark-theme .message-box-reply-preview .reply-text{
+.dark-theme .message-box-reply-preview .reply-text {
   color: #fff;
 }
 
-.dark-theme .cancel-reply{
+.dark-theme .cancel-reply {
   color: rgb(242, 242, 242);
   background: transparent;
 }
 
-.dark-theme .cancel-reply:hover{
+.dark-theme .cancel-reply:hover {
   color: #f94b0c;
 }
 
-.dark-theme .reply-preview-content{
+.dark-theme .reply-preview-content {
   background-color: transparent;
 }
 
-.dark-theme .reply-preview-content:hover{
+.dark-theme .reply-preview-content:hover {
   opacity: 0.8;
 }
 
@@ -283,19 +291,19 @@ body.dark-theme {
 /* Pinned Messages Dark Theme */
 
 
-.dark-mode .pinned-messages-content{
+.dark-mode .pinned-messages-content {
   background: #b92626;
 }
 
-.dark-mode .pinned-message{
+.dark-mode .pinned-message {
   background: #27272a;
   border: 1px solid #27272a;
 }
 
-.dark-mode .pinned-by{
+.dark-mode .pinned-by {
   color: #fafafa;
 }
 
-.dark-mode .pinned-text{
+.dark-mode .pinned-text {
   color: #fafafa;
 }

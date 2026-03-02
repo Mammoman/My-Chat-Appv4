@@ -102,6 +102,7 @@ export const Auth = (props) => {
         };
     }, []);
     return (
+        <div className="auth-wrapper">
         <div className="container" id="container">
             <div className={`form-container ${isSignUp ? "sign-up-container" : "sign-in-container"}`}>
                 {isSignUp ? (
@@ -186,6 +187,7 @@ export const Auth = (props) => {
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     );
 };
