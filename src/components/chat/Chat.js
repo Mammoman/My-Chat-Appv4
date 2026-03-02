@@ -23,6 +23,7 @@ import MessageHeader from './MessageHeader';
 import MessageContent from './MessageContent';
 
 import PinnedMessagesOverlay from './PinnedMessagesOverlay';
+import MentionsOverlay from './MentionsOverlay';
 
 
 
@@ -48,6 +49,7 @@ const Chat = ({ room, onError, showNotification }) => {
   const timerRef = useRef(null);
   const inputRef = useRef(null);
   const [isPinnedOpen, setIsPinnedOpen] = useState(false);
+  const [isMentionsOpen, setIsMentionsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   const MAX_DURATION = 60; // Maximum duration in seconds
@@ -584,6 +586,8 @@ const Chat = ({ room, onError, showNotification }) => {
 
 
   const pinnedCount = messages.filter(msg => msg.pinned).length;
+  // A message is a "mention" if someone replied to the current user's message
+  const mentions = messages.filter(msg => msg.replyTo && msg.replyTo.user === userEmail);
 
   return (
     <div className="message-area">
@@ -593,8 +597,17 @@ const Chat = ({ room, onError, showNotification }) => {
             roomData={roomData}
             userEmail={userEmail}
             pinnedCount={pinnedCount}
-            onPinClick={() => setIsPinnedOpen(!isPinnedOpen)}
+            onPinClick={() => {
+              setIsPinnedOpen(!isPinnedOpen);
+              setIsMentionsOpen(false);
+            }}
             isPinnedOpen={isPinnedOpen}
+            mentionsCount={mentions.length}
+            onMentionsClick={() => {
+              setIsMentionsOpen(!isMentionsOpen);
+              setIsPinnedOpen(false);
+            }}
+            isMentionsOpen={isMentionsOpen}
             messages={messages}
             users={users}
             onSearch={handleSearch}
@@ -606,6 +619,14 @@ const Chat = ({ room, onError, showNotification }) => {
               onMessageClick={scrollToMessage}
               onUnpin={handlePinMessage}
               onClose={() => setIsPinnedOpen(false)}
+            />
+          )}
+
+          {isMentionsOpen && (
+            <MentionsOverlay
+              mentions={mentions}
+              onMessageClick={scrollToMessage}
+              onClose={() => setIsMentionsOpen(false)}
             />
           )}
 

@@ -993,19 +993,61 @@
   gap: 16px;
 }
 
-.pin-info {
+.header-badges {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pin-info,
+.mention-info {
   display: flex;
   align-items: center;
   gap: 6px;
-  color: #c62020;
   font-size: 13px;
+  padding: 4px 10px;
+  border-radius: 20px;
   cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pin-info {
+  color: #e53e3e;
+  background: rgba(229, 62, 62, 0.1);
+}
+
+.mention-info {
+  color: #4CAF50;
+  background: rgba(76, 175, 80, 0.1);
+}
+
+.pin-info:hover {
+  background: rgba(229, 62, 62, 0.2);
+  transform: translateY(-1px);
+}
+
+.mention-info:hover {
+  background: rgba(76, 175, 80, 0.2);
+  transform: translateY(-1px);
 }
 
 .header-pin-icon {
   transform: rotate(-90deg);
+  transition: transform 0.2s;
 }
 
+.header-pin-icon.active {
+  transform: rotate(0deg);
+  /* Adjust open state if needed, but original was -90 in css and rotated to 45 in JS */
+}
+
+.header-mention-icon {
+  transition: transform 0.2s;
+}
+
+.header-mention-icon.active {
+  transform: scale(1.1);
+}
 
 
 /*  options-containe */
