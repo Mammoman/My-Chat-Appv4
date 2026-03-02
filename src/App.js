@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MainApp from './MainApp';
-import { useEffect } from 'react';
 import { NotificationProvider } from './components/chat/NotificationContext';
 
 const App = () => {

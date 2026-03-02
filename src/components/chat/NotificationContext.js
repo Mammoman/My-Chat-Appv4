@@ -27,7 +27,7 @@ export const NotificationProvider = ({ children }) => {
       console.log('This browser does not support notifications');
       return;
     }
-  
+
     if (Notification.permission === 'granted' && document.hidden) {
       new Notification(title, {
         ...options,
@@ -52,6 +52,7 @@ export const NotificationProvider = ({ children }) => {
     if (permission === 'default') {
       requestPermission();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

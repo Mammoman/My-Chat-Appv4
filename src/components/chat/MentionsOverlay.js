@@ -1,7 +1,6 @@
 import React from 'react';
 import { Cancel01Icon, AtIcon } from 'hugeicons-react';
 import '../../styles/chat/MentionsOverlay.css';
-import { auth } from '../../config/firebase';
 
 const MentionsOverlay = ({ mentions, onMessageClick, onClose }) => {
     const sortedMentions = [...mentions].sort((a, b) => {

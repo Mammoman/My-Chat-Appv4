@@ -20,25 +20,25 @@ export const Auth = (props) => {
 
     const handleGoogleSignIn = async () => {
         try {
-          const result = await signInWithPopup(auth, provider);
-          cookies.set("auth-token", result.user.refreshToken);
-          setIsAuth(true);
-          
-          // Request notification permission after successful sign-in
-          await requestPermission();
+            const result = await signInWithPopup(auth, provider);
+            cookies.set("auth-token", result.user.refreshToken);
+            setIsAuth(true);
+
+            // Request notification permission after successful sign-in
+            await requestPermission();
         } catch (err) {
-          console.error("Google Sign-In Error:", err);
-          alert("Failed to sign in with Google. Please try again.");
+            console.error("Google Sign-In Error:", err);
+            alert("Failed to sign in with Google. Please try again.");
         }
-      };
-    
-    
+    };
+
+
     const handleEmailPasswordSignIn = async (e) => {
         e.preventDefault();
         try {
-                // Sign in with email and password
-                const result = await signInWithEmailAndPassword(auth, email, password);
-                cookies.set("auth-token", result.user.refreshToken);
+            // Sign in with email and password
+            const result = await signInWithEmailAndPassword(auth, email, password);
+            cookies.set("auth-token", result.user.refreshToken);
             setIsAuth(true);
         } catch (err) {
             console.error(err);
@@ -103,91 +103,92 @@ export const Auth = (props) => {
     }, []);
     return (
         <div className="auth-wrapper">
-        <div className="container" id="container">
-            <div className={`form-container ${isSignUp ? "sign-up-container" : "sign-in-container"}`}>
-                {isSignUp ? (
-                    <form className="form-container-create" onSubmit={handleEmailPasswordSignUp}>
-                        <h1>Create Account</h1>
-                        <div className="social-container">
-                        <span>or use your email for registration</span>
-                          <ArrowRightDoubleIcon/>
-                            <GoogleIcon size={44} onClick={handleEmailPasswordSignUp} />
-                        </div>
-                        
-                        <input 
-                            className="form-container-input-create" 
-                            type="text" 
-                            placeholder="Name" 
-                            required 
-                        />
-                        <input
-                            className="form-container-input-create"
-                            type="email"
-                            placeholder="Email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-                        <input
-                            className="form-container-input-create"
-                            type="password"
-                            placeholder="Password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                        <button className="form-container-button" type="submit" onClick={handleEmailPasswordSignUp}>Sign Up</button>
-                    </form>
-                ) : (
-                    <form className="form-container-signin" onSubmit={handleEmailPasswordSignIn}>
-                        <h1 className="sign-in-title">Sign in</h1>
-                        <div className="social-container">
-                            <GoogleIcon size={44} className="social-icon" onClick={handleGoogleSignIn} />
-                        </div>
-                        <span>or use your account</span>
-                        <input
-                            className="form-container-input-signin"
-                            type="email"
-                            placeholder="Email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-                        <input
-                        className="form-container-input-signin"
-                            type="password"
-                            placeholder="Password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                        <button className="form-container-button-signin" type="submit">Sign In</button>
-                        <a href="#">Forgot your password?</a>
-                        <p className="sign-in-error">{errorMessage
-                            }</p>
-                    </form>
-                )}
-            </div>
+            <div className="container" id="container">
+                <div className={`form-container ${isSignUp ? "sign-up-container" : "sign-in-container"}`}>
+                    {isSignUp ? (
+                        <form className="form-container-create" onSubmit={handleEmailPasswordSignUp}>
+                            <h1>Create Account</h1>
+                            <div className="social-container">
+                                <span>or use your email for registration</span>
+                                <ArrowRightDoubleIcon />
+                                <GoogleIcon size={44} onClick={handleEmailPasswordSignUp} />
+                            </div>
 
-            <div className="overlay-container">
-                <div className="overlay">
-                    <div className="overlay-panel  overlay-right">
-                        <h1>Welcome Back!</h1>
-                        <p>To keep connected with us please login with your personal info</p>
-                        <p>First Time User ?</p>
-                        <CircleArrowDown02Icon className="overlay-icon" />
-                        <button className="ghost" id="signUp" onClick={handleSignUpClick}>Sign Up</button>
-                    </div>
-                    <div className="overlay-panel overlay-left">
-                        <h1>Hello, Friend!</h1>
-                        <p>Enter your personal details and start your journey with us</p>
-                        <p>Already a user?</p>
-                        <CircleArrowDown02Icon className="overlay-icon" />
-                        <button className="ghost" id="signIn" onClick={handleSignInClick}>Sign In</button>  
+                            <input
+                                className="form-container-input-create"
+                                type="text"
+                                placeholder="Name"
+                                required
+                            />
+                            <input
+                                className="form-container-input-create"
+                                type="email"
+                                placeholder="Email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                            <input
+                                className="form-container-input-create"
+                                type="password"
+                                placeholder="Password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                            <button className="form-container-button" type="submit" onClick={handleEmailPasswordSignUp}>Sign Up</button>
+                        </form>
+                    ) : (
+                        <form className="form-container-signin" onSubmit={handleEmailPasswordSignIn}>
+                            <h1 className="sign-in-title">Sign in</h1>
+                            <div className="social-container">
+                                <GoogleIcon size={44} className="social-icon" onClick={handleGoogleSignIn} />
+                            </div>
+                            <span>or use your account</span>
+                            <input
+                                className="form-container-input-signin"
+                                type="email"
+                                placeholder="Email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                            <input
+                                className="form-container-input-signin"
+                                type="password"
+                                placeholder="Password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                            <button className="form-container-button-signin" type="submit">Sign In</button>
+                            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                            <a href="#">Forgot your password?</a>
+                            <p className="sign-in-error">{errorMessage
+                            }</p>
+                        </form>
+                    )}
+                </div>
+
+                <div className="overlay-container">
+                    <div className="overlay">
+                        <div className="overlay-panel  overlay-right">
+                            <h1>Welcome Back!</h1>
+                            <p>To keep connected with us please login with your personal info</p>
+                            <p>First Time User ?</p>
+                            <CircleArrowDown02Icon className="overlay-icon" />
+                            <button className="ghost" id="signUp" onClick={handleSignUpClick}>Sign Up</button>
+                        </div>
+                        <div className="overlay-panel overlay-left">
+                            <h1>Hello, Friend!</h1>
+                            <p>Enter your personal details and start your journey with us</p>
+                            <p>Already a user?</p>
+                            <CircleArrowDown02Icon className="overlay-icon" />
+                            <button className="ghost" id="signIn" onClick={handleSignInClick}>Sign In</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         </div>
     );
 };

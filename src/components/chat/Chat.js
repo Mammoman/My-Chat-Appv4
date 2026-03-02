@@ -54,12 +54,6 @@ const Chat = ({ room, onError, showNotification }) => {
 
   const MAX_DURATION = 60; // Maximum duration in seconds
 
-  const scrollToBottom = () => {
-    if (messageContentRef.current) {
-      messageContentRef.current.scrollTop = messageContentRef.current.scrollHeight;
-    }
-  };
-
   const handleReaction = async (messageId, reaction) => {
     try {
       const messageRef = doc(db, 'rooms', room, 'Messages', messageId);
