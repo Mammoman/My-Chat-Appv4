@@ -127,6 +127,7 @@ const MessageContent = ({
                     canDelete={item.data.user === auth.currentUser?.email}
                     isDeleted={item.data.deleted}
                     isRoomCreator={item.data.user === auth.currentUser?.email}
+                    onCloseMenu={() => handleMessageClick(item.data.id)}
                   />
                 )}
               </div>

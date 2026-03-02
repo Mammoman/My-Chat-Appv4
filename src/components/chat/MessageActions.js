@@ -12,23 +12,27 @@ const MessageActions = ({
   isSelected,
   canDelete,
   isDeleted,
-  isRoomCreator
+  isRoomCreator,
+  onCloseMenu
 }) => {
   const handleReply = (e) => {
     e.stopPropagation();
     onReply(message);
+    onCloseMenu();
   };
 
   const handleDelete = (e) => {
     e.stopPropagation();
     if (window.confirm('Are you sure you want to delete this message?')) {
       onDelete(message);
+      onCloseMenu();
     }
   };
 
   const handlePin = (e) => {
     e.stopPropagation();
     onPin(message.id);
+    onCloseMenu();
   };
 
   return (
@@ -43,6 +47,7 @@ const MessageActions = ({
                 onClick={(e) => {
                   e.stopPropagation();
                   onReaction(message.id, reaction);
+                  onCloseMenu();
                 }}
               >
                 {reaction}
@@ -75,7 +80,7 @@ const MessageActions = ({
                 className="action-button pin-button"
                 onClick={handlePin}
               >
-                <PinIcon size={16} /> Pin
+                <PinIcon size={16} /> {message.pinned ? 'Unpin' : 'Pin'}
               </button>
             )}
           </div>

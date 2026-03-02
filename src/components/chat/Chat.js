@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useRef }                                         from 'react';
-import { 
-  addDoc, 
-  collection, 
-  onSnapshot, 
-  serverTimestamp, 
-  query, 
+import React, { useEffect, useState, useRef } from 'react';
+import {
+  addDoc,
+  collection,
+  onSnapshot,
+  serverTimestamp,
+  query,
   orderBy,
   doc,
   getDoc,
@@ -12,12 +12,12 @@ import {
   arrayUnion,
   getDocs,
   writeBatch
-}                                                                                     from 'firebase/firestore';
-import { auth, db }                                                                   from '../../config/firebase';
-import { onAuthStateChanged }                                                         from 'firebase/auth';
-import ChatRequestPopup                                                               from './ChatRequestPopup';
-import                                                                                '../../styles/chat/MessageArea.css';
-import                                                                               '../../styles/chat/Reactions.css';
+} from 'firebase/firestore';
+import { auth, db } from '../../config/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import ChatRequestPopup from './ChatRequestPopup';
+import '../../styles/chat/MessageArea.css';
+import '../../styles/chat/Reactions.css';
 import MessageInput from './MessageInput';
 import MessageHeader from './MessageHeader';
 import MessageContent from './MessageContent';
@@ -38,7 +38,7 @@ const Chat = ({ room, onError, showNotification }) => {
   const [isRoomCreator, setIsRoomCreator] = useState(false);
   const [selectedReply, setSelectedReply] = useState(null);
   const [selectedMessageId, setSelectedMessageId] = useState(null);
-  const reactions = ['🔥', '😂', '🤬', '😊','🫠','😭'];
+  const reactions = ['🔥', '😂', '🤬', '😊', '🫠', '😭'];
   const [isRecording, setIsRecording] = useState(false);
   const [recordingDuration, setRecordingDuration] = useState(0);
   const [previewAudio, setPreviewAudio] = useState(null);
@@ -63,17 +63,17 @@ const Chat = ({ room, onError, showNotification }) => {
       const messageRef = doc(db, 'rooms', room, 'Messages', messageId);
       const messageDoc = await getDoc(messageRef);
       const currentData = messageDoc.data();
-      
+
       // Initialize reactions object if it doesn't exist
       const currentReactions = currentData.reactions || {};
       const currentUsers = currentReactions[reaction] || [];
-      
+
       console.log('Current reactions:', currentReactions); // Debug
       console.log('Current user:', auth.currentUser.uid); // Debug
-      
+
       // uh Check if user already reacted
       const userIndex = currentUsers.indexOf(auth.currentUser.email);
-      
+
       if (userIndex > -1) {
         // this should emove user's reaction
         currentUsers.splice(userIndex, 1);
@@ -81,7 +81,7 @@ const Chat = ({ room, onError, showNotification }) => {
         // yh this Adds user's reaction
         currentUsers.push(auth.currentUser.email);
       }
-      
+
       // Update the reactions in Firestore
       await updateDoc(messageRef, {
         reactions: {
@@ -98,16 +98,16 @@ const Chat = ({ room, onError, showNotification }) => {
   useEffect(() => {
     if (!room) return;
 
-    
+
 
     const fetchRoomData = async () => {
       try {
         const roomRef = doc(db, 'rooms', room);
         const roomDoc = await getDoc(roomRef);
 
-        
 
-        
+
+
         if (roomDoc.exists()) {
           setRoomData(roomDoc.data());
         }
@@ -119,10 +119,10 @@ const Chat = ({ room, onError, showNotification }) => {
     fetchRoomData();
   }, [room]);
 
-useEffect(() => {
-    
+  useEffect(() => {
+
     if (messages.length > 0) {
-      
+
       setTimeout(() => {
         if (messageContentRef.current) {
           messageContentRef.current.scrollTo({
@@ -130,7 +130,7 @@ useEffect(() => {
             behavior: "smooth"
           });
         }
-      }, 100); 
+      }, 100);
     }
   }, [messages]);
 
@@ -141,7 +141,7 @@ useEffect(() => {
     const checkRoomCreator = async () => {
       const roomRef = doc(db, 'rooms', room);
       const roomDoc = await getDoc(roomRef);
-      
+
       if (roomDoc.exists()) {
 
         setIsRoomCreator(roomDoc.data().createdBy === auth.currentUser?.uid);
@@ -152,10 +152,10 @@ useEffect(() => {
   }, [room]);
 
 
-useEffect(() => {
-   
+  useEffect(() => {
+
     if (!room || !auth.currentUser?.uid) return;
-    
+
     const resetUnreadCount = async () => {
       try {
         const roomRef = doc(db, 'rooms', room);
@@ -166,23 +166,23 @@ useEffect(() => {
         console.error("Failed to reset unread count:", error);
       }
     };
-  
+
     resetUnreadCount();
-    
+
   }, [room, userEmail]);
 
- 
+
   useEffect(() => {
     if (!room) return;
 
     setMessages([]);
     setIsLoading(true);
-  
+
     const messagesRef = collection(db, 'rooms', room, 'Messages');
     const queryMessages = query(messagesRef, orderBy("createdAt"));
-    
+
     const unsubscribe = onSnapshot(queryMessages, (snapshot) => {
-      
+
       // 1. THE FIX: Grab all messages from scratch and overwrite the state directly
       const allMessages = snapshot.docs.map(doc => ({
         ...doc.data(),
@@ -195,7 +195,7 @@ useEffect(() => {
       snapshot.docChanges().forEach((change) => {
         if (change.type === "added") {
           const messageData = { ...change.doc.data(), id: change.doc.id };
-          
+
           // Update unread count for other users
           if (messageData.user === auth.currentUser?.email) {
             const roomRef = doc(db, 'rooms', room);
@@ -203,23 +203,23 @@ useEffect(() => {
               const roomData = roomDoc.data();
               const participants = [...(roomData.participants || []), roomData.createdBy];
               const unreadCounts = roomData.unreadCounts || {};
-              
+
               participants.forEach(userId => {
                 if (userId !== auth.currentUser.uid) {
                   unreadCounts[userId] = (unreadCounts[userId] || 0) + 1;
                 }
               });
-              
+
               updateDoc(roomRef, { unreadCounts });
             });
           }
-          
+
           // Show notification for new messages
           const isNewMessage = messageData.createdAt?.seconds >= (Date.now() / 1000 - 2);
-          if (isNewMessage && 
-              messageData.user !== auth.currentUser?.email && 
-              messageData.type !== 'system' &&
-              document.hidden) {
+          if (isNewMessage &&
+            messageData.user !== auth.currentUser?.email &&
+            messageData.type !== 'system' &&
+            document.hidden) {
             showNotification('New Message', {
               body: `${messageData.user.split('@')[0]}: ${messageData.type === 'voice' ? '🎤 Voice message' : messageData.text}`,
               tag: `new-message-${change.doc.id}`,
@@ -229,10 +229,10 @@ useEffect(() => {
         }
       });
     });
-  
+
     return () => unsubscribe();
   }, [room, showNotification]);
- 
+
 
 
   useEffect(() => {
@@ -265,7 +265,7 @@ useEffect(() => {
       if (replyToSend) {
         const replyMessageRef = doc(db, 'rooms', room, 'Messages', replyToSend.id);
         const replyMessageDoc = await getDoc(replyMessageRef);
-        
+
         if (replyMessageDoc.exists()) {
           const replyMessageData = replyMessageDoc.data();
           replyToData = {
@@ -286,7 +286,7 @@ useEffect(() => {
         room,
         replyTo: replyToData
       });
-   
+
 
       await updateDoc(roomRef, {
         lastMessageAt: serverTimestamp(),
@@ -352,7 +352,7 @@ useEffect(() => {
   };
 
   const handleReply = (message) => {
-    if ( message.type === 'voice') {
+    if (message.type === 'voice') {
       setSelectedReply({
         id: message.id,
         text: message.type === 'voice' ? '🎤 Voice message' : message.text,
@@ -360,19 +360,19 @@ useEffect(() => {
         type: message.type
       });
       messageContentRef.current?.focus();
-    }  else {
+    } else {
       setSelectedReply({
         id: message.id,
         text: message.text,
         user: message.user,
-        type: message.type || 'text' 
+        type: message.type || 'text'
       });
-    }; 
-       
-       // Focus the input immediately
-  setTimeout(() => {
-    inputRef.current?.focus();
-  }, 0);
+    };
+
+    // Focus the input immediately
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 0);
 
   };
 
@@ -391,20 +391,20 @@ useEffect(() => {
     try {
       const messageElement = document.getElementById(`message-${message.id}`);
       const currentScroll = messageElement?.parentElement?.scrollTop;
-      
+
       const messageRef = doc(db, 'rooms', room, 'Messages', message.id);
-      
+
       if (message.deleted) {
         // If message is already deleted, remove it and all references to it
         const messagesRef = collection(db, 'rooms', room, 'Messages');
         const q = query(messagesRef);
         const querySnapshot = await getDocs(q);
-        
+
         const batch = writeBatch(db);
-        
+
         // Delete the original message
         batch.delete(messageRef);
-        
+
         // Delete all messages that reference this message
         querySnapshot.forEach((doc) => {
           const messageData = doc.data();
@@ -412,7 +412,7 @@ useEffect(() => {
             batch.delete(doc.ref);
           }
         });
-        
+
         await batch.commit();
       } else {
         // First deletion - mark as deleted
@@ -426,7 +426,7 @@ useEffect(() => {
         const messagesRef = collection(db, 'rooms', room, 'Messages');
         const q = query(messagesRef);
         const querySnapshot = await getDocs(q);
-        
+
         const batch = writeBatch(db);
         querySnapshot.forEach((doc) => {
           const messageData = doc.data();
@@ -439,9 +439,9 @@ useEffect(() => {
         });
         await batch.commit();
       }
-      
+
       setSelectedMessageId(null);
-      
+
       setTimeout(() => {
         if (messageElement?.parentElement && currentScroll) {
           messageElement.parentElement.scrollTop = currentScroll;
@@ -524,7 +524,7 @@ useEffect(() => {
     reader.readAsDataURL(previewAudio.blob);
     reader.onloadend = async () => {
       const base64Audio = reader.result;
-      
+
       try {
         const messagesRef = collection(db, 'rooms', room, 'Messages');
         await addDoc(messagesRef, {
@@ -541,7 +541,7 @@ useEffect(() => {
             type: replyToSend.type
           } : null
         });
-        
+
         // Reset states after successful send
         setPreviewAudio(null);
         setRecordingDuration(0);
@@ -564,7 +564,7 @@ useEffect(() => {
     try {
       const messageRef = doc(db, 'rooms', room, 'Messages', messageId);
       const messageDoc = await getDoc(messageRef);
-      
+
       if (messageDoc.exists()) {
         const currentPinned = messageDoc.data().pinned || false;
         await updateDoc(messageRef, {
@@ -587,44 +587,45 @@ useEffect(() => {
 
   return (
     <div className="message-area">
-           {room && (
+      {room && (
         <>
-          <MessageHeader 
-              roomData={roomData}
-              userEmail={userEmail}
-              pinnedCount={pinnedCount}
-              onPinClick={() => setIsPinnedOpen(!isPinnedOpen)}
-              isPinnedOpen={isPinnedOpen}
-              messages={messages}
-              users={users}
-              onSearch={handleSearch}
+          <MessageHeader
+            roomData={roomData}
+            userEmail={userEmail}
+            pinnedCount={pinnedCount}
+            onPinClick={() => setIsPinnedOpen(!isPinnedOpen)}
+            isPinnedOpen={isPinnedOpen}
+            messages={messages}
+            users={users}
+            onSearch={handleSearch}
           />
-          
+
           {isPinnedOpen && (
             <PinnedMessagesOverlay
               messages={messages}
               onMessageClick={scrollToMessage}
+              onUnpin={handlePinMessage}
               onClose={() => setIsPinnedOpen(false)}
             />
           )}
-          
+
           <MessageContent
-                  messages={searchResults || messages}
-                  userEmail={userEmail}
-                  selectedMessageId={selectedMessageId}
-                  handleMessageClick={handleMessageClick}
-                  handleReply={handleReply}
-                  handleDeleteMessage={handleDeleteMessage}
-                  handlePinMessage={handlePinMessage}
-                  handleReaction={handleReaction}
-                  reactions={reactions}
-                  messageContentRef={messageContentRef}
-                  scrollToMessage={scrollToMessage}
-                  auth={auth}
-                  users={users}
-                  isLoading={isLoading}
+            messages={searchResults || messages}
+            userEmail={userEmail}
+            selectedMessageId={selectedMessageId}
+            handleMessageClick={handleMessageClick}
+            handleReply={handleReply}
+            handleDeleteMessage={handleDeleteMessage}
+            handlePinMessage={handlePinMessage}
+            handleReaction={handleReaction}
+            reactions={reactions}
+            messageContentRef={messageContentRef}
+            scrollToMessage={scrollToMessage}
+            auth={auth}
+            users={users}
+            isLoading={isLoading}
           />
-          
+
           <MessageInput
             handleSubmit={handleSubmit}
             selectedReply={selectedReply}
@@ -653,7 +654,7 @@ useEffect(() => {
         </>
       )}
     </div>
-    
+
   );
 };
 
