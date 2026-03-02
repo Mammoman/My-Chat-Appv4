@@ -39,7 +39,7 @@ const MessageHeader = ({ roomData,
             </div>
             <div className="mention-info" onClick={onMentionsClick}>
               <AtIcon size={18} className={`header-mention-icon ${isMentionsOpen ? 'active' : ''}`} />
-              <span>{mentionsCount} mentions</span>
+              <span>{mentionsCount} mentions.</span>
             </div>
           </div>
         </div>
