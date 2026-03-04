@@ -1,18 +1,18 @@
-import React, { useRef, useState }                  from 'react';
-import { auth, db }                                  from '../../config/firebase';
-import { 
-  collection, 
-  addDoc, 
-  query, 
-  where, 
-  getDocs, 
-  doc, 
-  getDoc, 
+import React, { useRef, useState } from 'react';
+import { auth, db } from '../../config/firebase';
+import {
+  collection,
+  addDoc,
+  query,
+  where,
+  getDocs,
+  doc,
+  getDoc,
   updateDoc,
   arrayUnion,
   serverTimestamp
-}                                                  from 'firebase/firestore';
-import                                          '../../styles/chat/RoomInput.css';
+} from 'firebase/firestore';
+import '../../styles/chat/RoomInput.css';
 
 function RoomInput({ setRoom, onError }) {
   const roomInputRef = useRef(null);
@@ -21,7 +21,7 @@ function RoomInput({ setRoom, onError }) {
   const [existingRoomId, setExistingRoomId] = useState(null);
   const [error, setError] = useState('');
   const [, setIsValidating] = useState(false);
-  
+
 
 
   const validateRoomName = (name) => {
@@ -30,8 +30,8 @@ function RoomInput({ setRoom, onError }) {
     if (name.length > 30) return 'Room name must be less than 30 characters';
     if (!/^[a-zA-Z0-9-_\s]+$/.test(name)) return 'Room name can only contain letters, numbers, spaces, hyphens and underscores';
 
-      
-  // Remove multiple spaces and trim
+
+    // Remove multiple spaces and trim
     const normalizedName = name.replace(/\s+/g, ' ').trim();
     if (normalizedName !== name) return 'Room name contains invalid spacing';
     return '';
@@ -43,9 +43,9 @@ function RoomInput({ setRoom, onError }) {
       const roomDoc = await getDoc(roomRef);
 
       if (!roomDoc.exists()) return;
-      
+
       const roomData = roomDoc.data();
-      
+
       if (roomData.type === 'private') {
         if (roomData.participants.includes(auth.currentUser.uid)) {
           setRoom(roomId);
@@ -56,15 +56,15 @@ function RoomInput({ setRoom, onError }) {
             email: auth.currentUser.email,
             timestamp: new Date()
           };
-          
+
           await updateDoc(roomRef, {
             pendingRequests: arrayUnion(requestData)
           });
-          
-          onError({ message: 'Join request sent to room creator', type: 'info'   });
+
+          onError({ message: 'Join request sent to room creator', type: 'info' });
         }
       }
-    }  catch (error) {
+    } catch (error) {
       console.error("Error joining private room:", error);
       onError({ message: 'Error joining room', type: 'error' });
     }
@@ -76,26 +76,26 @@ function RoomInput({ setRoom, onError }) {
 
     const roomName = roomInputRef.current.value.trim();
     setIsValidating(true);
-    
+
     const validationError = validateRoomName(roomName);
     if (validationError) {
       onError(validationError);
       setIsValidating(false);
       return;
     }
-       
+
     try {
       const roomsRef = collection(db, "rooms");
 
       const q = query(roomsRef,
-         where("exactName", "==", roomName),
-         where("type", "==", roomType));
+        where("exactName", "==", roomName),
+        where("type", "==", roomType));
       const querySnapshot = await getDocs(q);
-      
+
       if (!querySnapshot.empty) {
         const existingRoom = querySnapshot.docs[0];
         const existingRoomData = existingRoom.data();
-        
+
         if (existingRoomData.type === 'private') {
           setExistingRoomId(existingRoom.id);
           setShowPopup(true);
@@ -106,7 +106,7 @@ function RoomInput({ setRoom, onError }) {
         await updateDoc(doc(db, 'rooms', existingRoom.id), {
           participants: arrayUnion(auth.currentUser.uid)
         });
-        
+
         setRoom(existingRoom.id);
         await addSystemMessage(existingRoom.id, `${auth.currentUser.email} has joined ${roomName}`);
         roomInputRef.current.value = '';
@@ -125,7 +125,7 @@ function RoomInput({ setRoom, onError }) {
         pendingRequests: [],
         lastMessage: null,
         isPubliclyVisible: false,
-        publicVisibleAfter: roomType === 'public' ? 
+        publicVisibleAfter: roomType === 'public' ?
           new Date(Date.now() + (24 * 60 * 60 * 1000)) : // 24 hours for public rooms
           null // No delay for private rooms
       };
@@ -165,31 +165,31 @@ function RoomInput({ setRoom, onError }) {
   };
 
   return (
-    <div className='room'>
-      <label className='room-label'>Enter Room name: </label>
-      <div className='room-input'>
-      <input 
-      ref={roomInputRef}
-      className={`room-input ${error ? 'error' : ''}`}
-      type='text'
-      placeholder='Enter room name'
-      onKeyDown={(e) => {
-        if (e.key === 'Enter') {
-          createRoom();
-        }
-      }}
-      />
-      <select
-       className='room-type-select' 
-       value={roomType} 
-       onChange={(e) => setRoomType(e.target.value)}>
-        <option className='room-type-option' value="public">Public Room</option>
-        <option className='room-type-option' value="private">Private Room</option>
-      </select>
+    <div className='room-creator'>
+      <div className='room-input-group'>
+        <input
+          ref={roomInputRef}
+          className={`room-input-field ${error ? 'error' : ''}`}
+          type='text'
+          placeholder='Create a new room...'
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              createRoom();
+            }
+          }}
+        />
+        <select
+          className='room-type-select'
+          value={roomType}
+          onChange={(e) => setRoomType(e.target.value)}
+        >
+          <option value="public">Public</option>
+          <option value="private">Private</option>
+        </select>
       </div>
-       
-  
-     
+
+
+
 
       {showPopup && (
         <div className="popup">
