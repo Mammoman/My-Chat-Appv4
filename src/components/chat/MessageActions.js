@@ -13,7 +13,8 @@ const MessageActions = ({
   canDelete,
   isDeleted,
   isRoomCreator,
-  onCloseMenu
+  onCloseMenu,
+  onEdit
 }) => {
   const handleReply = (e) => {
     e.stopPropagation();
@@ -64,6 +65,18 @@ const MessageActions = ({
                 onClick={handleReply}
               >
                 <RepeatIcon size={16} /> Reply
+              </button>
+            )}
+            {canDelete && !isDeleted && message.type !== 'voice' && (
+              <button
+                className="action-button edit-button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEdit(message);
+                  onCloseMenu();
+                }}
+              >
+                <PinIcon size={16} /> Edit
               </button>
             )}
             {canDelete && (

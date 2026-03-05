@@ -6,6 +6,7 @@ import {
   serverTimestamp,
   query,
   orderBy,
+  limit,
   doc,
   getDoc,
   updateDoc,
@@ -39,6 +40,8 @@ const Chat = ({ room, onError, showNotification }) => {
   const [isRoomCreator, setIsRoomCreator] = useState(false);
   const [selectedReply, setSelectedReply] = useState(null);
   const [selectedMessageId, setSelectedMessageId] = useState(null);
+  const [editingMessage, setEditingMessage] = useState(null);
+  const [messageLimit, setMessageLimit] = useState(50);
   const reactions = ['🔥', '😂', '🤬', '😊', '🫠', '😭'];
   const [isRecording, setIsRecording] = useState(false);
   const [recordingDuration, setRecordingDuration] = useState(0);
@@ -175,7 +178,8 @@ const Chat = ({ room, onError, showNotification }) => {
     setIsLoading(true);
 
     const messagesRef = collection(db, 'rooms', room, 'Messages');
-    const queryMessages = query(messagesRef, orderBy("createdAt"));
+    // Fetch latest messages first, limited to messageLimit
+    const queryMessages = query(messagesRef, orderBy("createdAt", "desc"), limit(messageLimit));
 
     const unsubscribe = onSnapshot(queryMessages, (snapshot) => {
 
@@ -183,7 +187,7 @@ const Chat = ({ room, onError, showNotification }) => {
       const allMessages = snapshot.docs.map(doc => ({
         ...doc.data(),
         id: doc.id
-      }));
+      })).reverse(); // Reverse back to chronological order (oldest -> newest) for display
       setMessages(allMessages); // Look! No more 'prev' gluing!
       setIsLoading(false);
 
@@ -227,7 +231,11 @@ const Chat = ({ room, onError, showNotification }) => {
     });
 
     return () => unsubscribe();
-  }, [room, showNotification]);
+  }, [room, showNotification, messageLimit]); // Re-run when limit changes
+
+  const loadMoreMessages = () => {
+    setMessageLimit(prevLimit => prevLimit + 50);
+  };
 
 
 
@@ -256,33 +264,42 @@ const Chat = ({ room, onError, showNotification }) => {
       const messagesRef = collection(db, 'rooms', room, 'Messages');
       const roomRef = doc(db, 'rooms', room);
 
-      // If replying to a message, check its current state
-      let replyToData = null;
-      if (replyToSend) {
-        const replyMessageRef = doc(db, 'rooms', room, 'Messages', replyToSend.id);
-        const replyMessageDoc = await getDoc(replyMessageRef);
+      if (editingMessage) {
+        // Edit existing message
+        const messageRef = doc(db, 'rooms', room, 'Messages', editingMessage.id);
+        await updateDoc(messageRef, {
+          text: messageToSend,
+          edited: true
+        });
+        setEditingMessage(null);
+      } else {
+        // If replying to a message, check its current state
+        let replyToData = null;
+        if (replyToSend) {
+          const replyMessageRef = doc(db, 'rooms', room, 'Messages', replyToSend.id);
+          const replyMessageDoc = await getDoc(replyMessageRef);
 
-        if (replyMessageDoc.exists()) {
-          const replyMessageData = replyMessageDoc.data();
-          replyToData = {
-            id: replyToSend.id,
-            text: replyMessageData.deleted ? "Message has been deleted" : replyToSend.text,
-            user: replyToSend.user,
-            type: replyToSend.type,
-            deleted: replyMessageData.deleted || false
-          };
+          if (replyMessageDoc.exists()) {
+            const replyMessageData = replyMessageDoc.data();
+            replyToData = {
+              id: replyToSend.id,
+              text: replyMessageData.deleted ? "Message has been deleted" : replyToSend.text,
+              user: replyToSend.user,
+              type: replyToSend.type,
+              deleted: replyMessageData.deleted || false
+            };
+          }
         }
+
+        await addDoc(messagesRef, {
+          text: messageToSend,
+          type: 'text',
+          createdAt: serverTimestamp(),
+          user: auth.currentUser ? auth.currentUser.email : 'Guest',
+          room,
+          replyTo: replyToData
+        });
       }
-
-      await addDoc(messagesRef, {
-        text: messageToSend,
-        type: 'text',
-        createdAt: serverTimestamp(),
-        user: auth.currentUser ? auth.currentUser.email : 'Guest',
-        room,
-        replyTo: replyToData
-      });
-
 
       await updateDoc(roomRef, {
         lastMessageAt: serverTimestamp(),
@@ -348,6 +365,7 @@ const Chat = ({ room, onError, showNotification }) => {
   };
 
   const handleReply = (message) => {
+    if (editingMessage) setEditingMessage(null);
     if (message.type === 'voice') {
       setSelectedReply({
         id: message.id,
@@ -370,6 +388,22 @@ const Chat = ({ room, onError, showNotification }) => {
       inputRef.current?.focus();
     }, 0);
 
+  };
+
+  const handleEdit = (message) => {
+    if (selectedReply) setSelectedReply(null);
+    setEditingMessage(message);
+    setNewMessage(message.text);
+
+    // Focus the input immediately
+    setTimeout(() => {
+      inputRef.current?.focus();
+      // Adjust scroll height
+      if (inputRef.current) {
+        inputRef.current.style.height = 'auto';
+        inputRef.current.style.height = Math.min(inputRef.current.scrollHeight, 120) + 'px';
+      }
+    }, 0);
   };
 
 
@@ -581,7 +615,19 @@ const Chat = ({ room, onError, showNotification }) => {
 
   const pinnedCount = messages.filter(msg => msg.pinned).length;
   // A message is a "mention" if someone replied to the current user's message
-  const mentions = messages.filter(msg => msg.replyTo && msg.replyTo.user === userEmail);
+  // OR explicitly tagged them like @user
+  const mentions = messages.filter(msg => {
+    const isReply = msg.replyTo && msg.replyTo.user === userEmail;
+
+    let isMentioned = false;
+    if (userEmail && msg.text) {
+      // Check for @username match
+      const username = userEmail.split('@')[0];
+      const mentionPattern = new RegExp(`@${userEmail}|@${username}\\b`, 'i');
+      isMentioned = mentionPattern.test(msg.text);
+    }
+    return isReply || isMentioned;
+  });
 
   return (
     <div className="message-area">
@@ -630,6 +676,7 @@ const Chat = ({ room, onError, showNotification }) => {
             selectedMessageId={selectedMessageId}
             handleMessageClick={handleMessageClick}
             handleReply={handleReply}
+            handleEdit={handleEdit}
             handleDeleteMessage={handleDeleteMessage}
             handlePinMessage={handlePinMessage}
             handleReaction={handleReaction}
@@ -639,6 +686,8 @@ const Chat = ({ room, onError, showNotification }) => {
             auth={auth}
             users={users}
             isLoading={isLoading}
+            onLoadMore={loadMoreMessages}
+            hasMore={messages.length >= messageLimit}
           />
 
           <MessageInput
@@ -657,6 +706,12 @@ const Chat = ({ room, onError, showNotification }) => {
             stopRecording={stopRecording}
             recordingDuration={recordingDuration}
             formatDuration={formatDuration}
+            users={messages.map(m => m.user).filter((value, index, self) => self.indexOf(value) === index)}
+            editingMessage={editingMessage}
+            cancelEdit={() => {
+              setEditingMessage(null);
+              setNewMessage("");
+            }}
           />
 
           {isRoomCreator && joinRequest && (

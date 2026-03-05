@@ -33,16 +33,18 @@ const MentionsOverlay = ({ mentions, onMessageClick, onClose }) => {
                         >
                             <div className="mention-header">
                                 <span className="mention-by">{msg.user}</span>
-                                <span className="mention-type">replied to you</span>
+                                <span className="mention-type">
+                                    {msg.replyTo && msg.replyTo.user === msg.user ? 'replied to you' : 'mentioned you'}
+                                </span>
                             </div>
-                            <div className="mention-text-preview">
-                                {msg.text}
+                            <div className="mention-text-preview" dangerouslySetInnerHTML={{ __html: msg.text }}>
+
                             </div>
                         </div>
                     ))
                 ) : (
                     <div className="no-mentions">
-                        <p>No one has replied to you yet.</p>
+                        <p>No one has replied to or mentioned you yet.</p>
                     </div>
                 )}
             </div>

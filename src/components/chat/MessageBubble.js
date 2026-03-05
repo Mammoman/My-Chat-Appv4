@@ -5,11 +5,42 @@ import { PinIcon } from 'hugeicons-react';
 const formatTimestamp = (timestamp) => {
   if (!timestamp) return '';
   const date = new Date(timestamp.seconds * 1000);
-  return date.toLocaleTimeString([], { 
-    hour: '2-digit', 
+  return date.toLocaleTimeString([], {
+    hour: '2-digit',
     minute: '2-digit',
-    hour12: true 
+    hour12: true
   });
+};
+
+const formatMessageText = (text) => {
+  if (!text) return '';
+
+  // Escape HTML first to prevent XSS
+  let formatted = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+
+  // Format Bold: **text**
+  formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+  // Format Italics: *text* (only if not already matched as bold)
+  formatted = formatted.replace(/(?<!\*)\*(?!\*)(.*?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
+
+  // Format Code inline: `code`
+  formatted = formatted.replace(/`(.*?)`/g, '<code class="inline-code">$1</code>');
+
+  // Auto-link URLs
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  formatted = formatted.replace(urlRegex, '<a href="$1" target="_blank" rel="noopener noreferrer" class="message-link">$1</a>');
+
+  // Highlight @mentions
+  const mentionRegex = /@([a-zA-Z0-9_.-]+)/g;
+  formatted = formatted.replace(mentionRegex, '<span class="mention-highlight">@$1</span>');
+
+  return formatted;
 };
 
 const MessageBubble = ({ message, scrollToMessage, auth }) => {
@@ -22,7 +53,7 @@ const MessageBubble = ({ message, scrollToMessage, auth }) => {
       </div>
     );
   }
-  
+
   return (
     <div className="message-bubble">
       {message.pinned && (
@@ -52,11 +83,11 @@ const MessageBubble = ({ message, scrollToMessage, auth }) => {
           </div>
         </div>
       )}
-      
+
       {message.type === 'voice' ? (
         <div className="voice-message">
-          <VoiceMessagePlayer 
-            audioUrl={message.audioData} 
+          <VoiceMessagePlayer
+            audioUrl={message.audioData}
             duration={message.duration}
             isSent={isCurrentUser}
           />
@@ -64,8 +95,11 @@ const MessageBubble = ({ message, scrollToMessage, auth }) => {
         </div>
       ) : (
         <>
-          <p>{message.text}</p>
-          <span className="serverTimestamp">{formatTimestamp(message.createdAt)}</span>
+          <p dangerouslySetInnerHTML={{ __html: formatMessageText(message.text) }} />
+          <span className="serverTimestamp">
+            {message.edited && <span style={{ fontSize: '10px', fontStyle: 'italic', marginRight: '4px' }}>(edited)</span>}
+            {formatTimestamp(message.createdAt)}
+          </span>
         </>
       )}
     </div>

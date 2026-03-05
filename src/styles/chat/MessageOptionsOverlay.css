@@ -1,228 +1,240 @@
 .MessageOptions-overlay {
-    position: fixed;
-    top: 170px;
-    left: 110px;
-    background: white;
-    border-radius: 12px;
-    width: 300px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    z-index: 1000;
-    animation: slideDown 0.2s ease-out;
-  }
+  position: fixed;
+  top: 170px;
+  left: 110px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 16px;
+  width: 320px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+  z-index: 1000;
+  animation: slideDown 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
 
-  .dark-theme .MessageOptions-overlay{
-    background: #171818;
-  }
-  
-  .MessageOptions-content {
-    padding: 8px;
-  }
-  
-  .MessageOptions-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px 12px;
-    border-bottom: 1px solid #edf2f9;
-  }
+.dark-theme .MessageOptions-overlay {
+  background: rgba(26, 29, 36, 0.85);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+}
 
-  .dark-theme .MessageOptions-header{
-    border-bottom: 1px solid #272728;
-  }
-  
-  .MessageOptions-title span {
-    font-size: 14px;
-    font-weight: 500;
-    color: #4b5563;
-  }
+.MessageOptions-content {
+  padding: 8px;
+}
 
-  .dark-theme .MessageOptions-title span{
-    color: #f3f4f6;
-  }
-  
-  .MessageOptions-list {
-    padding: 8px 0;
-  }
+.MessageOptions-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid #edf2f9;
+}
 
-  .MessageOptions-list .message-search {
-    padding: 0;
-    border-bottom: none;
-  }
-  
+.dark-theme .MessageOptions-header {
+  border-bottom: 1px solid #272728;
+}
 
-  .MessageOptions-list .search-bar {
-    background: #f8f9fa;
-    border-radius: 12px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    padding: 0 15px;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-  }
+.MessageOptions-title span {
+  font-size: 14px;
+  font-weight: 500;
+  color: #4b5563;
+}
 
-  .MessageOptions-list .search-bar input {
-    border: none;
-    margin: 0;
-    padding: 10px;
-    outline: none;
-  }
+.dark-theme .MessageOptions-title span {
+  color: #f3f4f6;
+}
 
-  .dark-theme .MessageOptions-list .search-bar input{
-    background: #3f3e3e;
-    color: #f3f4f6;
-  }
+.MessageOptions-list {
+  padding: 8px 0;
+}
 
-  .dark-theme .MessageOptions-list .search-bar input::placeholder{
-    color: #f3f4f6;
-  }
+.MessageOptions-list .message-search {
+  padding: 0;
+  border-bottom: none;
+}
 
 
-  .MessageOptions-list .search-bar:focus-within {
-    border-color: #4f46e5;
-    background: #ffffff;
-    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
-  }
+.MessageOptions-list .search-bar {
+  background: #f8f9fa;
+  border-radius: 12px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
 
-  .dark-theme .MessageOptions-list .search-bar {
-    background: #3f3e3e;
-  }
+.MessageOptions-list .search-bar input {
+  border: none;
+  margin: 0;
+  padding: 10px;
+  outline: none;
+}
 
+.dark-theme .MessageOptions-list .search-bar input {
+  background: #3f3e3e;
+  color: #f3f4f6;
+}
 
-  
-  .MessageOptions-list .search-filters {
-    flex-direction: column;
-    background: #f9fafb;
-    margin: 8px 0;
-    padding: 12px;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-  }
-
-  .dark-theme .MessageOptions-list .search-filters{
-    background: #171818;
-    border: 1px solid #272728;
-  }
-  
-  .MessageOptions-list .date-filter,
-  .MessageOptions-list .user-filter,
-  .MessageOptions-list .type-filter {
-    width: 100%;
-    padding: 8px 0;
-  }
-
-  .dark-theme .MessageOptions-list .date-filter,
-  .dark-theme .MessageOptions-list .user-filter,
-  .dark-theme .MessageOptions-list .type-filter{
-    color: #f3f4f6;
-    
-  }
-  
-  .MessageOptions-list select,
-  .MessageOptions-list .react-datepicker-wrapper {
-    width: 100%;
-    padding: 6px 8px;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
-    background: white;
-    font-size: 14px;
-    color: #374151;
-  }
-
-  .dark-theme .MessageOptions-list select,
-  .dark-theme .MessageOptions-list .react-datepicker-wrapper{
-    background: #3f3e3e;
-    color: #f3f4f6;
-  }
-  
-  .MessageOptions-list select:focus,
-  .MessageOptions-list .react-datepicker-wrapper:focus-within {
-    border-color: #4f46e5;
-    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
-    outline: none;
-  }
-
-  .darkmode .MessageOptions-list select,
-  .darkmode .MessageOptions-list .react-datepicker-wrapper {
-    background: #1a1a1a;
-  }
-
-  .MessageOptions-list .filter-toggle{
-    border-radius: 6px;
-    border: none;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    margin-left: 4px;
-    color: #4b5563;
-  }
-
-  .dark-theme .MessageOptions-list .filter-toggle{
-    color: #ffffff;
-    background: #3f3e3e;
-  }
-  
-  .MessageOptions-list .filter-toggle:hover {
-    background: rgba(79, 70, 229, 0.08);
-    border-radius: 6px;
-    color: #4f46e5;
-  }
-
-  .dark-theme .MessageOptions-list .filter-toggle:hover{
-    background: rgba(79, 70, 229, 0.08);
-  }
-  
-  /* Add smooth transitions */
-  .MessageOptions-list select,
-  .MessageOptions-list .react-datepicker-wrapper,
-  .MessageOptions-list .filter-toggle {
-    transition: all 0.2s ease;
-  }
-
-  .MessageOptions-list .react-datepicker-wrapper input{
-    outline: none;
-    border: none;
-  }
-
-  .dark-theme .MessageOptions-list .react-datepicker-wrapper input{
-    background: #3f3e3e;
-    color: #f3f4f6;
-    border: none;
-    outline: none;
-  }
-
-  .dark-theme .MessageOptions-list .react-datepicker-wrapper input::placeholder{
-    color: #f3f4f6;
-  }
+.dark-theme .MessageOptions-list .search-bar input::placeholder {
+  color: #f3f4f6;
+}
 
 
-  
-  .MessageOptions-item {
-    padding: 10px 16px;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: #4b5563;
+.MessageOptions-list .search-bar:focus-within {
+  border-color: #4f46e5;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
+}
+
+.dark-theme .MessageOptions-list .search-bar {
+  background: #3f3e3e;
+}
+
+
+
+.MessageOptions-list .search-filters {
+  flex-direction: column;
+  background: #f9fafb;
+  margin: 8px 0;
+  padding: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.dark-theme .MessageOptions-list .search-filters {
+  background: #171818;
+  border: 1px solid #272728;
+}
+
+.MessageOptions-list .date-filter,
+.MessageOptions-list .user-filter,
+.MessageOptions-list .type-filter {
+  width: 100%;
+  padding: 8px 0;
+}
+
+.dark-theme .MessageOptions-list .date-filter,
+.dark-theme .MessageOptions-list .user-filter,
+.dark-theme .MessageOptions-list .type-filter {
+  color: #f3f4f6;
+
+}
+
+.MessageOptions-list select,
+.MessageOptions-list .react-datepicker-wrapper {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: white;
+  font-size: 14px;
+  color: #374151;
+}
+
+.dark-theme .MessageOptions-list select,
+.dark-theme .MessageOptions-list .react-datepicker-wrapper {
+  background: #3f3e3e;
+  color: #f3f4f6;
+}
+
+.MessageOptions-list select:focus,
+.MessageOptions-list .react-datepicker-wrapper:focus-within {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
+  outline: none;
+}
+
+.darkmode .MessageOptions-list select,
+.darkmode .MessageOptions-list .react-datepicker-wrapper {
+  background: #1a1a1a;
+}
+
+.MessageOptions-list .filter-toggle {
+  border-radius: 6px;
+  border: none;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  margin-left: 4px;
+  color: #4b5563;
+}
+
+.dark-theme .MessageOptions-list .filter-toggle {
+  color: #ffffff;
+  background: #3f3e3e;
+}
+
+.MessageOptions-list .filter-toggle:hover {
+  background: rgba(79, 70, 229, 0.08);
+  border-radius: 6px;
+  color: #4f46e5;
+}
+
+.dark-theme .MessageOptions-list .filter-toggle:hover {
+  background: rgba(79, 70, 229, 0.08);
+}
+
+/* Add smooth transitions */
+.MessageOptions-list select,
+.MessageOptions-list .react-datepicker-wrapper,
+.MessageOptions-list .filter-toggle {
+  transition: all 0.2s ease;
+}
+
+.MessageOptions-list .react-datepicker-wrapper input {
+  outline: none;
+  border: none;
+}
+
+.dark-theme .MessageOptions-list .react-datepicker-wrapper input {
+  background: #3f3e3e;
+  color: #f3f4f6;
+  border: none;
+  outline: none;
+}
+
+.dark-theme .MessageOptions-list .react-datepicker-wrapper input::placeholder {
+  color: #f3f4f6;
+}
+
+
+.MessageOptions-item {
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #475569;
+  font-weight: 500;
+  border-radius: 8px;
+  margin: 4px;
+}
+
+.dark-theme .MessageOptions-item {
+  color: #e2e8f0;
+}
+
+.MessageOptions-item:hover {
+  background: rgba(79, 70, 229, 0.08);
+  color: #4f46e5;
+}
+
+.dark-theme .MessageOptions-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #f8fafc;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
   }
 
-  .dark-theme .MessageOptions-item{
-    color: #f3f4f6;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  .MessageOptions-item:hover {
-    background: rgba(79, 70, 229, 0.05);
-    color: #4f46e5;
-  }
-  
-  @keyframes slideDown {
-    from {
-      opacity: 0;
-      transform: translateY(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+}

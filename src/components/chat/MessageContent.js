@@ -11,6 +11,7 @@ const MessageContent = ({
   selectedMessageId,
   handleMessageClick,
   handleReply,
+  handleEdit,
   handleDeleteMessage,
   handlePinMessage,
   handleReaction,
@@ -19,7 +20,9 @@ const MessageContent = ({
   scrollToMessage,
   auth,
   users,
-  isLoading
+  isLoading,
+  onLoadMore,
+  hasMore
 }) => {
   const groupMessagesByDate = () => {
     let currentDate = null;
@@ -61,6 +64,25 @@ const MessageContent = ({
         <LoadingAnimation />
       ) : (
         <div className="messages-container">
+          {hasMore && !isLoading && (
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
+              <button
+                onClick={onLoadMore}
+                style={{
+                  background: 'rgba(79, 70, 229, 0.1)',
+                  color: '#4f46e5',
+                  border: 'none',
+                  padding: '8px 16px',
+                  borderRadius: '20px',
+                  fontSize: '12px',
+                  cursor: 'pointer',
+                  fontWeight: '600'
+                }}
+              >
+                Load older messages
+              </button>
+            </div>
+          )}
           {groupMessagesByDate().map((item, index) => (
             item.type === 'date' ? (
               <DateDivider key={`date-${index}`} date={item.date} />
@@ -119,6 +141,7 @@ const MessageContent = ({
                   <MessageActions
                     message={item.data}
                     onReply={handleReply}
+                    onEdit={handleEdit}
                     onDelete={handleDeleteMessage}
                     onPin={handlePinMessage}
                     reactions={reactions}

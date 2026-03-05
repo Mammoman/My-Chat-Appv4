@@ -1,25 +1,27 @@
-import React, { useState, useEffect }                                      from 'react';
-import { Moon01Icon, Search02Icon, Sun02Icon }                             from 'hugeicons-react';
-import { auth }                                                            from '../../config/firebase';
-import { doc,
-   getDoc, 
-   updateDoc, 
-   arrayRemove, 
-   collection, 
-   getDocs, 
-   addDoc,
-   serverTimestamp,
-   deleteDoc,
-   writeBatch }                                                            from 'firebase/firestore';
-import { db }                                                              from '../../config/firebase';
-import DeleteRoomPopup                                                     from './DeleteRoomPopup';
-import RoomInput                                                           from './RoomInput';
-import                                                                     '../../styles/chat/ChatList.css';
+import React, { useState, useEffect } from 'react';
+import { Moon01Icon, Search02Icon, Sun02Icon } from 'hugeicons-react';
+import { auth } from '../../config/firebase';
+import {
+  doc,
+  getDoc,
+  updateDoc,
+  arrayRemove,
+  collection,
+  getDocs,
+  addDoc,
+  serverTimestamp,
+  deleteDoc,
+  writeBatch
+} from 'firebase/firestore';
+import { db } from '../../config/firebase';
+import DeleteRoomPopup from './DeleteRoomPopup';
+import RoomInput from './RoomInput';
+import '../../styles/chat/ChatList.css';
 
 
 
 
-const ChatList = ({ rooms, selectedRoom, onSelectRoom, messages, onMessageClick, activeFilter, showNotification}) => {
+const ChatList = ({ rooms, selectedRoom, onSelectRoom, messages, onMessageClick, activeFilter, showNotification }) => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredRooms, setFilteredRooms] = useState([]);
@@ -29,7 +31,7 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom, messages, onMessageClick,
   const [errorType, setErrorType] = useState('error');
   const [showErrorPopup, setShowErrorPopup] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(() => {
-  const savedMode = localStorage.getItem('darkMode');
+    const savedMode = localStorage.getItem('darkMode');
     return savedMode === 'true';
   });
 
@@ -48,16 +50,16 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom, messages, onMessageClick,
 
   useEffect(() => {
     if (!rooms) return;
-    
+
     // Filter rooms based on permissions and search query
     const userRooms = rooms.filter(room => {
       const matchesSearch = room.name?.toLowerCase().includes(searchQuery.toLowerCase());
       const currentTime = new Date();
-      
+
       // Check if user is a participant or creator
       const isParticipant = room.participants?.includes(auth.currentUser.uid);
       const isCreator = room.createdBy === auth.currentUser.uid;
-  
+
       // Show notification for new join requests
       if (isCreator && room.pendingRequests?.length > 0) {
         showNotification('New Join Request', {
@@ -65,21 +67,21 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom, messages, onMessageClick,
           tag: 'join-request',
         });
       }
-  
+
       if (activeFilter !== 'all') {
         if (room.type !== activeFilter) return false;
       }
-  
+
       // For public rooms
       if (room.type === 'public') {
         return matchesSearch && (
-          isCreator || 
-          isParticipant || 
+          isCreator ||
+          isParticipant ||
           (room.publicVisibleAfter && new Date(room.publicVisibleAfter) <= currentTime)
         );
       }
 
-      
+
       // For private rooms
       return matchesSearch && (isCreator || isParticipant);
     });
@@ -90,7 +92,7 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom, messages, onMessageClick,
       const timeB = b.lastMessageAt?.seconds || 0;
       return timeB - timeA;
     });
-  
+
     setFilteredRooms(sortedRooms);
   }, [rooms, searchQuery, activeFilter, showNotification]);
 
@@ -132,7 +134,7 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom, messages, onMessageClick,
   const handleRoomExit = async (roomId, isCreator) => {
     try {
       const roomRef = doc(db, 'rooms', roomId);
-      
+
       // Add leave message
       const messagesRef = collection(db, 'rooms', roomId, 'Messages');
       await addDoc(messagesRef, {
@@ -142,7 +144,7 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom, messages, onMessageClick,
         user: 'system',
         room: roomId
       });
-  
+
       if (isCreator) {
         await deleteDoc(roomRef);
       } else {
@@ -150,7 +152,7 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom, messages, onMessageClick,
           participants: arrayRemove(auth.currentUser.uid)
         });
       }
-      
+
       if (selectedRoom === roomId) {
         onSelectRoom(null);
       }
@@ -167,13 +169,13 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom, messages, onMessageClick,
       setError(errorData.message);
       setErrorType(errorData.type || 'error');
     }
-    
+
     setShowErrorPopup(true);
-    
+
     if (window.errorTimeout) {
       clearTimeout(window.errorTimeout);
     }
-    
+
     window.errorTimeout = setTimeout(() => {
       setShowErrorPopup(false);
       setError('');
@@ -190,21 +192,21 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom, messages, onMessageClick,
           <div className={`search ${isSearchFocused ? 'focused' : ''}`}>
             <div className="chat-search-container">
               <Search02Icon className="search-icon" />
-              <input 
-              className='search-input'
-                type="text" 
-                placeholder="Search rooms..." 
+              <input
+                className='search-input'
+                type="text"
+                placeholder="Search rooms..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setIsSearchFocused(true)}
                 onBlur={() => setIsSearchFocused(false)}
-              />  
+              />
             </div>
           </div>
           <div className={`darkmode-icon ${isDarkMode ? 'active' : ''}`}
             onClick={toggleDarkMode}
             title="Toggle dark mode">
-            {!isDarkMode ? <Moon01Icon/> : <Sun02Icon className='toggle-icon-1'/>}
+            {!isDarkMode ? <Moon01Icon /> : <Sun02Icon className='toggle-icon-1' />}
           </div>
         </div>
       </div>
@@ -212,54 +214,57 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom, messages, onMessageClick,
       <div className="rooms-container">
 
         {filteredRooms.map((room) => (
-          <div 
+          <div
             key={room.id}
             className={`room-item ${selectedRoom === room.id ? 'active' : ''}`}
           >
-            <div 
+            <div
               className="room-content"
               onClick={() => onSelectRoom(room.id)}
             >
-        <div className="room-avatar">
-            <div className="avatar-placeholder">
-              {room.unreadCounts?.[auth.currentUser.uid] > 0 && (
-                <span className={`unread-count ${room.type}`}>
-                  {room.unreadCounts[auth.currentUser.uid]}
-                </span>
-              )}
-            </div>
-          </div>
-                        <div className="room-info">
-              <h4>{room.displayName}</h4>
-        <div className="room-type-info">
-          <span className={`room-type-badge ${room.type}`}>
-            {room.type}
+              <div className="room-avatar">
+                <div className={`avatar-placeholder ${room.type}`}>
+                  <span className="avatar-initial">
+                    {room.displayName?.charAt(0)?.toUpperCase() || '?'}
+                  </span>
+                  {room.unreadCounts?.[auth.currentUser.uid] > 0 && (
+                    <span className={`unread-count ${room.type}`}>
+                      {room.unreadCounts[auth.currentUser.uid]}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div className="room-info">
+                <h4>{room.displayName}</h4>
+                <div className="room-type-info">
+                  <span className={`room-type-badge ${room.type}`}>
+                    {room.type}
                   </span>
                 </div>
-            {room.lastMessage && (
-              <p className="last-message">
-                <span className="sender">
-                  {room.lastMessage.sender === auth.currentUser?.email 
-                    ? 'New Chat' 
-                    : 'New Message' 
-                  }: 
-                </span>
-                {room.lastMessage.type === 'voice' ? '🎤 Voice message' : room.lastMessage.text}
-              </p>
-            )}
+                {room.lastMessage && (
+                  <p className="last-message">
+                    <span className="sender">
+                      {room.lastMessage.sender === auth.currentUser?.email
+                        ? 'New Chat'
+                        : 'New Message'
+                      }:
+                    </span>
+                    {room.lastMessage.type === 'voice' ? '🎤 Voice message' : room.lastMessage.text}
+                  </p>
+                )}
               </div>
             </div>
-            <button 
-                className="room-action-btn"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  const isCreator = room.createdBy === auth.currentUser.uid;
-                  if (isCreator) {
-                    setRoomToDelete({ id: room.id, isCreator: true });
-                  } else {
-                    setRoomToExit({ id: room.id, isCreator: false });
-                  }
-            }}      
+            <button
+              className="room-action-btn"
+              onClick={(e) => {
+                e.stopPropagation();
+                const isCreator = room.createdBy === auth.currentUser.uid;
+                if (isCreator) {
+                  setRoomToDelete({ id: room.id, isCreator: true });
+                } else {
+                  setRoomToExit({ id: room.id, isCreator: false });
+                }
+              }}
             >
               {room.createdBy === auth.currentUser.uid ? 'Delete' : 'Exit'}
             </button>
@@ -268,9 +273,9 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom, messages, onMessageClick,
       </div>
 
       <div className="room-input-wrapper">
-        <RoomInput 
-        setRoom={onSelectRoom}
-        onError={handleError}/>
+        <RoomInput
+          setRoom={onSelectRoom}
+          onError={handleError} />
       </div>
 
       {roomToDelete && (
@@ -285,23 +290,23 @@ const ChatList = ({ rooms, selectedRoom, onSelectRoom, messages, onMessageClick,
       )}
 
       {showErrorPopup && (
-              <div className="error-popup">
-                <div className={`error-popup-content ${errorType}`}>
-                  <span className="error-message">{error}</span>
-                </div>
-              </div>
-            )}
-        
-                {roomToExit && (
-          <DeleteRoomPopup
-            isCreator={false}
-            onConfirm={() => {
-              handleRoomExit(roomToExit.id, false);
-              setRoomToExit(null);
-            }}
-                  onCancel={() => setRoomToExit(null)}
-                />
-              )}
+        <div className="error-popup">
+          <div className={`error-popup-content ${errorType}`}>
+            <span className="error-message">{error}</span>
+          </div>
+        </div>
+      )}
+
+      {roomToExit && (
+        <DeleteRoomPopup
+          isCreator={false}
+          onConfirm={() => {
+            handleRoomExit(roomToExit.id, false);
+            setRoomToExit(null);
+          }}
+          onCancel={() => setRoomToExit(null)}
+        />
+      )}
     </div>
 
   );
