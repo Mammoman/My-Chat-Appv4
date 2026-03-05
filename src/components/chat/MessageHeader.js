@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Call02Icon, MoreVerticalIcon, PinIcon, AtIcon } from 'hugeicons-react';
 import MessageOptionsOverlay from './MessageOptionsOverlay';
+import RoomDetailsOverlay from './RoomDetailsOverlay';
 
 const MessageHeader = ({ roomData,
   userEmail,
@@ -15,32 +16,38 @@ const MessageHeader = ({ roomData,
   isMentionsOpen
 }) => {
   const [showOptions, setShowOptions] = useState(false);
+  const [showRoomDetails, setShowRoomDetails] = useState(false);
 
   const handleOptionsClick = () => {
     setShowOptions(!showOptions);
   };
 
-  const handleClose = () => {
+  const handleCloseOptions = () => {
     setShowOptions(false);
     onSearch(null);
+  };
+
+  const handleOpenRoomDetails = () => {
+    setShowOptions(false); // Close the dropdown menu
+    setShowRoomDetails(true); // Open the room details modal
   };
 
 
   return (
     <div className='message-header'>
       <div className="header-info">
-        <h1>Welcome to: {roomData?.displayName || roomData?.name}</h1>
-        <div className="header-details">
-          {userEmail && <h2>User Email: {userEmail}</h2>}
-          <div className="header-badges">
-            <div className="pin-info" onClick={onPinClick}>
-              <PinIcon size={18} className={`header-pin-icon ${isPinnedOpen ? 'active' : ''}`} />
-              <span>{pinnedCount} pinned messages</span>
-            </div>
-            <div className="mention-info" onClick={onMentionsClick}>
-              <AtIcon size={18} className={`header-mention-icon ${isMentionsOpen ? 'active' : ''}`} />
-              <span>{mentionsCount} mentions.</span>
-            </div>
+        <div className="header-title-group">
+          <h1>{roomData?.displayName || roomData?.name}</h1>
+          {userEmail && <h2>{userEmail}</h2>}
+        </div>
+        <div className="header-badges">
+          <div className="pin-info" onClick={onPinClick}>
+            <PinIcon size={16} className={`header-pin-icon ${isPinnedOpen ? 'active' : ''}`} />
+            <span>{pinnedCount} pinned</span>
+          </div>
+          <div className="mention-info" onClick={onMentionsClick}>
+            <AtIcon size={16} className={`header-mention-icon ${isMentionsOpen ? 'active' : ''}`} />
+            <span>{mentionsCount} mentions</span>
           </div>
         </div>
       </div>
@@ -58,7 +65,8 @@ const MessageHeader = ({ roomData,
           </button>
           {showOptions && (
             <MessageOptionsOverlay
-              onClose={handleClose}
+              onClose={handleCloseOptions}
+              onOpenRoomDetails={handleOpenRoomDetails}
               messages={messages}
               users={users}
               onSearch={onSearch}
@@ -67,6 +75,13 @@ const MessageHeader = ({ roomData,
           )}
         </div>
       </div>
+      {showRoomDetails && (
+        <RoomDetailsOverlay
+          roomData={roomData}
+          messages={messages}
+          onClose={() => setShowRoomDetails(false)}
+        />
+      )}
     </div>
   );
 };
