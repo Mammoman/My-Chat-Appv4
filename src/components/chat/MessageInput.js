@@ -32,7 +32,7 @@ const MessageInput = ({
       inputRef.current.style.height = 'auto';
       inputRef.current.style.height = Math.min(inputRef.current.scrollHeight, 120) + 'px';
     }
-  }, [newMessage]);
+  }, [newMessage, inputRef]);
 
   const handleInputChange = (e) => {
     const value = e.target.value;
